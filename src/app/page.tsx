@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { 
   Search, 
   ShoppingCart, 
@@ -191,7 +190,7 @@ export default function Home() {
       {/* Grille des produits - Responsive optimisé */}
       <main className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6">
         <h2 className="text-white text-lg sm:text-xl font-bold mb-4 sm:mb-6">
-          Résultats pour "objets vintage"
+          Résultats pour &ldquo;objets vintage&rdquo;
         </h2>
         
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-4">
