@@ -3,7 +3,6 @@ import {
   Star, 
   StarHalf, 
   Menu, 
-  User, 
   MapPin, 
   Truck, 
   CreditCard, 
