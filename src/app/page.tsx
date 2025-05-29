@@ -1,4 +1,18 @@
 import Image from "next/image";
+import { 
+  Search, 
+  ShoppingCart, 
+  Star, 
+  StarHalf, 
+  Menu, 
+  User, 
+  MapPin, 
+  Truck, 
+  CreditCard, 
+  Mail, 
+  Phone,
+  ExternalLink
+} from "lucide-react";
 
 // Données des produits (vous pourrez les modifier facilement)
 const products = [
@@ -7,114 +21,299 @@ const products = [
     name: "Vase vintage en céramique",
     description: "Magnifique vase en céramique des années 70, parfait état",
     price: 25,
-    image: "/products/vase.jpg" // Vous ajouterez vos vraies images plus tard
+    originalPrice: 35,
+    rating: 4.5,
+    reviews: 12,
+    image: "/products/vase.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple1"
   },
   {
     id: 2,
     name: "Livre ancien de cuisine",
     description: "Livre de recettes traditionelles, édition 1960",
     price: 15,
-    image: "/products/livre.jpg"
+    originalPrice: 22,
+    rating: 4.8,
+    reviews: 8,
+    image: "/products/livre.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple2"
   },
   {
     id: 3,
     name: "Lampe de bureau rétro",
     description: "Lampe de bureau style industriel, fonctionne parfaitement",
     price: 45,
-    image: "/products/lampe.jpg"
+    originalPrice: 65,
+    rating: 4.3,
+    reviews: 15,
+    image: "/products/lampe.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple3"
   },
   {
     id: 4,
     name: "Service à thé porcelaine",
     description: "Service à thé complet pour 6 personnes, motifs floraux",
     price: 35,
-    image: "/products/service-the.jpg"
+    originalPrice: 50,
+    rating: 4.7,
+    reviews: 6,
+    image: "/products/service-the.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple4"
   },
   {
     id: 5,
     name: "Cadre photo vintage",
     description: "Cadre en bois doré, style baroque, 20x30cm",
     price: 18,
-    image: "/products/cadre.jpg"
+    originalPrice: 25,
+    rating: 4.2,
+    reviews: 9,
+    image: "/products/cadre.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple5"
   },
   {
     id: 6,
     name: "Boîte à bijoux ancienne",
     description: "Boîte à bijoux en velours rouge, compartiments multiples",
     price: 22,
-    image: "/products/boite-bijoux.jpg"
+    originalPrice: 30,
+    rating: 4.6,
+    reviews: 11,
+    image: "/products/boite-bijoux.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple6"
   }
 ];
 
+// Composant pour afficher les étoiles avec Lucide
+const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) => {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 !== 0;
+  
+  return (
+    <div className="flex items-center gap-1 text-sm">
+      <div className="flex text-yellow-400">
+        {[...Array(5)].map((_, i) => (
+          <span key={i} className="w-4 h-4">
+            {i < fullStars ? (
+              <Star className="w-4 h-4 fill-current" />
+            ) : i === fullStars && hasHalfStar ? (
+              <StarHalf className="w-4 h-4 fill-current" />
+            ) : (
+              <Star className="w-4 h-4 text-gray-300" />
+            )}
+          </span>
+        ))}
+      </div>
+      <span className="text-blue-400 hover:text-orange-400 cursor-pointer ml-1">
+        ({reviews})
+      </span>
+    </div>
+  );
+};
+
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b-2 border-amber-200">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <h1 className="text-4xl font-bold text-amber-800 text-center">
-            🛍️ La Boutique de Capponuts
-          </h1>
-          <p className="text-center text-amber-600 mt-2 text-lg">
-            Trésors et objets uniques trouvés avec amour
-          </p>
+    <div className="min-h-screen bg-gray-900">
+      {/* Header Amazon-style - Optimisé mobile */}
+      <header className="bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 py-2 sm:py-3">
+          <div className="flex items-center justify-between gap-2">
+            {/* Logo et menu mobile */}
+            <div className="flex items-center gap-2 sm:gap-4">
+              <button className="md:hidden text-white p-2">
+                <Menu className="w-5 h-5" />
+              </button>
+              <h1 className="text-lg sm:text-2xl font-bold text-white">
+                🛍️ Capponuts
+              </h1>
+              <div className="hidden lg:block text-gray-300 text-sm">
+                <MapPin className="w-4 h-4 inline mr-1" />
+                Livrer en France
+              </div>
+            </div>
+            
+            {/* Barre de recherche - Responsive */}
+            <div className="flex-1 max-w-2xl mx-2 sm:mx-4 lg:mx-8">
+              <div className="flex w-full">
+                <select className="hidden sm:block bg-gray-200 text-gray-800 px-2 lg:px-3 py-2 rounded-l-md border-r border-gray-300 text-xs lg:text-sm">
+                  <option>Tous</option>
+                  <option>Décoration</option>
+                  <option>Livres</option>
+                  <option>Vintage</option>
+                </select>
+                <input 
+                  type="text" 
+                  placeholder="Rechercher..."
+                  className="flex-1 px-2 sm:px-4 py-2 text-gray-800 focus:outline-none text-sm search-input sm:rounded-l-md"
+                />
+                <button className="bg-orange-400 hover:bg-orange-500 px-3 sm:px-4 py-2 rounded-r-md transition-colors">
+                  <Search className="w-4 h-4 sm:w-5 sm:h-5 text-gray-800" />
+                </button>
+              </div>
+            </div>
+
+            {/* Actions utilisateur - Mobile optimisé */}
+            <div className="flex items-center gap-2 sm:gap-4 text-white text-xs sm:text-sm">
+              <div className="hidden sm:block">
+                <div className="text-xs text-gray-300 flex items-center">
+                  <User className="w-3 h-3 mr-1" />
+                  Bonjour
+                </div>
+                <div className="font-bold">Compte</div>
+              </div>
+              <div className="relative">
+                <ShoppingCart className="w-6 h-6 sm:w-7 sm:h-7" />
+                <span className="absolute -top-2 -right-2 bg-orange-400 text-gray-800 text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-bold">
+                  0
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
-      {/* Grille des produits */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Navigation secondaire - Responsive */}
+      <nav className="bg-gray-700 text-white text-xs sm:text-sm overflow-x-auto">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 py-2">
+          <div className="flex items-center gap-3 sm:gap-6 whitespace-nowrap">
+            <span className="hover:text-orange-400 cursor-pointer flex items-center">
+              <Menu className="w-4 h-4 mr-1" />
+              Toutes les catégories
+            </span>
+            <span className="hover:text-orange-400 cursor-pointer">🏺 Décoration</span>
+            <span className="hover:text-orange-400 cursor-pointer">📚 Livres anciens</span>
+            <span className="hover:text-orange-400 cursor-pointer">💡 Éclairage</span>
+            <span className="hover:text-orange-400 cursor-pointer">🎨 Art & Antiquités</span>
+          </div>
+        </div>
+      </nav>
+
+      {/* Grille des produits - Responsive optimisé */}
+      <main className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6">
+        <h2 className="text-white text-lg sm:text-xl font-bold mb-4 sm:mb-6">
+          Résultats pour "objets vintage"
+        </h2>
+        
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-4">
           {products.map((product) => (
             <div
               key={product.id}
-              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-amber-200"
+              className="bg-white rounded-lg hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer product-card"
             >
               {/* Image du produit */}
-              <div className="relative h-64 bg-gray-200">
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                  📷 Image à venir
+              <div className="relative h-32 sm:h-48 bg-gray-100 p-2 sm:p-4">
+                <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-2xl sm:text-4xl">
+                  📷
+                </div>
+                {/* Badge de réduction */}
+                <div className="absolute top-1 sm:top-2 left-1 sm:left-2 bg-red-600 text-white text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded discount-badge">
+                  -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
                 </div>
                 {/* Quand vous aurez vos vraies images, décommentez ceci :
                 <Image
                   src={product.image}
                   alt={product.name}
                   fill
-                  className="object-cover"
+                  className="object-contain p-2 sm:p-4"
                 />
                 */}
               </div>
 
               {/* Informations du produit */}
-              <div className="p-4">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              <div className="p-2 sm:p-3">
+                <h3 className="text-xs sm:text-sm font-medium text-gray-800 mb-1 sm:mb-2 line-clamp-2 group-hover:text-orange-600">
                   {product.name}
                 </h3>
-                <p className="text-gray-600 mb-4 text-sm leading-relaxed">
+                
+                {/* Rating - Caché sur très petit écran */}
+                <div className="hidden sm:block">
+                  <StarRating rating={product.rating} reviews={product.reviews} />
+                </div>
+                
+                {/* Prix */}
+                <div className="mt-1 sm:mt-2">
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <span className="text-sm sm:text-lg font-bold text-red-600">
+                      {product.price}€
+                    </span>
+                    <span className="text-xs text-gray-500 line-through">
+                      {product.originalPrice}€
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-600 mt-1 flex items-center">
+                    <Truck className="w-3 h-3 mr-1" />
+                    Livraison GRATUITE
+                  </div>
+                </div>
+
+                {/* Description - Cachée sur mobile */}
+                <p className="hidden sm:block text-xs text-gray-600 mt-2 line-clamp-2">
                   {product.description}
                 </p>
+
+                {/* Boutons d'action */}
+                <button className="w-full mt-2 sm:mt-3 bg-orange-400 hover:bg-orange-500 text-gray-800 font-bold py-1.5 sm:py-2 px-2 sm:px-4 rounded text-xs sm:text-sm transition-colors amazon-button flex items-center justify-center">
+                  <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                  Ajouter au panier
+                </button>
                 
-                {/* Prix et bouton */}
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-amber-600">
-                    {product.price}€
-                  </span>
-                  <button className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 font-medium">
-                    Contacter
-                  </button>
-                </div>
+                <a 
+                  href={product.amazonLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full mt-1 sm:mt-2 bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-1.5 sm:py-2 px-2 sm:px-4 rounded text-xs sm:text-sm transition-colors amazon-button flex items-center justify-center"
+                >
+                  <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                  Lien Amazon
+                </a>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Footer simple */}
-        <footer className="mt-16 text-center text-amber-700">
-          <p className="text-lg font-medium">
-            💌 Pour acheter un article, contactez-moi !
-          </p>
-          <p className="text-sm mt-2 text-amber-600">
-            Paiement sécurisé • Livraison possible • Remise en main propre
-          </p>
+        {/* Footer Amazon-style - Responsive */}
+        <footer className="mt-8 sm:mt-16 bg-gray-800 text-white p-4 sm:p-8 rounded-lg">
+          <div className="text-center">
+            <h3 className="text-lg font-bold mb-4">La Boutique de Capponuts</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-sm">
+              <div>
+                <h4 className="font-bold mb-2 text-orange-400 flex items-center justify-center sm:justify-start">
+                  <CreditCard className="w-4 h-4 mr-2" />
+                  Paiement
+                </h4>
+                <p className="flex items-center justify-center sm:justify-start">
+                  <CreditCard className="w-3 h-3 mr-1" />
+                  Paiement sécurisé
+                </p>
+                <p>💰 Espèces acceptées</p>
+              </div>
+              <div>
+                <h4 className="font-bold mb-2 text-orange-400 flex items-center justify-center sm:justify-start">
+                  <Truck className="w-4 h-4 mr-2" />
+                  Livraison
+                </h4>
+                <p className="flex items-center justify-center sm:justify-start">
+                  <Truck className="w-3 h-3 mr-1" />
+                  Livraison possible
+                </p>
+                <p>🤝 Remise en main propre</p>
+              </div>
+              <div>
+                <h4 className="font-bold mb-2 text-orange-400 flex items-center justify-center sm:justify-start">
+                  <Mail className="w-4 h-4 mr-2" />
+                  Contact
+                </h4>
+                <p className="flex items-center justify-center sm:justify-start">
+                  <Mail className="w-3 h-3 mr-1" />
+                  capponuts@email.com
+                </p>
+                <p className="flex items-center justify-center sm:justify-start">
+                  <Phone className="w-3 h-3 mr-1" />
+                  06 XX XX XX XX
+                </p>
+              </div>
+            </div>
+          </div>
         </footer>
       </main>
     </div>

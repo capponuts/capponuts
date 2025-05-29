@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛍️ La Boutique de Capponuts
 
-## Getting Started
+Site web simple et élégant pour présenter vos produits de brocante en ligne.
 
-First, run the development server:
+## 🚀 Démarrage rapide
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. **Installer les dépendances :**
+   ```bash
+   npm install
+   ```
+
+2. **Lancer le serveur de développement :**
+   ```bash
+   npm run dev
+   ```
+
+3. **Ouvrir votre navigateur :**
+   Allez sur [http://localhost:3000](http://localhost:3000)
+
+## 📝 Comment modifier vos produits
+
+### Ajouter/modifier des produits
+
+Éditez le fichier `src/app/page.tsx` et modifiez le tableau `products` :
+
+```javascript
+const products = [
+  {
+    id: 1,
+    name: "Nom de votre produit",
+    description: "Description détaillée de votre produit",
+    price: 25, // Prix en euros
+    image: "/products/votre-image.jpg"
+  },
+  // Ajoutez d'autres produits ici...
+];
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Ajouter des images
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Placez vos photos de produits dans le dossier `public/products/`
+2. Nommez-les de manière claire (ex: `vase-vintage.jpg`)
+3. Mettez à jour le chemin dans le tableau des produits
+4. Décommentez le composant `Image` dans le code pour afficher vos vraies photos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Personnaliser les couleurs et le style
 
-## Learn More
+Le site utilise une palette de couleurs ambrées. Pour changer :
+- Modifiez les classes Tailwind dans `src/app/page.tsx`
+- Couleurs principales : `amber-50`, `amber-200`, `amber-500`, `amber-600`, `amber-800`
 
-To learn more about Next.js, take a look at the following resources:
+## 📱 Fonctionnalités
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- ✅ Design responsive (mobile, tablette, desktop)
+- ✅ Interface simple et directe
+- ✅ Grille de produits avec images, descriptions et prix
+- ✅ Boutons de contact pour chaque produit
+- ✅ Optimisé pour le SEO
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎨 Prochaines améliorations possibles
 
-## Deploy on Vercel
+- Ajouter un système de contact par email
+- Intégrer WhatsApp pour les messages directs
+- Ajouter un système de catégories
+- Créer une galerie d'images pour chaque produit
+- Ajouter un système de recherche
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📞 Contact
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Pour toute question sur le site, contactez Capponuts !
+
+---
+
+*Site créé avec Next.js 15, TypeScript et Tailwind CSS*
