@@ -160,13 +160,6 @@ export default function Home() {
 
             {/* Actions utilisateur - Mobile optimisé */}
             <div className="flex items-center gap-2 sm:gap-4 text-white text-xs sm:text-sm">
-              <div className="hidden sm:block">
-                <div className="text-xs text-gray-300 flex items-center">
-                  <User className="w-3 h-3 mr-1" />
-                  Bonjour
-                </div>
-                <div className="font-bold">Contact</div>
-              </div>
               <div className="relative">
                 <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7" />
                 <span className="absolute -top-1 -right-1 bg-orange-400 text-gray-800 text-xs rounded-full w-3 h-3 sm:w-4 sm:h-4 flex items-center justify-center font-bold">
@@ -221,13 +214,9 @@ export default function Home() {
                 <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-2xl sm:text-4xl">
                   📷
                 </div>
-                {/* Badge de réduction */}
+                {/* Badge en stock */}
                 <div className="absolute top-1 sm:top-2 left-1 sm:left-2 bg-green-600 text-white text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded">
                   EN STOCK
-                </div>
-                {/* Badge prix négociable */}
-                <div className="absolute top-1 sm:top-2 right-1 sm:right-2 bg-blue-600 text-white text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded">
-                  NÉGOCIABLE
                 </div>
                 {/* Quand vous aurez vos vraies images, décommentez ceci :
                 <Image
@@ -271,20 +260,15 @@ export default function Home() {
                   {product.description}
                 </p>
 
-                {/* Boutons d'action */}
-                <button className="w-full mt-2 sm:mt-3 bg-green-500 hover:bg-green-600 text-white font-bold py-1.5 sm:py-2 px-2 sm:px-4 rounded text-xs sm:text-sm transition-colors amazon-button flex items-center justify-center">
-                  <MessageCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                  Me contacter
-                </button>
-                
+                {/* Bouton d'action */}
                 <a 
                   href={product.amazonLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full mt-1 sm:mt-2 bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-1.5 sm:py-2 px-2 sm:px-4 rounded text-xs sm:text-sm transition-colors amazon-button flex items-center justify-center"
+                  className="w-full mt-2 sm:mt-3 bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-1.5 sm:py-2 px-2 sm:px-4 rounded text-xs sm:text-sm transition-colors amazon-button flex items-center justify-center"
                 >
                   <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                  Voir similaire
+                  Article Sur Amazon
                 </a>
               </div>
             </div>
@@ -331,11 +315,11 @@ export default function Home() {
                 </h4>
                 <p className="flex items-center justify-center sm:justify-start">
                   <Mail className="w-3 h-3 mr-1" />
-                  capponuts@email.com
+                  kevin@capponi.fr
                 </p>
                 <p className="flex items-center justify-center sm:justify-start">
                   <Phone className="w-3 h-3 mr-1" />
-                  06 XX XX XX XX
+                  06 58 65 79 87
                 </p>
               </div>
             </div>
