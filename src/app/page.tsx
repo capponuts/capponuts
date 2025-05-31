@@ -11,19 +11,20 @@ import {
   ExternalLink,
   MessageCircle
 } from "lucide-react";
+import Image from "next/image";
 
 // Données des produits (vous pourrez les modifier facilement)
 const products = [
   {
     id: 1,
-    name: "Vase vintage en céramique",
-    description: "Magnifique vase en céramique des années 70, parfait état",
-    price: 25,
-    originalPrice: 35,
-    rating: 4.5,
+    name: "Bateaux Telecommander, Jouet Mosasaure Télécommandé 2.4G avec USB et Lumière",
+    description: "Jouet aquatique télécommandé en forme de mosasaure, 2.4GHz, avec éclairage LED et rechargeable USB",
+    price: 15,
+    originalPrice: 29.99,
+    rating: 4.3,
     reviews: 12,
-    image: "/products/vase.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple1"
+    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/91mKK7NFi3L._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0DSHZ2RP5"
   },
   {
     id: 2,
@@ -79,6 +80,138 @@ const products = [
     reviews: 11,
     image: "/products/boite-bijoux.jpg",
     amazonLink: "https://amazon.fr/dp/exemple6"
+  },
+  {
+    id: 7,
+    name: "Miroir rond en rotin",
+    description: "Miroir vintage en rotin tressé, diamètre 40cm, style bohème chic",
+    price: 32,
+    originalPrice: 45,
+    rating: 4.4,
+    reviews: 7,
+    image: "/products/miroir-rotin.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple7"
+  },
+  {
+    id: 8,
+    name: "Machine à écrire Olympia",
+    description: "Machine à écrire vintage des années 60, parfait état de fonctionnement",
+    price: 85,
+    originalPrice: 120,
+    rating: 4.9,
+    reviews: 4,
+    image: "/products/machine-ecrire.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple8"
+  },
+  {
+    id: 9,
+    name: "Coussin brodé fait main",
+    description: "Coussin décoratif brodé à la main, motifs floraux, 45x45cm",
+    price: 28,
+    originalPrice: 38,
+    rating: 4.6,
+    reviews: 13,
+    image: "/products/coussin-brode.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple9"
+  },
+  {
+    id: 10,
+    name: "Plateau en bois d'olivier",
+    description: "Plateau artisanal en bois d'olivier massif, idéal pour l'apéritif",
+    price: 42,
+    originalPrice: 55,
+    rating: 4.7,
+    reviews: 9,
+    image: "/products/plateau-olivier.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple10"
+  },
+  {
+    id: 11,
+    name: "Théière en fonte japonaise",
+    description: "Théière traditionnelle en fonte émaillée, avec infuseur, 1L",
+    price: 55,
+    originalPrice: 75,
+    rating: 4.8,
+    reviews: 16,
+    image: "/products/theiere-fonte.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple11"
+  },
+  {
+    id: 12,
+    name: "Horloge murale vintage",
+    description: "Horloge de gare parisienne, style rétro, mécanisme silencieux",
+    price: 38,
+    originalPrice: 52,
+    rating: 4.3,
+    reviews: 8,
+    image: "/products/horloge-vintage.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple12"
+  },
+  {
+    id: 13,
+    name: "Carafe en verre soufflé",
+    description: "Carafe artisanale en verre soufflé bleu, forme élégante, 1.5L",
+    price: 29,
+    originalPrice: 40,
+    rating: 4.5,
+    reviews: 11,
+    image: "/products/carafe-verre.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple13"
+  },
+  {
+    id: 14,
+    name: "Panier en osier tressé",
+    description: "Grand panier de rangement en osier naturel, anses en cuir",
+    price: 24,
+    originalPrice: 35,
+    rating: 4.4,
+    reviews: 12,
+    image: "/products/panier-osier.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple14"
+  },
+  {
+    id: 15,
+    name: "Bougeoir en laiton patiné",
+    description: "Bougeoir ancien en laiton, patine d'époque, hauteur 15cm",
+    price: 19,
+    originalPrice: 28,
+    rating: 4.2,
+    reviews: 6,
+    image: "/products/bougeoir-laiton.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple15"
+  },
+  {
+    id: 16,
+    name: "Pot de fleurs en terre cuite",
+    description: "Pot artisanal en terre cuite émaillée, motifs géométriques, 25cm",
+    price: 21,
+    originalPrice: 30,
+    rating: 4.6,
+    reviews: 14,
+    image: "/products/pot-terre-cuite.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple16"
+  },
+  {
+    id: 17,
+    name: "Plaid en laine mohair",
+    description: "Plaid doux en laine mohair, couleur beige chiné, 130x170cm",
+    price: 65,
+    originalPrice: 85,
+    rating: 4.9,
+    reviews: 8,
+    image: "/products/plaid-mohair.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple17"
+  },
+  {
+    id: 18,
+    name: "Globe terrestre vintage",
+    description: "Globe terrestre sur pied en bois, cartographie années 80",
+    price: 48,
+    originalPrice: 68,
+    rating: 4.5,
+    reviews: 5,
+    image: "/products/globe-vintage.jpg",
+    amazonLink: "https://amazon.fr/dp/exemple18"
   }
 ];
 
@@ -210,21 +343,22 @@ export default function Home() {
             >
               {/* Image du produit */}
               <div className="relative h-32 sm:h-48 bg-gray-100 p-2 sm:p-4">
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-2xl sm:text-4xl">
-                  📷
-                </div>
+                {product.image && product.image.startsWith('http') ? (
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-contain p-2 sm:p-4"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-2xl sm:text-4xl">
+                    📷
+                  </div>
+                )}
                 {/* Badge en stock */}
-                <div className="absolute top-1 sm:top-2 left-1 sm:left-2 bg-green-600 text-white text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded">
+                <div className="absolute top-1 sm:top-2 left-1 sm:left-2 bg-green-600 text-white text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded z-10">
                   EN STOCK
                 </div>
-                {/* Quand vous aurez vos vraies images, décommentez ceci :
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="object-contain p-2 sm:p-4"
-                />
-                */}
               </div>
 
               {/* Informations du produit */}
