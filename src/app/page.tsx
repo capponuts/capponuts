@@ -34,8 +34,8 @@ const products = [
     id: 2,
     name: "Seche Cheveux Ionique 1600W Diffuseur de Cheveux Professionnel 150 000 t/m 4 Températures 3 Vitesses Bouton Chaud/Froid Hair Dryer Concentrateur/Diffuseur Magnétique Faible Bruit Voyage Maison",
     description: "Sèche-cheveux professionnel ionique 1600W avec diffuseur, 4 températures, 3 vitesses, fonction chaud/froid, concentrateur magnétique",
-    price: 25,
-    originalPrice: 49.99,
+    price: 15,
+    originalPrice: 29.99,
     rating: 4.5,
     reviews: 28,
     category: "Beauté et Soins",
@@ -273,10 +273,10 @@ export default function Home() {
                 {/* Prix */}
                 <div className="mt-1 sm:mt-2">
                   <div className="flex items-center gap-1 sm:gap-2">
-                    <span className="text-sm sm:text-lg font-bold text-green-600">
+                    <span className="text-xl sm:text-2xl font-black text-red-600 bg-yellow-300 px-2 py-1 rounded-lg shadow-md border-2 border-red-500">
                       {product.price}€
                     </span>
-                    <span className="text-xs text-gray-500 line-through">
+                    <span className="text-xs text-gray-400 line-through ml-2">
                       {product.originalPrice}€
                     </span>
                   </div>
