@@ -311,7 +311,7 @@ export default function Home() {
           <div className="text-center py-12">
             <div className="text-gray-400 text-4xl mb-4">📦</div>
             <h3 className="text-white text-lg font-medium mb-2">Aucun produit dans cette catégorie</h3>
-            <p className="text-gray-400">D'autres articles seront bientôt ajoutés !</p>
+            <p className="text-gray-400">D&apos;autres articles seront bientôt ajoutés !</p>
           </div>
         )}
 
