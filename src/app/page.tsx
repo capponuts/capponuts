@@ -1,3 +1,5 @@
+"use client";
+
 import { 
   Search, 
   Star, 
@@ -12,6 +14,7 @@ import {
   MessageCircle
 } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
 // Données des produits (vous pourrez les modifier facilement)
 const products = [
@@ -23,195 +26,21 @@ const products = [
     originalPrice: 29.99,
     rating: 4.3,
     reviews: 12,
+    category: "Jeux et Jouets",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/91mKK7NFi3L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DSHZ2RP5"
   },
   {
     id: 2,
-    name: "Livre ancien de cuisine",
-    description: "Livre de recettes traditionelles, édition 1960",
-    price: 15,
-    originalPrice: 22,
-    rating: 4.8,
-    reviews: 8,
-    image: "/products/livre.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple2"
-  },
-  {
-    id: 3,
-    name: "Lampe de bureau rétro",
-    description: "Lampe de bureau style industriel, fonctionne parfaitement",
-    price: 45,
-    originalPrice: 65,
-    rating: 4.3,
-    reviews: 15,
-    image: "/products/lampe.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple3"
-  },
-  {
-    id: 4,
-    name: "Service à thé porcelaine",
-    description: "Service à thé complet pour 6 personnes, motifs floraux",
-    price: 35,
-    originalPrice: 50,
-    rating: 4.7,
-    reviews: 6,
-    image: "/products/service-the.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple4"
-  },
-  {
-    id: 5,
-    name: "Cadre photo vintage",
-    description: "Cadre en bois doré, style baroque, 20x30cm",
-    price: 18,
-    originalPrice: 25,
-    rating: 4.2,
-    reviews: 9,
-    image: "/products/cadre.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple5"
-  },
-  {
-    id: 6,
-    name: "Boîte à bijoux ancienne",
-    description: "Boîte à bijoux en velours rouge, compartiments multiples",
-    price: 22,
-    originalPrice: 30,
-    rating: 4.6,
-    reviews: 11,
-    image: "/products/boite-bijoux.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple6"
-  },
-  {
-    id: 7,
-    name: "Miroir rond en rotin",
-    description: "Miroir vintage en rotin tressé, diamètre 40cm, style bohème chic",
-    price: 32,
-    originalPrice: 45,
-    rating: 4.4,
-    reviews: 7,
-    image: "/products/miroir-rotin.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple7"
-  },
-  {
-    id: 8,
-    name: "Machine à écrire Olympia",
-    description: "Machine à écrire vintage des années 60, parfait état de fonctionnement",
-    price: 85,
-    originalPrice: 120,
-    rating: 4.9,
-    reviews: 4,
-    image: "/products/machine-ecrire.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple8"
-  },
-  {
-    id: 9,
-    name: "Coussin brodé fait main",
-    description: "Coussin décoratif brodé à la main, motifs floraux, 45x45cm",
-    price: 28,
-    originalPrice: 38,
-    rating: 4.6,
-    reviews: 13,
-    image: "/products/coussin-brode.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple9"
-  },
-  {
-    id: 10,
-    name: "Plateau en bois d'olivier",
-    description: "Plateau artisanal en bois d'olivier massif, idéal pour l'apéritif",
-    price: 42,
-    originalPrice: 55,
-    rating: 4.7,
-    reviews: 9,
-    image: "/products/plateau-olivier.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple10"
-  },
-  {
-    id: 11,
-    name: "Théière en fonte japonaise",
-    description: "Théière traditionnelle en fonte émaillée, avec infuseur, 1L",
-    price: 55,
-    originalPrice: 75,
-    rating: 4.8,
-    reviews: 16,
-    image: "/products/theiere-fonte.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple11"
-  },
-  {
-    id: 12,
-    name: "Horloge murale vintage",
-    description: "Horloge de gare parisienne, style rétro, mécanisme silencieux",
-    price: 38,
-    originalPrice: 52,
-    rating: 4.3,
-    reviews: 8,
-    image: "/products/horloge-vintage.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple12"
-  },
-  {
-    id: 13,
-    name: "Carafe en verre soufflé",
-    description: "Carafe artisanale en verre soufflé bleu, forme élégante, 1.5L",
-    price: 29,
-    originalPrice: 40,
+    name: "Seche Cheveux Ionique 1600W Diffuseur de Cheveux Professionnel 150 000 t/m 4 Températures 3 Vitesses Bouton Chaud/Froid Hair Dryer Concentrateur/Diffuseur Magnétique Faible Bruit Voyage Maison",
+    description: "Sèche-cheveux professionnel ionique 1600W avec diffuseur, 4 températures, 3 vitesses, fonction chaud/froid, concentrateur magnétique",
+    price: 25,
+    originalPrice: 49.99,
     rating: 4.5,
-    reviews: 11,
-    image: "/products/carafe-verre.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple13"
-  },
-  {
-    id: 14,
-    name: "Panier en osier tressé",
-    description: "Grand panier de rangement en osier naturel, anses en cuir",
-    price: 24,
-    originalPrice: 35,
-    rating: 4.4,
-    reviews: 12,
-    image: "/products/panier-osier.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple14"
-  },
-  {
-    id: 15,
-    name: "Bougeoir en laiton patiné",
-    description: "Bougeoir ancien en laiton, patine d'époque, hauteur 15cm",
-    price: 19,
-    originalPrice: 28,
-    rating: 4.2,
-    reviews: 6,
-    image: "/products/bougeoir-laiton.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple15"
-  },
-  {
-    id: 16,
-    name: "Pot de fleurs en terre cuite",
-    description: "Pot artisanal en terre cuite émaillée, motifs géométriques, 25cm",
-    price: 21,
-    originalPrice: 30,
-    rating: 4.6,
-    reviews: 14,
-    image: "/products/pot-terre-cuite.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple16"
-  },
-  {
-    id: 17,
-    name: "Plaid en laine mohair",
-    description: "Plaid doux en laine mohair, couleur beige chiné, 130x170cm",
-    price: 65,
-    originalPrice: 85,
-    rating: 4.9,
-    reviews: 8,
-    image: "/products/plaid-mohair.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple17"
-  },
-  {
-    id: 18,
-    name: "Globe terrestre vintage",
-    description: "Globe terrestre sur pied en bois, cartographie années 80",
-    price: 48,
-    originalPrice: 68,
-    rating: 4.5,
-    reviews: 5,
-    image: "/products/globe-vintage.jpg",
-    amazonLink: "https://amazon.fr/dp/exemple18"
+    reviews: 28,
+    category: "Beauté et Soins",
+    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61aH3xKghuL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0DSL9VW8D?th=1"
   }
 ];
 
@@ -243,6 +72,13 @@ const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) =>
 };
 
 export default function Home() {
+  const [selectedCategory, setSelectedCategory] = useState<string>("Toutes catégories");
+
+  // Filtrer les produits selon la catégorie sélectionnée
+  const filteredProducts = selectedCategory === "Toutes catégories" 
+    ? products 
+    : products.filter(product => product.category === selectedCategory);
+
   return (
     <div className="min-h-screen bg-gray-900">
       {/* Header Amazon-style - Optimisé mobile */}
@@ -266,7 +102,11 @@ export default function Home() {
             {/* Barre de recherche - Responsive */}
             <div className="flex-1 max-w-2xl mx-2 sm:mx-4 lg:mx-8">
               <div className="flex w-full">
-                <select className="hidden sm:block bg-gray-200 text-gray-800 px-2 lg:px-3 py-2 rounded-l-md border-r border-gray-300 text-xs lg:text-sm">
+                <select 
+                  className="hidden sm:block bg-gray-200 text-gray-800 px-2 lg:px-3 py-2 rounded-l-md border-r border-gray-300 text-xs lg:text-sm"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                >
                   <option>Toutes catégories</option>
                   <option>High-Tech</option>
                   <option>Cuisine et Maison</option>
@@ -276,6 +116,7 @@ export default function Home() {
                   <option>Mode</option>
                   <option>Sports et Loisirs</option>
                   <option>Hygiène et Santé</option>
+                  <option>Beauté et Soins</option>
                   <option>Jardin</option>
                   <option>Jeux et Jouets</option>
                 </select>
@@ -307,19 +148,73 @@ export default function Home() {
       <nav className="bg-gray-700 text-white text-xs sm:text-sm overflow-x-auto">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 py-2">
           <div className="flex items-center gap-3 sm:gap-6 whitespace-nowrap">
-            <span className="hover:text-orange-400 cursor-pointer flex items-center">
+            <button 
+              onClick={() => setSelectedCategory("Toutes catégories")}
+              className={`hover:text-orange-400 cursor-pointer flex items-center ${selectedCategory === "Toutes catégories" ? "text-orange-400" : ""}`}
+            >
               <Menu className="w-4 h-4 mr-1" />
               Toutes les catégories
-            </span>
-            <span className="hover:text-orange-400 cursor-pointer">📱 High-Tech</span>
-            <span className="hover:text-orange-400 cursor-pointer">🏠 Cuisine et Maison</span>
-            <span className="hover:text-orange-400 cursor-pointer">🚗 Auto et Moto</span>
-            <span className="hover:text-orange-400 cursor-pointer">💻 Informatique</span>
-            <span className="hover:text-orange-400 cursor-pointer">🔧 Bricolage</span>
-            <span className="hover:text-orange-400 cursor-pointer">👕 Mode</span>
-            <span className="hover:text-orange-400 cursor-pointer">⚽ Sports et Loisirs</span>
-            <span className="hover:text-orange-400 cursor-pointer">💡 Luminaires</span>
-            <span className="hover:text-orange-400 cursor-pointer">🌱 Jardin</span>
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("High-Tech")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "High-Tech" ? "text-orange-400" : ""}`}
+            >
+              📱 High-Tech
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Cuisine et Maison")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Cuisine et Maison" ? "text-orange-400" : ""}`}
+            >
+              🏠 Cuisine et Maison
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Auto et Moto")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Auto et Moto" ? "text-orange-400" : ""}`}
+            >
+              🚗 Auto et Moto
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Informatique")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Informatique" ? "text-orange-400" : ""}`}
+            >
+              💻 Informatique
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Bricolage")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Bricolage" ? "text-orange-400" : ""}`}
+            >
+              🔧 Bricolage
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Mode")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Mode" ? "text-orange-400" : ""}`}
+            >
+              👕 Mode
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Sports et Loisirs")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Sports et Loisirs" ? "text-orange-400" : ""}`}
+            >
+              ⚽ Sports et Loisirs
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Beauté et Soins")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Beauté et Soins" ? "text-orange-400" : ""}`}
+            >
+              💄 Beauté et Soins
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Luminaires")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Luminaires" ? "text-orange-400" : ""}`}
+            >
+              💡 Luminaires
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Jeux et Jouets")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Jeux et Jouets" ? "text-orange-400" : ""}`}
+            >
+              🧸 Jeux et Jouets
+            </button>
           </div>
         </div>
       </nav>
@@ -329,6 +224,9 @@ export default function Home() {
         <div className="mb-4 sm:mb-6 bg-gray-800 p-3 sm:p-4 rounded-lg">
           <h2 className="text-white text-lg sm:text-xl font-bold mb-2">
             Catalogue des articles disponibles
+            {selectedCategory !== "Toutes catégories" && (
+              <span className="ml-2 text-orange-400">- {selectedCategory}</span>
+            )}
           </h2>
           <p className="text-gray-300 text-sm">
             💬 Pour commander un article, contactez-moi par message • 📱 Paiement et livraison à convenir
@@ -336,7 +234,7 @@ export default function Home() {
         </div>
         
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-4">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <div
               key={product.id}
               className="bg-white rounded-lg hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer product-card"
@@ -407,6 +305,15 @@ export default function Home() {
             </div>
           ))}
         </div>
+
+        {/* Message si aucun produit dans la catégorie */}
+        {filteredProducts.length === 0 && (
+          <div className="text-center py-12">
+            <div className="text-gray-400 text-4xl mb-4">📦</div>
+            <h3 className="text-white text-lg font-medium mb-2">Aucun produit dans cette catégorie</h3>
+            <p className="text-gray-400">D'autres articles seront bientôt ajoutés !</p>
+          </div>
+        )}
 
         {/* Footer Amazon-style - Responsive */}
         <footer className="mt-8 sm:mt-16 bg-gray-800 text-white p-4 sm:p-8 rounded-lg">
