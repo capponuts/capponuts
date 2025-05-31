@@ -53,6 +53,18 @@ const products = [
     category: "Cuisine et Maison",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71pcYaYe3jL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DSTNYLRV"
+  },
+  {
+    id: 4,
+    name: "Rasoir intime 5 en 1 pour femme, rasoir électrique, pour la zone intime IPX7, étanche avec station de charge USB, tondeuse pour le visage, les sourcils, le corps, le bikini",
+    description: "Rasoir électrique 5 en 1 étanche IPX7 avec station de charge USB, tondeuse multifonction pour visage, sourcils, corps et zone bikini",
+    price: 13,
+    originalPrice: 26.99,
+    rating: 4.4,
+    reviews: 22,
+    category: "Beauté et Soins",
+    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61QvIGuSFaL.__AC_SX300_SY300_QL70_ML2_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0DLNYRJW5"
   }
 ];
 
