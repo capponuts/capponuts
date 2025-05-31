@@ -41,6 +41,18 @@ const products = [
     category: "Beauté et Soins",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61aH3xKghuL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DSL9VW8D?th=1"
+  },
+  {
+    id: 3,
+    name: "4 Pièces Étagère de Douche sans Percage - Noir Porte Savon Douche Sans PerçAge Avec Crochets- Avec 1 Support De Dentifrice Et 1 Porte-Savon - Organiseur De Salle De Bain Et Cuisine",
+    description: "Set de 4 étagères de douche noires sans perçage avec crochets, support dentifrice et porte-savon, organiseur salle de bain et cuisine",
+    price: 12,
+    originalPrice: 25,
+    rating: 4.2,
+    reviews: 15,
+    category: "Cuisine et Maison",
+    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71pcYaYe3jL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0DSTNYLRV"
   }
 ];
 
