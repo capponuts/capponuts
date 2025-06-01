@@ -359,11 +359,25 @@ export default function Home() {
               </div>
             </div>
             
-            {/* Barre de recherche - Responsive */}
+            {/* Barre de recherche et filtre catégorie - Responsive */}
             <div className="flex-1 max-w-2xl mx-2 sm:mx-4 lg:mx-8">
-              <div className="flex w-full">
+              <div className="flex w-full gap-2 items-center">
+                {/* Bouton Catégorie sur mobile */}
+                <button
+                  type="button"
+                  className="sm:hidden flex items-center bg-orange-400 hover:bg-orange-500 text-gray-900 font-bold px-3 py-2 rounded-md shadow-md transition-colors"
+                  onClick={() => {
+                    const select = document.getElementById('category-select');
+                    if (select) select.focus();
+                  }}
+                >
+                  <Menu className="w-4 h-4 mr-2" />
+                  Catégorie
+                </button>
+                {/* Select visible sur desktop/tablette, invisible sur mobile */}
                 <select 
-                  className="bg-gray-200 text-gray-800 px-2 lg:px-3 py-2 rounded-l-md border-r border-gray-300 text-xs lg:text-sm w-full sm:w-auto"
+                  id="category-select"
+                  className="hidden sm:block bg-gray-200 text-gray-800 px-2 lg:px-3 py-2 rounded-l-md border-r border-gray-300 text-xs lg:text-sm"
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                 >
@@ -380,14 +394,37 @@ export default function Home() {
                   <option>Jardin</option>
                   <option>Jeux et Jouets</option>
                 </select>
-                <input 
-                  type="text" 
-                  placeholder="Rechercher..."
-                  className="flex-1 px-2 sm:px-4 py-2 text-gray-800 focus:outline-none text-sm search-input sm:rounded-l-md"
-                />
-                <button className="bg-orange-400 hover:bg-orange-500 px-3 sm:px-4 py-2 rounded-r-md transition-colors">
-                  <Search className="w-4 h-4 sm:w-5 sm:h-5 text-gray-800" />
-                </button>
+                {/* Select natif invisible mais accessible sur mobile */}
+                <select
+                  id="category-select"
+                  className="absolute opacity-0 pointer-events-none sm:hidden"
+                  tabIndex={-1}
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  aria-label="Choisir une catégorie"
+                >
+                  <option>Toutes catégories</option>
+                  <option>High-Tech</option>
+                  <option>Cuisine et Maison</option>
+                  <option>Auto et Moto</option>
+                  <option>Informatique</option>
+                  <option>Bricolage</option>
+                  <option>Mode</option>
+                  <option>Sports et Loisirs</option>
+                  <option>Hygiène et Santé</option>
+                  <option>Beauté et Soins</option>
+                  <option>Jardin</option>
+                  <option>Jeux et Jouets</option>
+                </select>
+                {/* Champ de recherche */}
+                <div className="flex-1 flex items-center bg-white border-2 border-orange-400 rounded-md overflow-hidden shadow-sm">
+                  <Search className="w-5 h-5 text-orange-400 ml-2" />
+                  <input 
+                    type="text" 
+                    placeholder="Rechercher..."
+                    className="flex-1 px-2 py-2 text-gray-800 focus:outline-none text-sm bg-transparent"
+                  />
+                </div>
               </div>
             </div>
           </div>
