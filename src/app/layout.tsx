@@ -22,12 +22,21 @@ export const metadata: Metadata = {
   openGraph: {
     title: "La Boutique de Capponuts",
     description: "Produits Amazon sélectionnés avec soin - Prix imbattables !",
-    type: "website"
+    type: "website",
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'La Boutique de Capponuts - Open Graph Image'
+      }
+    ]
   },
   twitter: {
     card: "summary_large_image",
     title: "La Boutique de Capponuts",
-    description: "Produits Amazon sélectionnés avec soin - Prix imbattables !"
+    description: "Produits Amazon sélectionnés avec soin - Prix imbattables !",
+    images: ['/og-image.png']
   }
 };
 
