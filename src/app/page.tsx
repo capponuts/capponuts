@@ -394,16 +394,6 @@ export default function Home() {
                 </button>
               </div>
             </div>
-
-            {/* Actions utilisateur - Mobile optimisé */}
-            <div className="flex items-center gap-2 sm:gap-4 text-white text-xs sm:text-sm">
-              <div className="relative">
-                <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7" />
-                <span className="absolute -top-1 -right-1 bg-orange-400 text-gray-800 text-xs rounded-full w-3 h-3 sm:w-4 sm:h-4 flex items-center justify-center font-bold">
-                  !
-                </span>
-              </div>
-            </div>
           </div>
         </div>
       </header>
@@ -578,57 +568,6 @@ export default function Home() {
             <p className="text-gray-400">D&apos;autres articles seront bientôt ajoutés !</p>
           </div>
         )}
-
-        {/* Footer Amazon-style - Responsive */}
-        <footer className="mt-8 sm:mt-16 bg-gray-800 text-white p-4 sm:p-8 rounded-lg">
-          <div className="text-center">
-            <h3 className="text-lg font-bold mb-4">La Boutique de Capponuts</h3>
-            <div className="mb-6 p-4 bg-orange-500 text-gray-900 rounded-lg">
-              <h4 className="font-bold mb-2">💬 Comment commander ?</h4>
-              <p className="text-sm">
-                Contactez-moi par message pour réserver un article • Prix négociables • Paiement à la livraison ou remise en main propre
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-sm">
-              <div>
-                <h4 className="font-bold mb-2 text-orange-400 flex items-center justify-center sm:justify-start">
-                  <CreditCard className="w-4 h-4 mr-2" />
-                  Paiement
-                </h4>
-                <p className="flex items-center justify-center sm:justify-start">
-                  <CreditCard className="w-3 h-3 mr-1" />
-                  Espèces ou virement
-                </p>
-                <p>💰 Prix négociables</p>
-              </div>
-              <div>
-                <h4 className="font-bold mb-2 text-orange-400 flex items-center justify-center sm:justify-start">
-                  <Truck className="w-4 h-4 mr-2" />
-                  Livraison
-                </h4>
-                <p className="flex items-center justify-center sm:justify-start">
-                  <Truck className="w-3 h-3 mr-1" />
-                  Livraison possible
-                </p>
-                <p>🤝 Remise en main propre</p>
-              </div>
-              <div>
-                <h4 className="font-bold mb-2 text-orange-400 flex items-center justify-center sm:justify-start">
-                  <Mail className="w-4 h-4 mr-2" />
-                  Contact
-                </h4>
-                <p className="flex items-center justify-center sm:justify-start">
-                  <Mail className="w-3 h-3 mr-1" />
-                  kevin@capponi.fr
-                </p>
-                <p className="flex items-center justify-center sm:justify-start">
-                  <Phone className="w-3 h-3 mr-1" />
-                  06 58 65 79 87
-                </p>
-              </div>
-            </div>
-          </div>
-        </footer>
       </main>
     </div>
   );
