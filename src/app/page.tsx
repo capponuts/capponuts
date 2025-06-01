@@ -363,7 +363,7 @@ export default function Home() {
             <div className="flex-1 max-w-2xl mx-2 sm:mx-4 lg:mx-8">
               <div className="flex w-full">
                 <select 
-                  className="hidden sm:block bg-gray-200 text-gray-800 px-2 lg:px-3 py-2 rounded-l-md border-r border-gray-300 text-xs lg:text-sm"
+                  className="bg-gray-200 text-gray-800 px-2 lg:px-3 py-2 rounded-l-md border-r border-gray-300 text-xs lg:text-sm w-full sm:w-auto"
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                 >
@@ -395,7 +395,7 @@ export default function Home() {
       </header>
 
       {/* Navigation secondaire - Responsive */}
-      <nav className="bg-gray-700 text-white text-xs sm:text-sm overflow-x-auto">
+      <nav className="bg-gray-700 text-white text-xs sm:text-sm overflow-x-auto hidden sm:block">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 py-2">
           <div className="flex items-center gap-3 sm:gap-6 whitespace-nowrap">
             <button 
