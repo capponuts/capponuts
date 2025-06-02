@@ -388,35 +388,6 @@ export default function Home() {
                   Capponuts&rsquo;Shop
                 </span>
               </span>
-              <div className="hidden lg:block text-gray-300 text-sm">
-                <MapPin className="w-4 h-4 inline mr-1" />
-                Catalogue en ligne
-              </div>
-            </div>
-            
-            {/* Filtre catégorie - Responsive, sans moteur de recherche */}
-            <div className="flex-1 max-w-2xl mx-2 sm:mx-4 lg:mx-8">
-              <div className="flex w-full items-center">
-                <select 
-                  className="bg-orange-100 text-gray-900 font-bold px-3 py-2 rounded-md shadow-md w-full focus:outline-none focus:ring-2 focus:ring-orange-400"
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  aria-label="Choisir une catégorie"
-                >
-                  <option>Toutes catégories</option>
-                  <option>High-Tech</option>
-                  <option>Cuisine et Maison</option>
-                  <option>Auto et Moto</option>
-                  <option>Informatique</option>
-                  <option>Bricolage</option>
-                  <option>Mode</option>
-                  <option>Sports et Loisirs</option>
-                  <option>Hygiène et Santé</option>
-                  <option>Beauté et Soins</option>
-                  <option>Jardin</option>
-                  <option>Jeux et Jouets</option>
-                </select>
-              </div>
             </div>
           </div>
         </div>
