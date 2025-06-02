@@ -8,7 +8,7 @@ import {
   ExternalLink
 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Données des produits (vous pourrez les modifier facilement)
 const products = [
@@ -369,6 +369,40 @@ const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) =>
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("Toutes catégories");
+  const [showIntro, setShowIntro] = useState(true);
+  const [typedText, setTypedText] = useState("");
+  const welcomeText = "Bienvenue sur la boutique de Capponuts";
+
+  useEffect(() => {
+    if (!showIntro) return;
+    let i = 0;
+    const interval = setInterval(() => {
+      setTypedText(welcomeText.slice(0, i + 1));
+      i++;
+      if (i === welcomeText.length) {
+        clearInterval(interval);
+        setTimeout(() => setShowIntro(false), 1200); // Affiche le logo 1s puis transition
+      }
+    }, 40);
+    return () => clearInterval(interval);
+  }, [showIntro]);
+
+  // Affichage de l'intro
+  if (showIntro) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-orange-100 to-amber-200">
+        <div className="text-2xl sm:text-3xl font-bold text-amber-900 mb-8 min-h-[2.5em] tracking-wide animate-fade-in">
+          {typedText}
+          <span className="animate-pulse">|</span>
+        </div>
+        {typedText.length === welcomeText.length && (
+          <div className="flex flex-col items-center animate-fade-in-up">
+            <img src="/logo.png" alt="Logo Capponuts'Shop" width={90} height={90} className="mb-2 mt-4 animate-bounce-in" />
+          </div>
+        )}
+      </div>
+    );
+  }
 
   // Filtrage des produits par catégorie (à adapter si tu ajoutes la catégorie dans chaque produit)
   const filteredProducts = selectedCategory === "Toutes catégories"
@@ -388,6 +422,9 @@ export default function Home() {
               <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>
                 Capponuts&rsquo;Shop
               </span>
+              <span className="ml-3 inline-block bg-red-600 text-white text-xs sm:text-sm font-bold px-2 py-1 rounded shadow-sm align-middle animate-pulse" style={{letterSpacing: '0.05em'}}>
+                -50%
+              </span>
             </span>
           </div>
         </div>
@@ -399,9 +436,9 @@ export default function Home() {
       </div>
 
       {/* Menu déroulant catégories - visible uniquement sur mobile */}
-      <div className="block sm:hidden w-full sticky top-[56px] z-0 bg-gray-900 px-2 pt-3">
+      <div className="block sm:hidden w-full sticky top-[64px] z-20 bg-white px-2 pt-3 shadow-md border-b border-gray-200">
         <select
-          className="w-full rounded-md border border-gray-300 py-2 px-3 text-gray-900 font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-orange-400"
+          className="w-full rounded-md border border-gray-300 py-2 px-3 text-gray-900 font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-orange-400 text-base"
           value={selectedCategory}
           onChange={e => setSelectedCategory(e.target.value)}
         >
@@ -531,21 +568,21 @@ export default function Home() {
       </main>
 
       {/* Footer simple en bas de page */}
-      <footer className="w-full flex items-center justify-center py-4 bg-gray-900 border-t border-gray-800 mt-8">
+      <footer className="w-full flex items-center justify-center py-2 bg-gray-900 border-t border-gray-800">
         <Image src="/logo.png" alt="Logo Capponuts'Shop" width={28} height={28} className="mr-2 w-7 h-7 object-contain" />
         <span className="text-gray-400 text-sm font-semibold">Capponuts&rsquo;Shop &copy; {new Date().getFullYear()}</span>
       </footer>
 
       {/* Image capponuts.png avant le footer */}
-      <div className="flex justify-center my-8">
-        <Image src="/capponuts.png" alt="Capponuts" width={120} height={120} className="object-contain rounded-full shadow" />
+      <div className="flex justify-center mb-2 mt-8">
+        <Image src="/capponuts.png" alt="Capponuts" width={180} height={180} className="object-contain rounded-full shadow" />
       </div>
 
       <a
         href="https://wa.me/33658657987"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-5 right-5 z-50 flex items-center group"
+        className="fixed bottom-4 right-4 z-50 flex items-center group"
         aria-label="Contact WhatsApp"
         style={{ textDecoration: 'none' }}
       >
