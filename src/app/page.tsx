@@ -343,7 +343,7 @@ const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) =>
   );
 };
 
-const PRODUCTS_PER_PAGE = 8;
+const PRODUCTS_PER_PAGE = 12;
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("Toutes catégories");
