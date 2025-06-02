@@ -354,6 +354,15 @@ const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) =>
   );
 };
 
+const LogoCapponuts = () => (
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
+    <rect x="4" y="10" width="24" height="16" rx="4" fill="#2563eb"/>
+    <rect x="4" y="18" width="24" height="8" rx="4" fill="#fbbf24"/>
+    <rect x="10" y="6" width="12" height="8" rx="6" fill="#60a5fa"/>
+    <rect x="13" y="2" width="6" height="8" rx="3" fill="#fbbf24"/>
+  </svg>
+);
+
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string>("Toutes catégories");
 
@@ -368,14 +377,17 @@ export default function Home() {
       <header className="bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 py-2 sm:py-3">
           <div className="flex items-center justify-between gap-2">
-            {/* Logo et menu mobile */}
+            {/* Logo et nom boutique */}
             <div className="flex items-center gap-2 sm:gap-4">
               <button className="md:hidden text-white p-2">
                 <Menu className="w-5 h-5" />
               </button>
-              <h1 className="text-lg sm:text-2xl font-bold text-white">
-                🛍️ Capponuts
-              </h1>
+              <span className="flex items-center select-none">
+                <LogoCapponuts />
+                <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>
+                  LA Boutique de Capponuts
+                </span>
+              </span>
               <div className="hidden lg:block text-gray-300 text-sm">
                 <MapPin className="w-4 h-4 inline mr-1" />
                 Catalogue en ligne
