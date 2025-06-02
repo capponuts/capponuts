@@ -326,6 +326,20 @@ const products = [
   }
 ];
 
+const categories = [
+  "Toutes catégories",
+  "High-Tech",
+  "Cuisine et Maison",
+  "Auto et Moto",
+  "Informatique",
+  "Bricolage",
+  "Mode",
+  "Sports et Loisirs",
+  "Hygiène et Santé",
+  "Jardin",
+  "Jeux et Jouets"
+];
+
 // Composant pour afficher les étoiles avec Lucide
 const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) => {
   const fullStars = Math.floor(rating);
@@ -363,12 +377,12 @@ const LogoCapponuts = () => (
 );
 
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("Toutes catégories");
+  const [selectedCategory, setSelectedCategory] = useState("Toutes catégories");
 
-  // Filtrer les produits selon la catégorie sélectionnée
-  const filteredProducts = selectedCategory === "Toutes catégories" 
-    ? products 
-    : products.filter(product => product.category === selectedCategory);
+  // Filtrage des produits par catégorie (à adapter si tu ajoutes la catégorie dans chaque produit)
+  const filteredProducts = selectedCategory === "Toutes catégories"
+    ? products
+    : products.filter((p) => (p.category === selectedCategory));
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -392,82 +406,41 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Navigation secondaire - Responsive */}
+      {/* Menu déroulant catégories - visible uniquement sur mobile */}
+      <div className="block sm:hidden px-2 pt-3">
+        <select
+          className="w-full rounded-md border border-gray-300 py-2 px-3 text-gray-900 font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-orange-400"
+          value={selectedCategory}
+          onChange={e => setSelectedCategory(e.target.value)}
+        >
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Barre horizontale catégories - masquée sur mobile */}
       <nav className="bg-gray-700 text-white text-xs sm:text-sm overflow-x-auto hidden sm:block">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 py-2">
           <div className="flex items-center gap-3 sm:gap-6 whitespace-nowrap">
-            <button 
-              onClick={() => setSelectedCategory("Toutes catégories")}
-              className={`hover:text-orange-400 cursor-pointer flex items-center ${selectedCategory === "Toutes catégories" ? "text-orange-400" : ""}`}
-            >
+            <span className="hover:text-orange-400 cursor-pointer flex items-center">
               <Menu className="w-4 h-4 mr-1" />
               Toutes les catégories
-            </button>
-            <button 
-              onClick={() => setSelectedCategory("High-Tech")}
-              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "High-Tech" ? "text-orange-400" : ""}`}
-            >
-              📱 High-Tech
-            </button>
-            <button 
-              onClick={() => setSelectedCategory("Cuisine et Maison")}
-              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Cuisine et Maison" ? "text-orange-400" : ""}`}
-            >
-              🏠 Cuisine et Maison
-            </button>
-            <button 
-              onClick={() => setSelectedCategory("Auto et Moto")}
-              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Auto et Moto" ? "text-orange-400" : ""}`}
-            >
-              🚗 Auto et Moto
-            </button>
-            <button 
-              onClick={() => setSelectedCategory("Informatique")}
-              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Informatique" ? "text-orange-400" : ""}`}
-            >
-              💻 Informatique
-            </button>
-            <button 
-              onClick={() => setSelectedCategory("Bricolage")}
-              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Bricolage" ? "text-orange-400" : ""}`}
-            >
-              🔧 Bricolage
-            </button>
-            <button 
-              onClick={() => setSelectedCategory("Mode")}
-              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Mode" ? "text-orange-400" : ""}`}
-            >
-              👕 Mode
-            </button>
-            <button 
-              onClick={() => setSelectedCategory("Sports et Loisirs")}
-              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Sports et Loisirs" ? "text-orange-400" : ""}`}
-            >
-              ⚽ Sports et Loisirs
-            </button>
-            <button 
-              onClick={() => setSelectedCategory("Beauté et Soins")}
-              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Beauté et Soins" ? "text-orange-400" : ""}`}
-            >
-              💄 Beauté et Soins
-            </button>
-            <button 
-              onClick={() => setSelectedCategory("Luminaires")}
-              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Luminaires" ? "text-orange-400" : ""}`}
-            >
-              💡 Luminaires
-            </button>
-            <button 
-              onClick={() => setSelectedCategory("Jeux et Jouets")}
-              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Jeux et Jouets" ? "text-orange-400" : ""}`}
-            >
-              🧸 Jeux et Jouets
-            </button>
+            </span>
+            <span className="hover:text-orange-400 cursor-pointer">📱 High-Tech</span>
+            <span className="hover:text-orange-400 cursor-pointer">🏠 Cuisine et Maison</span>
+            <span className="hover:text-orange-400 cursor-pointer">🚗 Auto et Moto</span>
+            <span className="hover:text-orange-400 cursor-pointer">💻 Informatique</span>
+            <span className="hover:text-orange-400 cursor-pointer">🔧 Bricolage</span>
+            <span className="hover:text-orange-400 cursor-pointer">👕 Mode</span>
+            <span className="hover:text-orange-400 cursor-pointer">⚽ Sports et Loisirs</span>
+            <span className="hover:text-orange-400 cursor-pointer">💡 Luminaires</span>
+            <span className="hover:text-orange-400 cursor-pointer">🌱 Jardin</span>
           </div>
         </div>
       </nav>
 
-      {/* Grille des produits - Responsive optimisé */}
+      {/* Grille des produits - responsive amélioré */}
       <main className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6">
         <div className="mb-4 sm:mb-6 bg-gray-800 p-3 sm:p-4 rounded-lg">
           <h2 className="text-white text-lg sm:text-xl font-bold mb-2">
@@ -481,7 +454,7 @@ export default function Home() {
           </p>
         </div>
         
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-4">
+        <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
           {filteredProducts.map((product) => (
             <div
               key={product.id}
