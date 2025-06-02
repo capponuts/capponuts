@@ -402,7 +402,7 @@ export default function Home() {
         </div>
         {typedText.length === welcomeText.length && (
           <div className="flex flex-col items-center animate-fade-in-up">
-            <img src="/logo.png" alt="Logo Capponuts'Shop" width={150} height={150} className="mb-2 mt-4 animate-bounce-in shadow-2xl" style={{filter:'drop-shadow(0 8px 32px #fbbf24)'}} />
+            <Image src="/logo.png" alt="Logo Capponuts'Shop" width={150} height={150} className="mb-2 mt-4 animate-bounce-in shadow-2xl" style={{filter:'drop-shadow(0 8px 32px #fbbf24)'}} priority />
           </div>
         )}
       </div>
@@ -413,8 +413,6 @@ export default function Home() {
   const filteredProducts = selectedCategory === "Toutes catégories"
     ? products
     : products.filter((p) => (p.category === selectedCategory));
-
-  const sortedProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
 
   return (
     <div className="min-h-screen bg-gray-900">
