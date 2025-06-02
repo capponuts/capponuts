@@ -367,11 +367,16 @@ const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) =>
   );
 };
 
+const PRODUCTS_PER_PAGE = 8;
+
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("Toutes catégories");
   const [showIntro, setShowIntro] = useState(true);
   const [typedText, setTypedText] = useState("");
   const welcomeText = "Bienvenue sur la boutique de Capponuts";
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
+  const paginatedProducts = products.slice((currentPage - 1) * PRODUCTS_PER_PAGE, currentPage * PRODUCTS_PER_PAGE);
 
   useEffect(() => {
     if (!showIntro) return;
@@ -484,7 +489,7 @@ export default function Home() {
         </div>
         
         <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
-          {sortedProducts.map((product, idx) => (
+          {paginatedProducts.map((product, idx) => (
             <div
               key={product.id}
               className="bg-white rounded-lg shadow transition-transform duration-200 hover:scale-105 hover:shadow-2xl overflow-hidden group cursor-pointer product-card"
@@ -557,6 +562,25 @@ export default function Home() {
           ))}
         </div>
 
+        {/* Pagination */}
+        <div className="flex justify-center items-center gap-2 mt-6">
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 rounded bg-gray-200 text-gray-700 font-bold disabled:opacity-50"
+          >
+            Précédent
+          </button>
+          <span className="font-semibold text-gray-700">Page {currentPage} / {totalPages}</span>
+          <button
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 rounded bg-gray-200 text-gray-700 font-bold disabled:opacity-50"
+          >
+            Suivant
+          </button>
+        </div>
+
         {/* Message si aucun produit dans la catégorie */}
         {filteredProducts.length === 0 && (
           <div className="text-center py-12">
@@ -582,9 +606,9 @@ export default function Home() {
         href="https://wa.me/33658657987"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-2 right-2 z-50 flex items-center group whatsapp-float"
+        className="fixed bottom-0 right-0 z-50 flex items-center group w-16 h-16 p-3 whatsapp-float"
         aria-label="Contact WhatsApp"
-        style={{ textDecoration: 'none' }}
+        style={{ textDecoration: 'none', borderRadius: '50%' }}
       >
         <span className="bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg p-3 flex items-center justify-center transition-colors duration-200" style={{ boxShadow: '0 4px 16px 0 rgba(0,0,0,0.15)' }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 32 32" fill="currentColor">
