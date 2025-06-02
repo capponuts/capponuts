@@ -1,12 +1,16 @@
 "use client";
 
 import { 
+  Search, 
   Star, 
   StarHalf, 
   Menu, 
-  MapPin, 
   Truck, 
-  ExternalLink
+  CreditCard, 
+  Mail, 
+  Phone,
+  ExternalLink,
+  MessageCircle
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
