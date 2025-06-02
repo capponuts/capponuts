@@ -367,15 +367,6 @@ const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) =>
   );
 };
 
-const LogoCapponuts = () => (
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
-    <rect x="4" y="10" width="24" height="16" rx="4" fill="#2563eb"/>
-    <rect x="4" y="18" width="24" height="8" rx="4" fill="#fbbf24"/>
-    <rect x="10" y="6" width="12" height="8" rx="6" fill="#60a5fa"/>
-    <rect x="13" y="2" width="6" height="8" rx="3" fill="#fbbf24"/>
-  </svg>
-);
-
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("Toutes catégories");
 
