@@ -396,7 +396,7 @@ export default function Home() {
                 <Menu className="w-5 h-5" />
               </button>
               <span className="flex items-center select-none">
-                <LogoCapponuts />
+                <Image src="/logo.png" alt="Logo Capponuts'Shop" width={36} height={36} className="mr-2 w-9 h-9 object-contain" priority />
                 <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>
                   Capponuts&rsquo;Shop
                 </span>
@@ -536,6 +536,12 @@ export default function Home() {
           </div>
         )}
       </main>
+
+      {/* Footer simple en bas de page */}
+      <footer className="w-full flex items-center justify-center py-4 bg-gray-900 border-t border-gray-800 mt-8">
+        <Image src="/logo.png" alt="Logo Capponuts'Shop" width={28} height={28} className="mr-2 w-7 h-7 object-contain" />
+        <span className="text-gray-400 text-sm font-semibold">Capponuts&rsquo;Shop &copy; {new Date().getFullYear()}</span>
+      </footer>
     </div>
   );
 }

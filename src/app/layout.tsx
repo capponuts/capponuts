@@ -49,6 +49,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
+      <head>
+        <link rel="icon" href="/favicon.png" type="image/png" />
+      </head>
       <body className={`${montserrat.variable} font-sans antialiased`}>
         {children}
         <Analytics />
