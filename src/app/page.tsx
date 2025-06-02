@@ -375,6 +375,8 @@ export default function Home() {
     ? products
     : products.filter((p) => (p.category === selectedCategory));
 
+  const sortedProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
+
   return (
     <div className="min-h-screen bg-gray-900">
       {/* Header Amazon-style - Optimisé mobile */}
@@ -446,7 +448,7 @@ export default function Home() {
         </div>
         
         <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
-          {filteredProducts.map((product) => (
+          {sortedProducts.map((product) => (
             <div
               key={product.id}
               className="bg-white rounded-lg hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer product-card"
