@@ -300,6 +300,30 @@ const products = [
     category: "High-Tech",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/81rTL0ebWbL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F6LV4H3M"
+  },
+  {
+    id: 25,
+    name: "LIGE Montre Connectée Hommes avec Boussole, Baromètre, Pression et Altimètre, 2,13\" Grand Écran AMOLED Smartwatch Compatible Android iOS, Batterie 1000 mAh, 100+ Modes Sportifs, GrisBleu",
+    description: "Smartwatch avec écran AMOLED 2.13\", boussole, baromètre, altimètre, batterie 1000mAh, 100+ modes sport, compatible Android et iOS",
+    price: 20,
+    originalPrice: 39.99,
+    rating: 4.5,
+    reviews: 42,
+    category: "High-Tech",
+    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/81jM5HBKXML._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F6LNPSVR"
+  },
+  {
+    id: 26,
+    name: "Montre Connectée Homme, Smartwatch avec GPS intégré Appels Bluetooth et Écran HD 1.39\", 3ATM Étanche et Batterie 530mAh, Montre Sport Homme avec 110Modes Sportifs/SpO2 pour Android iOS",
+    description: "Smartwatch avec GPS intégré, écran HD 1.39\", étanche 3ATM, batterie 530mAh, 110 modes sport, SpO2, appels Bluetooth, compatible Android et iOS",
+    price: 30,
+    originalPrice: 59.99,
+    rating: 4.5,
+    reviews: 38,
+    category: "High-Tech",
+    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71PYK0WEeUL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F5WDMS4V"
   }
 ];
 
