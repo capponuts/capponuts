@@ -385,7 +385,7 @@ export default function Home() {
               <span className="flex items-center select-none">
                 <LogoCapponuts />
                 <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>
-                  Capponuts'Shop
+                  Capponuts&rsquo;Shop
                 </span>
               </span>
               <div className="hidden lg:block text-gray-300 text-sm">
