@@ -145,18 +145,6 @@ const products = [
     amazonLink: "https://www.amazon.fr/dp/B0F2H2CPR4?th=1"
   },
   {
-    id: 12,
-    name: "Écouteurs Bluetooth sans Fil Sport, Casque à Clip Ouverts,3D HiFi Stéréo, Bluetooth 5.4,IP5,EQ Dynamique, Écouteurs Ouverts sans Fil,Léger et Stable Seulement 4.8 g pour Running",
-    description: "Écouteurs sport ultra-légers (4.8g) avec clip ouvert, son stéréo 3D HiFi, Bluetooth 5.4, protection IP5, égaliseur dynamique, parfaits pour le running",
-    price: 20,
-    originalPrice: 39.99,
-    rating: 4.3,
-    reviews: 45,
-    category: "High-Tech",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61k15mvx7wL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F62S2YHT?th=1"
-  },
-  {
     id: 13,
     name: "Routeur Wi-FI 6 VPN - Alimentation USB-C Compact, Ports Gigabit LAN/WAN, OpenVPN/WireGuard/ZeroTier - Hôtels,Camping-Car",
     description: "Routeur Wi-Fi 6 compact avec alimentation USB-C, ports Gigabit, support VPN (OpenVPN/WireGuard/ZeroTier), idéal pour hôtels et camping-cars",
@@ -191,18 +179,6 @@ const products = [
     category: "Sports et Loisirs",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61rY4dKV++L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DRBDSZ6F"
-  },
-  {
-    id: 16,
-    name: "Drift Voiture avec Lumière LED, Voiture télécommandée pour Enfants de Plus de 8+ Ans",
-    description: "Voiture télécommandée avec effets lumineux LED, parfaite pour les enfants de 8 ans et plus, maniable et amusante",
-    price: 15,
-    originalPrice: 36.99,
-    rating: 4.4,
-    reviews: 32,
-    category: "Jeux et Jouets",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71rYzQFN9vL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F2FLC1FL?th=1"
   },
   {
     id: 17,
