@@ -1,0 +1,21 @@
+{
+  "name": "Capponuts'Shop",
+  "short_name": "Capponuts",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#fbbf24",
+  "description": "La boutique privée de Capponuts sur mobile !",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+} 

@@ -393,8 +393,13 @@ export default function Home() {
         </div>
       </header>
 
+      {/* Message d'accueil personnalisé */}
+      <div className="max-w-2xl mx-auto mt-4 mb-6 p-4 bg-orange-100 text-orange-900 rounded-xl shadow text-center font-semibold text-lg">
+        🎉 Bienvenue sur la boutique privée de Capponuts !
+      </div>
+
       {/* Menu déroulant catégories - visible uniquement sur mobile */}
-      <div className="block sm:hidden px-2 pt-3">
+      <div className="block sm:hidden w-full sticky top-[56px] z-0 bg-gray-900 px-2 pt-3">
         <select
           className="w-full rounded-md border border-gray-300 py-2 px-3 text-gray-900 font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-orange-400"
           value={selectedCategory}
@@ -445,7 +450,7 @@ export default function Home() {
           {sortedProducts.map((product, idx) => (
             <div
               key={product.id}
-              className="bg-white rounded-lg hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer product-card"
+              className="bg-white rounded-lg shadow transition-transform duration-200 hover:scale-105 hover:shadow-2xl overflow-hidden group cursor-pointer product-card"
             >
               {/* Image du produit */}
               <div className="relative h-32 sm:h-48 bg-gray-100 p-2 sm:p-4">
@@ -530,6 +535,11 @@ export default function Home() {
         <Image src="/logo.png" alt="Logo Capponuts'Shop" width={28} height={28} className="mr-2 w-7 h-7 object-contain" />
         <span className="text-gray-400 text-sm font-semibold">Capponuts&rsquo;Shop &copy; {new Date().getFullYear()}</span>
       </footer>
+
+      {/* Image capponuts.png avant le footer */}
+      <div className="flex justify-center my-8">
+        <Image src="/capponuts.png" alt="Capponuts" width={120} height={120} className="object-contain rounded-full shadow" />
+      </div>
 
       <a
         href="https://wa.me/33658657987"
