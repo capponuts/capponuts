@@ -494,11 +494,6 @@ export default function Home() {
             >
               {/* Image du produit */}
               <div className="relative h-32 sm:h-48 bg-gray-100 p-2 sm:p-4">
-                <div className="absolute top-1 sm:top-2 left-1 sm:left-2 flex items-center">
-                  <span className="bg-green-600 text-white text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded flex items-center">
-                    EN STOCK{idx < 3 && <span className="ml-1">🔥</span>}
-                  </span>
-                </div>
                 {product.image && product.image.startsWith('http') ? (
                   <Image
                     src={product.image}
