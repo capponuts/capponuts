@@ -582,7 +582,7 @@ export default function Home() {
         href="https://wa.me/33658657987"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-2 right-2 z-50 flex items-center group"
+        className="fixed bottom-2 right-2 z-50 flex items-center group whatsapp-float"
         aria-label="Contact WhatsApp"
         style={{ textDecoration: 'none' }}
       >
