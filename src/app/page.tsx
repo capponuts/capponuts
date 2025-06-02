@@ -487,7 +487,7 @@ export default function Home() {
         </div>
         
         <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
-          {paginatedProducts.map((product, idx) => (
+          {paginatedProducts.map((product) => (
             <div
               key={product.id}
               className="bg-white rounded-lg shadow transition-transform duration-200 hover:scale-105 hover:shadow-2xl overflow-hidden group cursor-pointer product-card"
