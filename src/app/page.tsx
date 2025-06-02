@@ -381,23 +381,23 @@ export default function Home() {
       i++;
       if (i === welcomeText.length) {
         clearInterval(interval);
-        setTimeout(() => setShowIntro(false), 1200); // Affiche le logo 1s puis transition
+        setTimeout(() => setShowIntro(false), 1500); // Affiche le logo 1.5s puis transition
       }
-    }, 40);
+    }, 70);
     return () => clearInterval(interval);
   }, [showIntro]);
 
   // Affichage de l'intro
   if (showIntro) {
     return (
-      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-orange-100 to-amber-200">
+      <div className="fixed inset-0 z-50 flex flex-col min-h-screen justify-center items-center bg-gradient-to-br from-orange-100 to-amber-200 text-center">
         <div className="text-2xl sm:text-3xl font-bold text-amber-900 mb-8 min-h-[2.5em] tracking-wide animate-fade-in">
           {typedText}
           <span className="animate-pulse">|</span>
         </div>
         {typedText.length === welcomeText.length && (
           <div className="flex flex-col items-center animate-fade-in-up">
-            <img src="/logo.png" alt="Logo Capponuts'Shop" width={90} height={90} className="mb-2 mt-4 animate-bounce-in" />
+            <img src="/logo.png" alt="Logo Capponuts'Shop" width={150} height={150} className="mb-2 mt-4 animate-bounce-in shadow-2xl" style={{filter:'drop-shadow(0 8px 32px #fbbf24)'}} />
           </div>
         )}
       </div>
@@ -582,7 +582,7 @@ export default function Home() {
         href="https://wa.me/33658657987"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-4 right-4 z-50 flex items-center group"
+        className="fixed bottom-2 right-2 z-50 flex items-center group"
         aria-label="Contact WhatsApp"
         style={{ textDecoration: 'none' }}
       >
