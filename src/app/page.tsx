@@ -343,16 +343,11 @@ const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) =>
   );
 };
 
-const PRODUCTS_PER_PAGE = 12;
-
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("Toutes catégories");
   const [showIntro, setShowIntro] = useState(true);
   const [typedText, setTypedText] = useState("");
   const welcomeText = "Bienvenue sur la boutique de Capponuts";
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
-  const paginatedProducts = products.slice((currentPage - 1) * PRODUCTS_PER_PAGE, currentPage * PRODUCTS_PER_PAGE);
 
   useEffect(() => {
     if (!showIntro) return;
@@ -463,7 +458,7 @@ export default function Home() {
         </div>
         
         <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
-          {paginatedProducts.map((product) => (
+          {filteredProducts.map((product) => (
             <div
               key={product.id}
               className="bg-white rounded-lg shadow transition-transform duration-200 hover:scale-105 hover:shadow-2xl overflow-hidden group cursor-pointer product-card"
@@ -529,25 +524,6 @@ export default function Home() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Pagination */}
-        <div className="flex justify-center items-center gap-2 mt-6">
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="px-3 py-1 rounded bg-gray-200 text-gray-700 font-bold disabled:opacity-50"
-          >
-            Précédent
-          </button>
-          <span className="font-semibold text-gray-700">Page {currentPage} / {totalPages}</span>
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 rounded bg-gray-200 text-gray-700 font-bold disabled:opacity-50"
-          >
-            Suivant
-          </button>
         </div>
 
         {/* Message si aucun produit dans la catégorie */}
