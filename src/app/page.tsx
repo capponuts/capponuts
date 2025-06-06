@@ -299,6 +299,18 @@ const products = [
     category: "High-Tech",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71PYK0WEeUL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F5WDMS4V"
+  },
+  {
+    id: 27,
+    name: "Voiture Télécommandée Drift 2.4GHz 4WD avec Pulvérisation et Lumière, Voiture RC Radiocommandée de Course Jouet Cadeau de Jouet pour Les Enfants de Plus de 6 Ans",
+    description: "Voiture RC drift 2.4GHz 4 roues motrices avec effets lumineux et pulvérisation, parfaite pour les enfants de 6 ans et plus",
+    price: 15,
+    originalPrice: 32,
+    rating: 4.4,
+    reviews: 35,
+    category: "Jeux et Jouets",
+    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71rYzQFN9vL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0DYNT8VGG"
   }
 ];
 
