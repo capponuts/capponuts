@@ -309,8 +309,32 @@ const products = [
     rating: 4.4,
     reviews: 35,
     category: "Jeux et Jouets",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71rYzQFN9vL._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71cJy9YMVXL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DYNT8VGG"
+  },
+  {
+    id: 28,
+    name: "Talkie Walkie Spider, Toki Walki Enfant pour Maison, Jardin, Camping, Randonnée (sans Fil)",
+    description: "Talkies-walkies pour enfants avec design Spider, idéal pour la maison, le jardin, le camping et la randonnée",
+    price: 10,
+    originalPrice: 20,
+    rating: 4.3,
+    reviews: 28,
+    category: "Jeux et Jouets",
+    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/81SzbregZgL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F4XB1NWR?th=1"
+  },
+  {
+    id: 29,
+    name: "Air Styler 5 In 1 Magic Styler Hair Styler avec Seche Cheveux, Brosse Soufflante, Brosse Brushing Soufflante, Auto Boucleur Air, Brosse Lissante, pour Sécher, Boucler, Lisser",
+    description: "Kit coiffure 5 en 1 avec sèche-cheveux, brosse soufflante, brushing, boucleur automatique et brosse lissante pour un style parfait",
+    price: 30,
+    originalPrice: 59.99,
+    rating: 4.5,
+    reviews: 42,
+    category: "Beauté et Soins",
+    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71rbWfB0CYL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F36H4N1T"
   }
 ];
 
@@ -438,19 +462,67 @@ export default function Home() {
       <nav className="bg-gray-700 text-white text-xs sm:text-sm overflow-x-auto hidden sm:block">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 py-2">
           <div className="flex items-center gap-3 sm:gap-6 whitespace-nowrap">
-            <span className="hover:text-orange-400 cursor-pointer flex items-center">
+            <button 
+              onClick={() => setSelectedCategory("Toutes catégories")}
+              className={`hover:text-orange-400 cursor-pointer flex items-center ${selectedCategory === "Toutes catégories" ? "text-orange-400" : ""}`}
+            >
               <Menu className="w-4 h-4 mr-1" />
               Toutes les catégories
-            </span>
-            <span className="hover:text-orange-400 cursor-pointer">📱 High-Tech</span>
-            <span className="hover:text-orange-400 cursor-pointer">🏠 Cuisine et Maison</span>
-            <span className="hover:text-orange-400 cursor-pointer">🚗 Auto et Moto</span>
-            <span className="hover:text-orange-400 cursor-pointer">💻 Informatique</span>
-            <span className="hover:text-orange-400 cursor-pointer">🔧 Bricolage</span>
-            <span className="hover:text-orange-400 cursor-pointer">👕 Mode</span>
-            <span className="hover:text-orange-400 cursor-pointer">⚽ Sports et Loisirs</span>
-            <span className="hover:text-orange-400 cursor-pointer">💡 Luminaires</span>
-            <span className="hover:text-orange-400 cursor-pointer">🌱 Jardin</span>
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("High-Tech")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "High-Tech" ? "text-orange-400" : ""}`}
+            >
+              📱 High-Tech
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Cuisine et Maison")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Cuisine et Maison" ? "text-orange-400" : ""}`}
+            >
+              🏠 Cuisine et Maison
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Auto et Moto")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Auto et Moto" ? "text-orange-400" : ""}`}
+            >
+              🚗 Auto et Moto
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Informatique")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Informatique" ? "text-orange-400" : ""}`}
+            >
+              💻 Informatique
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Bricolage")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Bricolage" ? "text-orange-400" : ""}`}
+            >
+              🔧 Bricolage
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Mode")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Mode" ? "text-orange-400" : ""}`}
+            >
+              👕 Mode
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Sports et Loisirs")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Sports et Loisirs" ? "text-orange-400" : ""}`}
+            >
+              ⚽ Sports et Loisirs
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Jardin")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Jardin" ? "text-orange-400" : ""}`}
+            >
+              🌱 Jardin
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Jeux et Jouets")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Jeux et Jouets" ? "text-orange-400" : ""}`}
+            >
+              🧸 Jeux et Jouets
+            </button>
           </div>
         </div>
       </nav>
