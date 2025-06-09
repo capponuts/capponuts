@@ -345,7 +345,7 @@ const products = [
     rating: 4.4,
     reviews: 35,
     category: "Jeux et Jouets",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71rbWfB0CYL._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71xSrF5gG3L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F2ML2MW2"
   }
 ];
