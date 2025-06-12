@@ -22,8 +22,7 @@ const products = [
     reviews: 12,
     category: "Jeux et Jouets",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/91mKK7NFi3L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DSHZ2RP5",
-    isTrending: true
+    amazonLink: "https://www.amazon.fr/dp/B0DSHZ2RP5"
   },
   {
     id: 2,
@@ -633,7 +632,10 @@ export default function Home() {
                 <h3 className="text-xs sm:text-sm font-medium text-gray-800 mb-1 sm:mb-2 line-clamp-2 group-hover:text-orange-600 flex items-center">
                   {product.name}
                   {product.isTrending && (
-                    <span className="ml-2 text-orange-500 trending-flame">🔥</span>
+                    <span className="ml-2 flex items-center">
+                      <span className="trending-flame text-2xl sm:text-3xl">🔥</span>
+                      <span className="ml-1 font-extrabold text-orange-500 text-base sm:text-lg" style={{letterSpacing:'0.03em'}}>HOT</span>
+                    </span>
                   )}
                 </h3>
                 
