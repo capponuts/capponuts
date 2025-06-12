@@ -99,6 +99,15 @@ body {
   animation: pulse 2s infinite;
 }
 
+/* Style pour l'emoji flamme des produits tendance */
+.trending-flame {
+  display: inline-block;
+  animation: pulse 1.5s infinite;
+  font-size: 1.2em;
+  line-height: 1;
+  vertical-align: middle;
+}
+
 @keyframes pulse {
   0%, 100% {
     opacity: 1;

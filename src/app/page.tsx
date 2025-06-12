@@ -457,18 +457,22 @@ export default function Home() {
     );
   }
 
-  // Filtrage des produits par catégorie (à adapter si tu ajoutes la catégorie dans chaque produit)
+  // Filtrage et tri des produits
   const filteredProducts = selectedCategory === "Toutes catégories"
     ? [...products].sort((a, b) => {
+        // Mettre les produits tendance en premier
         if (a.isTrending && !b.isTrending) return -1;
         if (!a.isTrending && b.isTrending) return 1;
         return 0;
       })
-    : products.filter((p) => (p.category === selectedCategory)).sort((a, b) => {
-        if (a.isTrending && !b.isTrending) return -1;
-        if (!a.isTrending && b.isTrending) return 1;
-        return 0;
-      });
+    : [...products]
+        .filter((p) => p.category === selectedCategory)
+        .sort((a, b) => {
+          // Mettre les produits tendance en premier dans chaque catégorie
+          if (a.isTrending && !b.isTrending) return -1;
+          if (!a.isTrending && b.isTrending) return 1;
+          return 0;
+        });
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -629,7 +633,7 @@ export default function Home() {
                 <h3 className="text-xs sm:text-sm font-medium text-gray-800 mb-1 sm:mb-2 line-clamp-2 group-hover:text-orange-600 flex items-center">
                   {product.name}
                   {product.isTrending && (
-                    <span className="ml-2 text-orange-500 animate-pulse inline-block">🔥</span>
+                    <span className="ml-2 text-orange-500 trending-flame">🔥</span>
                   )}
                 </h3>
                 
