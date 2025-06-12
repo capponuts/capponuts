@@ -634,7 +634,7 @@ export default function Home() {
                   {product.isTrending && (
                     <span className="ml-2 flex items-center">
                       <span className="trending-flame text-2xl sm:text-3xl">🔥</span>
-                      <span className="ml-1 font-extrabold text-orange-500 text-base sm:text-lg" style={{letterSpacing:'0.03em'}}>HOT</span>
+                      <span className="hot-label">HOT</span>
                     </span>
                   )}
                 </h3>

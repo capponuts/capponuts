@@ -103,9 +103,10 @@ body {
 .trending-flame {
   display: inline-block;
   animation: pulse 1.5s infinite;
-  font-size: 1.2em;
+  font-size: 2em;
   line-height: 1;
   vertical-align: middle;
+  margin-right: 0.1em;
 }
 
 @keyframes pulse {
@@ -152,4 +153,22 @@ body {
     padding: 0 !important;
     z-index: 9999 !important;
   }
+}
+
+@media (min-width: 640px) {
+  .trending-flame {
+    font-size: 2.2em;
+  }
+  .hot-label {
+    font-size: 1.3em;
+  }
+}
+
+.hot-label {
+  font-weight: 800;
+  color: #f59e0b;
+  letter-spacing: 0.03em;
+  margin-left: 0.2em;
+  vertical-align: middle;
+  font-size: 1.1em;
 }
