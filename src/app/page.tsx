@@ -347,6 +347,18 @@ const products = [
     category: "Jeux et Jouets",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71xSrF5gG3L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F2ML2MW2"
+  },
+  {
+    id: 31,
+    name: "3 EN 1 Épilateur Lumière Pulsée avec Refroidissement, Épilateur Laser avec 9 Niveaux D'énergie, Fonctions HR/SC/RA, Écran Tactile LCD, Onde Lumineuse Rouge 600NM, Épilation IPL pour Femme, Rose",
+    description: "Épilateur lumière pulsée 3 en 1 avec refroidissement, 9 niveaux d'énergie, écran tactile LCD et onde lumineuse rouge 600NM",
+    price: 40,
+    originalPrice: 89.99,
+    rating: 4.6,
+    reviews: 48,
+    category: "Beauté et Soins",
+    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61UwpS7tl6L._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0DSSKVCC7"
   }
 ];
 
