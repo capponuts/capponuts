@@ -434,9 +434,9 @@ export default function Home() {
       i++;
       if (i === welcomeText.length) {
         clearInterval(interval);
-        setTimeout(() => setShowIntro(false), 1500); // Affiche le logo 1.5s puis transition
+        setTimeout(() => setShowIntro(false), 800); // Affiche le logo 0.8s puis transition
       }
-    }, 70);
+    }, 40); // Animation plus rapide
     return () => clearInterval(interval);
   }, [showIntro]);
 
@@ -459,8 +459,16 @@ export default function Home() {
 
   // Filtrage des produits par catégorie (à adapter si tu ajoutes la catégorie dans chaque produit)
   const filteredProducts = selectedCategory === "Toutes catégories"
-    ? products.sort((a, b) => (b.isTrending ? 1 : 0) - (a.isTrending ? 1 : 0))
-    : products.filter((p) => (p.category === selectedCategory)).sort((a, b) => (b.isTrending ? 1 : 0) - (a.isTrending ? 1 : 0));
+    ? [...products].sort((a, b) => {
+        if (a.isTrending && !b.isTrending) return -1;
+        if (!a.isTrending && b.isTrending) return 1;
+        return 0;
+      })
+    : products.filter((p) => (p.category === selectedCategory)).sort((a, b) => {
+        if (a.isTrending && !b.isTrending) return -1;
+        if (!a.isTrending && b.isTrending) return 1;
+        return 0;
+      });
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -618,10 +626,10 @@ export default function Home() {
 
               {/* Informations du produit */}
               <div className="p-2 sm:p-3">
-                <h3 className="text-xs sm:text-sm font-medium text-gray-800 mb-1 sm:mb-2 line-clamp-2 group-hover:text-orange-600">
+                <h3 className="text-xs sm:text-sm font-medium text-gray-800 mb-1 sm:mb-2 line-clamp-2 group-hover:text-orange-600 flex items-center">
                   {product.name}
                   {product.isTrending && (
-                    <span className="ml-2 text-orange-500 animate-pulse">🔥</span>
+                    <span className="ml-2 text-orange-500 animate-pulse inline-block">🔥</span>
                   )}
                 </h3>
                 

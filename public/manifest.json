@@ -1,21 +1,24 @@
 {
   "name": "Capponuts'Shop",
   "short_name": "Capponuts",
+  "description": "Boutique privée de Capponuts avec les meilleurs prix",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#111827",
+  "background_color": "#1f2937",
   "theme_color": "#fbbf24",
-  "description": "La boutique privée de Capponuts sur mobile !",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "/logo.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/logo.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 } 
