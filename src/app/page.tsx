@@ -339,18 +339,6 @@ const products = [
     amazonLink: "https://www.amazon.fr/dp/B0F36H4N1T"
   },
   {
-    id: 30,
-    name: "Téléphone Mobile avec Double Caméra d'enfants 2,8 Pouces écran Tactile Apprentissage Téléphone Apprentissage Jouet avec 32 Go Carte SD",
-    description: "Téléphone jouet éducatif pour enfants avec écran tactile 2.8 pouces, double caméra et carte SD 32 Go pour l'apprentissage",
-    price: 15,
-    originalPrice: 36.99,
-    rating: 4.4,
-    reviews: 35,
-    category: "Jeux et Jouets",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71xSrF5gG3L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F2ML2MW2"
-  },
-  {
     id: 31,
     name: "3 EN 1 Épilateur Lumière Pulsée avec Refroidissement, Épilateur Laser avec 9 Niveaux D'énergie, Fonctions HR/SC/RA, Écran Tactile LCD, Onde Lumineuse Rouge 600NM, Épilation IPL pour Femme, Rose",
     description: "Épilateur lumière pulsée 3 en 1 avec refroidissement, 9 niveaux d'énergie, écran tactile LCD et onde lumineuse rouge 600NM",
