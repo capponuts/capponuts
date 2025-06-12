@@ -57,7 +57,7 @@ const products = [
     originalPrice: 26.99,
     rating: 4.4,
     reviews: 22,
-    category: "Beauté et Soins",
+    category: "Hygiène et Santé",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61QvIGuSFaL.__AC_SX300_SY300_QL70_ML2_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DLNYRJW5"
   },
@@ -69,7 +69,7 @@ const products = [
     originalPrice: 50,
     rating: 4.3,
     reviews: 18,
-    category: "Beauté et Soins",
+    category: "Hygiène et Santé",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71gcIR7IBmL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DZCSNCZ9"
   },
