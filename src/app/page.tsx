@@ -22,12 +22,13 @@ const products = [
     reviews: 12,
     category: "Jeux et Jouets",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/91mKK7NFi3L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DSHZ2RP5"
+    amazonLink: "https://www.amazon.fr/dp/B0DSHZ2RP5",
+    isTrending: true
   },
   {
     id: 2,
     name: "Seche Cheveux Ionique 1600W Diffuseur de Cheveux Professionnel 150 000 t/m 4 Températures 3 Vitesses Bouton Chaud/Froid Hair Dryer Concentrateur/Diffuseur Magnétique Faible Bruit Voyage Maison",
-    description: "Sèche-cheveux professionnel ionique 1600W avec diffuseur, 4 températures, 3 vitesses, fonction chaud/froid, concentrateur magnétique",
+    description: "Sèche-cheveux profesfix catégoriesionnel ionique 1600W avec diffuseur, 4 températures, 3 vitesses, fonction chaud/froid, concentrateur magnétique",
     price: 15,
     originalPrice: 29.99,
     rating: 4.5,
@@ -214,7 +215,8 @@ const products = [
     reviews: 42,
     category: "Jeux et Jouets",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/81kAK5Di29L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F7LVQ4JP"
+    amazonLink: "https://www.amazon.fr/dp/B0F7LVQ4JP",
+    isTrending: true
   },
   {
     id: 20,
@@ -298,7 +300,8 @@ const products = [
     reviews: 38,
     category: "High-Tech",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71PYK0WEeUL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F5WDMS4V"
+    amazonLink: "https://www.amazon.fr/dp/B0F5WDMS4V",
+    isTrending: true
   },
   {
     id: 27,
@@ -358,7 +361,20 @@ const products = [
     reviews: 48,
     category: "Beauté et Soins",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61UwpS7tl6L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DSSKVCC7"
+    amazonLink: "https://www.amazon.fr/dp/B0DSSKVCC7",
+    isTrending: true
+  },
+  {
+    id: 32,
+    name: "Sèche Cheveux 6 EN 1, Sèche Cheveux Professionnel avec Diffuseur, Brosse Soufflante, Brosse Brushing Soufflante, Auto Boucleur Air, Brosse Lissante, pour Sécher, Boucler, Lisser",
+    description: "Kit coiffure 6 en 1 avec sèche-cheveux professionnel, diffuseur, brosse soufflante, brushing, boucleur automatique et brosse lissante",
+    price: 20,
+    originalPrice: 39,
+    rating: 4.5,
+    reviews: 35,
+    category: "Beauté et Soins",
+    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/4168hTUNfPL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F5452M6L"
   }
 ];
 
@@ -373,7 +389,8 @@ const categories = [
   "Sports et Loisirs",
   "Hygiène et Santé",
   "Jardin",
-  "Jeux et Jouets"
+  "Jeux et Jouets",
+  "Beauté et Soins"
 ];
 
 // Composant pour afficher les étoiles avec Lucide
@@ -442,8 +459,8 @@ export default function Home() {
 
   // Filtrage des produits par catégorie (à adapter si tu ajoutes la catégorie dans chaque produit)
   const filteredProducts = selectedCategory === "Toutes catégories"
-    ? products
-    : products.filter((p) => (p.category === selectedCategory));
+    ? products.sort((a, b) => (b.isTrending ? 1 : 0) - (a.isTrending ? 1 : 0))
+    : products.filter((p) => (p.category === selectedCategory)).sort((a, b) => (b.isTrending ? 1 : 0) - (a.isTrending ? 1 : 0));
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -536,6 +553,12 @@ export default function Home() {
               ⚽ Sports et Loisirs
             </button>
             <button 
+              onClick={() => setSelectedCategory("Hygiène et Santé")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Hygiène et Santé" ? "text-orange-400" : ""}`}
+            >
+              🧴 Hygiène et Santé
+            </button>
+            <button 
               onClick={() => setSelectedCategory("Jardin")}
               className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Jardin" ? "text-orange-400" : ""}`}
             >
@@ -546,6 +569,12 @@ export default function Home() {
               className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Jeux et Jouets" ? "text-orange-400" : ""}`}
             >
               🧸 Jeux et Jouets
+            </button>
+            <button 
+              onClick={() => setSelectedCategory("Beauté et Soins")}
+              className={`hover:text-orange-400 cursor-pointer ${selectedCategory === "Beauté et Soins" ? "text-orange-400" : ""}`}
+            >
+              💅 Beauté et Soins
             </button>
           </div>
         </div>
@@ -591,6 +620,9 @@ export default function Home() {
               <div className="p-2 sm:p-3">
                 <h3 className="text-xs sm:text-sm font-medium text-gray-800 mb-1 sm:mb-2 line-clamp-2 group-hover:text-orange-600">
                   {product.name}
+                  {product.isTrending && (
+                    <span className="ml-2 text-orange-500 animate-pulse">🔥</span>
+                  )}
                 </h3>
                 
                 {/* Rating - Caché sur très petit écran */}
