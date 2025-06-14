@@ -360,8 +360,44 @@ const products = [
     rating: 4.5,
     reviews: 35,
     category: "Beauté et Soins",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/4168hTUNfPL._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/4168hTUNfPL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F5452M6L"
+  },
+  {
+    id: 33,
+    name: "Airbrush 6 en 1, Seche Cheveux 6 en 1,1000w Air Styler Brosse Soufflante,Hair Styler avec 30mm boucleur,Sèche-cheveux Ionique Pour Cheveux Bouclés et Lissés,Température Vitesse du vent Réglable, Noir",
+    description: "Airbrush 6 en 1, Seche Cheveux 6 en 1,1000w Air Styler Brosse Soufflante,Hair Styler avec 30mm boucleur,Sèche-cheveux Ionique Pour Cheveux Bouclés et Lissés,Température Vitesse du vent Réglable, Noir",
+    price: 35,
+    originalPrice: 75,
+    rating: 4.5,
+    reviews: 0,
+    category: "Beauté et Soins",
+    image: "https://m.media-amazon.com/images/I/71TOwi7JSYL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0DQSMBV9L"
+  },
+  {
+    id: 34,
+    name: "Support Sèche Cheveux sans Perçage, Fixation Auto-Adhésive, Porte Sèche Cheveux Mural Noir Stable Et Antirouille, Idéal pour Salle De Bain",
+    description: "Support Sèche Cheveux sans Perçage, Fixation Auto-Adhésive, Porte Sèche Cheveux Mural Noir Stable Et Antirouille, Idéal pour Salle De Bain",
+    price: 10,
+    originalPrice: 19.99,
+    rating: 4.5,
+    reviews: 0,
+    category: "Beauté et Soins",
+    image: "https://m.media-amazon.com/images/I/71KJ7xmCB3L._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F1T392LH"
+  },
+  {
+    id: 35,
+    name: "Raquette Anti Moustiques Électrique, Raquette Electrique Insectes 4000V 1500mAh Rechargeable avec Base Stable Contre Moustiques Mouches Insectes Volants, Blanc 2PCS",
+    description: "Raquette Anti Moustiques Électrique, Raquette Electrique Insectes 4000V 1500mAh Rechargeable avec Base Stable Contre Moustiques Mouches Insectes Volants, Blanc 2PCS",
+    price: 20,
+    originalPrice: 35.99,
+    rating: 4.5,
+    reviews: 0,
+    category: "Cuisine et Maison",
+    image: "https://m.media-amazon.com/images/I/81zcz0q2gfL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F1FBML57"
   }
 ];
 
