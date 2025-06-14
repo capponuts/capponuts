@@ -398,6 +398,18 @@ const products = [
     category: "Cuisine et Maison",
     image: "https://m.media-amazon.com/images/I/81zcz0q2gfL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F1FBML57"
+  },
+  {
+    id: 36,
+    name: "Chargeur de Voiture 5-en-1 Multifonctionnel avec aromathérapie et Adaptateur rétractable et projecteur lumière ambiance",
+    description: "Chargeur de Voiture 5-en-1 Multifonctionnel avec aromathérapie et Adaptateur rétractable et projecteur lumière ambiance",
+    price: 20,
+    originalPrice: 35.99,
+    rating: 4.5,
+    reviews: 0,
+    category: "Auto et Moto",
+    image: "https://m.media-amazon.com/images/I/71qeuh7k6cL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F43HLVBD"
   }
 ];
 
