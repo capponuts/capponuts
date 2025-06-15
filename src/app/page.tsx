@@ -367,13 +367,14 @@ const products = [
     id: 33,
     name: "Airbrush 6 en 1, Seche Cheveux 6 en 1,1000w Air Styler Brosse Soufflante,Hair Styler avec 30mm boucleur,Sèche-cheveux Ionique Pour Cheveux Bouclés et Lissés,Température Vitesse du vent Réglable, Noir",
     description: "Airbrush 6 en 1, Seche Cheveux 6 en 1,1000w Air Styler Brosse Soufflante,Hair Styler avec 30mm boucleur,Sèche-cheveux Ionique Pour Cheveux Bouclés et Lissés,Température Vitesse du vent Réglable, Noir",
-    price: 35,
-    originalPrice: 75,
+    price: 40,
+    originalPrice: 75.99,
     rating: 4.5,
     reviews: 0,
     category: "Beauté et Soins",
     image: "https://m.media-amazon.com/images/I/71TOwi7JSYL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DQSMBV9L"
+    amazonLink: "https://www.amazon.fr/dp/B0DQSMBV9L",
+    isTrending: true
   },
   {
     id: 34,
@@ -410,6 +411,32 @@ const products = [
     category: "Auto et Moto",
     image: "https://m.media-amazon.com/images/I/71qeuh7k6cL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F43HLVBD"
+  },
+  {
+    id: 37,
+    name: "Miroir 360° avec trépied – Miroir 3 faces pour se couper les cheveux– Verre ultra-clair, 4 LED intégrées, recharge rapide USB-C, batterie rechargeable",
+    description: "Miroir 360° avec trépied – Miroir 3 faces pour se couper les cheveux– Verre ultra-clair, 4 LED intégrées, recharge rapide USB-C, batterie rechargeable",
+    price: 45,
+    originalPrice: 79.99,
+    rating: 4.5,
+    reviews: 0,
+    category: "Beauté et Soins",
+    image: "https://m.media-amazon.com/images/I/71m-Vq7AEKL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0DSTL823V?th=1",
+    isTrending: true
+  },
+  {
+    id: 38,
+    name: "Airbrush 6 en 1, Seche Cheveux 6 en 1,1000w Air Styler Brosse Soufflante,Hair Styler avec 30mm boucleur,Sèche-cheveux Ionique Pour Cheveux Bouclés et Lissés,Température Vitesse du vent Réglable, Noir",
+    description: "Airbrush 6 en 1, Seche Cheveux 6 en 1,1000w Air Styler Brosse Soufflante,Hair Styler avec 30mm boucleur,Sèche-cheveux Ionique Pour Cheveux Bouclés et Lissés,Température Vitesse du vent Réglable, Noir",
+    price: 40,
+    originalPrice: 75.99,
+    rating: 4.5,
+    reviews: 0,
+    category: "Beauté et Soins",
+    image: "https://m.media-amazon.com/images/I/71TOwi7JSYL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0DQSMBV9L",
+    isTrending: true
   }
 ];
 
