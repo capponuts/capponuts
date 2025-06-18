@@ -517,6 +517,7 @@ const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) =>
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("Sélectionnez une catégorie");
+  const [showFeaturedProduct, setShowFeaturedProduct] = useState(true);
   const [showIntro, setShowIntro] = useState(true);
   const [typedText, setTypedText] = useState("");
   const welcomeText = "Bienvenue sur la boutique de Capponuts";
@@ -556,12 +557,13 @@ export default function Home() {
   const filteredProducts = (() => {
     let filtered = [...products];
     
-    // Si aucune catégorie n'est sélectionnée, afficher seulement le produit le plus cher
+    // Si aucune catégorie n'est sélectionnée, afficher tous les produits (comportement par défaut)
     if (selectedCategory === "Sélectionnez une catégorie") {
-      const mostExpensiveProduct = products.reduce((max, current) => 
-        current.price > max.price ? current : max
-      );
-      return [mostExpensiveProduct];
+      return filtered.sort((a, b) => {
+        if (a.isTrending && !b.isTrending) return -1;
+        if (!a.isTrending && b.isTrending) return 1;
+        return b.id - a.id; // Plus récents en premier
+      });
     }
     
     // Filtrer par catégorie
@@ -576,6 +578,11 @@ export default function Home() {
       return b.id - a.id; // Plus récents en premier
     });
   })();
+
+  // Produit vedette (le plus cher) pour mobile
+  const featuredProduct = products.reduce((max, current) => 
+    current.price > max.price ? current : max
+  );
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -733,80 +740,168 @@ export default function Home() {
           </p>
         </div>
         
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-4">
-          {filteredProducts.map((product) => (
-            <div
-              key={product.id}
-              className="bg-white rounded-lg shadow transition-transform duration-200 hover:scale-105 hover:shadow-2xl overflow-hidden group cursor-pointer product-card"
-            >
-              {/* Image du produit */}
-              <div className="relative h-24 sm:h-48 bg-gray-100 p-1 sm:p-4">
-                {product.image && product.image.startsWith('http') ? (
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-contain p-1 sm:p-4"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-xl sm:text-4xl">
-                    📷
-                  </div>
-                )}
-              </div>
-
-              {/* Informations du produit */}
-              <div className="p-1.5 sm:p-3">
-                <h3 className="text-xs sm:text-sm font-medium text-gray-800 mb-1 sm:mb-2 line-clamp-2 group-hover:text-orange-600 flex items-center">
-                  {product.name}
-                  {product.isTrending && (
-                    <span className="ml-1 sm:ml-2 flex items-center">
-                      <span className="trending-flame text-lg sm:text-3xl">🔥</span>
-                      <span className="hot-label text-xs">HOT</span>
-                    </span>
+        <div className={`grid gap-2 sm:gap-4 ${
+          selectedCategory === "Sélectionnez une catégorie" 
+            ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" 
+            : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+        }`}>
+          {/* Produit vedette - visible seulement sur mobile */}
+          {selectedCategory === "Sélectionnez une catégorie" && (
+            <div className="block sm:hidden">
+              <div
+                key={featuredProduct.id}
+                className="bg-white rounded-lg shadow transition-transform duration-200 hover:scale-105 hover:shadow-2xl overflow-hidden group cursor-pointer product-card"
+              >
+                {/* Image du produit */}
+                <div className="relative h-24 sm:h-48 bg-gray-100 p-1 sm:p-4">
+                  {featuredProduct.image && featuredProduct.image.startsWith('http') ? (
+                    <Image
+                      src={featuredProduct.image}
+                      alt={featuredProduct.name}
+                      fill
+                      className="object-contain p-1 sm:p-4"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-xl sm:text-4xl">
+                      📷
+                    </div>
                   )}
-                </h3>
-                
-                {/* Rating - Caché sur très petit écran */}
-                <div className="hidden sm:block">
-                  <StarRating rating={product.rating} reviews={product.reviews} />
-                </div>
-                
-                {/* Prix */}
-                <div className="mt-1 sm:mt-2">
-                  <div className="flex items-center gap-1 sm:gap-2">
-                    <span className="text-lg sm:text-2xl font-black text-red-600 bg-yellow-300 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg shadow-md border-2 border-red-500">
-                      {product.price}€
-                    </span>
-                    <span className="text-xs text-gray-500 line-through font-bold">
-                      {product.originalPrice}€
-                    </span>
-                  </div>
-                  <div className="text-xs text-gray-600 mt-1 flex items-center">
-                    <Truck className="w-3 h-3 mr-1" />
-                    Livraison possible
-                  </div>
                 </div>
 
-                {/* Description - Cachée sur mobile */}
-                <p className="hidden sm:block text-xs text-gray-600 mt-2 line-clamp-2">
-                  {product.description}
-                </p>
+                {/* Informations du produit */}
+                <div className="p-1.5 sm:p-3">
+                  <h3 className="text-xs sm:text-sm font-medium text-gray-800 mb-1 sm:mb-2 line-clamp-2 group-hover:text-orange-600 flex items-center">
+                    {featuredProduct.name}
+                    {featuredProduct.isTrending && (
+                      <span className="ml-1 sm:ml-2 flex items-center">
+                        <span className="trending-flame text-lg sm:text-3xl">🔥</span>
+                        <span className="hot-label text-xs">HOT</span>
+                      </span>
+                    )}
+                  </h3>
+                  
+                  {/* Rating - Caché sur très petit écran */}
+                  <div className="hidden sm:block">
+                    <StarRating rating={featuredProduct.rating} reviews={featuredProduct.reviews} />
+                  </div>
+                  
+                  {/* Prix */}
+                  <div className="mt-1 sm:mt-2">
+                    <div className="flex items-center gap-1 sm:gap-2">
+                      <span className="text-lg sm:text-2xl font-black text-red-600 bg-yellow-300 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg shadow-md border-2 border-red-500">
+                        {featuredProduct.price}€
+                      </span>
+                      <span className="text-xs text-gray-500 line-through font-bold">
+                        {featuredProduct.originalPrice}€
+                      </span>
+                    </div>
+                    <div className="text-xs text-gray-600 mt-1 flex items-center">
+                      <Truck className="w-3 h-3 mr-1" />
+                      Livraison possible
+                    </div>
+                  </div>
 
-                {/* Bouton d'action */}
-                <a 
-                  href={product.amazonLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full mt-1.5 sm:mt-3 bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-1 sm:py-2 px-1.5 sm:px-4 rounded text-xs sm:text-sm transition-colors amazon-button flex items-center justify-center"
-                >
-                  <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                  <span className="hidden sm:inline">Article Sur Amazon</span>
-                  <span className="sm:hidden">Amazon</span>
-                </a>
+                  {/* Description - Cachée sur mobile */}
+                  <p className="hidden sm:block text-xs text-gray-600 mt-2 line-clamp-2">
+                    {featuredProduct.description}
+                  </p>
+
+                  {/* Bouton d'action */}
+                  <a 
+                    href={featuredProduct.amazonLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full mt-1.5 sm:mt-3 bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-1 sm:py-2 px-1.5 sm:px-4 rounded text-xs sm:text-sm transition-colors amazon-button flex items-center justify-center"
+                  >
+                    <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                    <span className="hidden sm:inline">Article Sur Amazon</span>
+                    <span className="sm:hidden">Amazon</span>
+                  </a>
+                </div>
               </div>
             </div>
-          ))}
+          )}
+
+          {/* Tous les produits - visible sur desktop, ou quand une catégorie est sélectionnée */}
+          <div className={`grid gap-2 sm:gap-4 ${
+            selectedCategory === "Sélectionnez une catégorie" 
+              ? "hidden sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" 
+              : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+          }`}>
+            {filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="bg-white rounded-lg shadow transition-transform duration-200 hover:scale-105 hover:shadow-2xl overflow-hidden group cursor-pointer product-card"
+              >
+                {/* Image du produit */}
+                <div className="relative h-24 sm:h-48 bg-gray-100 p-1 sm:p-4">
+                  {product.image && product.image.startsWith('http') ? (
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      className="object-contain p-1 sm:p-4"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-xl sm:text-4xl">
+                      📷
+                    </div>
+                  )}
+                </div>
+
+                {/* Informations du produit */}
+                <div className="p-1.5 sm:p-3">
+                  <h3 className="text-xs sm:text-sm font-medium text-gray-800 mb-1 sm:mb-2 line-clamp-2 group-hover:text-orange-600 flex items-center">
+                    {product.name}
+                    {product.isTrending && (
+                      <span className="ml-1 sm:ml-2 flex items-center">
+                        <span className="trending-flame text-lg sm:text-3xl">🔥</span>
+                        <span className="hot-label text-xs">HOT</span>
+                      </span>
+                    )}
+                  </h3>
+                  
+                  {/* Rating - Caché sur très petit écran */}
+                  <div className="hidden sm:block">
+                    <StarRating rating={product.rating} reviews={product.reviews} />
+                  </div>
+                  
+                  {/* Prix */}
+                  <div className="mt-1 sm:mt-2">
+                    <div className="flex items-center gap-1 sm:gap-2">
+                      <span className="text-lg sm:text-2xl font-black text-red-600 bg-yellow-300 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg shadow-md border-2 border-red-500">
+                        {product.price}€
+                      </span>
+                      <span className="text-xs text-gray-500 line-through font-bold">
+                        {product.originalPrice}€
+                      </span>
+                    </div>
+                    <div className="text-xs text-gray-600 mt-1 flex items-center">
+                      <Truck className="w-3 h-3 mr-1" />
+                      Livraison possible
+                    </div>
+                  </div>
+
+                  {/* Description - Cachée sur mobile */}
+                  <p className="hidden sm:block text-xs text-gray-600 mt-2 line-clamp-2">
+                    {product.description}
+                  </p>
+
+                  {/* Bouton d'action */}
+                  <a 
+                    href={product.amazonLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full mt-1.5 sm:mt-3 bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-1 sm:py-2 px-1.5 sm:px-4 rounded text-xs sm:text-sm transition-colors amazon-button flex items-center justify-center"
+                  >
+                    <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                    <span className="hidden sm:inline">Article Sur Amazon</span>
+                    <span className="sm:hidden">Amazon</span>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Message si aucun produit dans la catégorie */}
