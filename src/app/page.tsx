@@ -568,21 +568,21 @@ export default function Home() {
   }
 
   // Filtrage et tri des produits
-  const filteredProducts = selectedCategory === "Toutes catégories"
-    ? [...products].sort((a, b) => {
-        // Mettre les produits tendance en premier
-        if (a.isTrending && !b.isTrending) return -1;
-        if (!a.isTrending && b.isTrending) return 1;
-        return 0;
-      })
-    : [...products]
-        .filter((p) => p.category === selectedCategory)
-        .sort((a, b) => {
-          // Mettre les produits tendance en premier dans chaque catégorie
-          if (a.isTrending && !b.isTrending) return -1;
-          if (!a.isTrending && b.isTrending) return 1;
-          return 0;
-        });
+  const filteredProducts = (() => {
+    let filtered = [...products];
+    
+    // Filtrer par catégorie
+    if (selectedCategory !== "Toutes catégories") {
+      filtered = filtered.filter((p) => p.category === selectedCategory);
+    }
+    
+    // Trier : produits tendance en premier, puis par ID décroissant (plus récents en premier)
+    return filtered.sort((a, b) => {
+      if (a.isTrending && !b.isTrending) return -1;
+      if (!a.isTrending && b.isTrending) return 1;
+      return b.id - a.id; // Plus récents en premier
+    });
+  })();
 
   return (
     <div className="min-h-screen bg-gray-900">
