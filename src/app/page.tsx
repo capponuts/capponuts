@@ -437,6 +437,54 @@ const products = [
     image: "https://m.media-amazon.com/images/I/71TOwi7JSYL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DQSMBV9L",
     isTrending: true
+  },
+  {
+    id: 39,
+    name: "CIVO Montre Connectée Femme Sport: Fitness Smartwatch avec Appel Bluetooth - 110+ Sportifs Montre avec Podometre - Etanche IP67 Smart Watch pour Android iOS",
+    description: "Montre Connectée Femme Sport: Fitness Smartwatch avec Appel Bluetooth - 110+ Sportifs Montre avec Podometre - Etanche IP67 Smart Watch pour Android iOS",
+    price: 25,
+    originalPrice: 49.99,
+    rating: 4.4,
+    reviews: 28,
+    category: "High-Tech",
+    image: "https://m.media-amazon.com/images/I/71DlDf+D6CL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F9S66RG5"
+  },
+  {
+    id: 40,
+    name: "GAN XIN Tableau D'affichage électronique LED Gardien de Score Numérique avec Télécommande pour Basketball, Volley-Ball, Sports d'intérieur et d'extérieur. luminosité Réglable",
+    description: "Tableau D'affichage électronique LED Gardien de Score Numérique avec Télécommande pour Basketball, Volley-Ball, Sports d'intérieur et d'extérieur. luminosité Réglable",
+    price: 15,
+    originalPrice: 29.99,
+    rating: 4.2,
+    reviews: 35,
+    category: "Sports et Loisirs",
+    image: "https://m.media-amazon.com/images/I/618rVb6bMiL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0D2RCWK48"
+  },
+  {
+    id: 41,
+    name: "Pistolet à bulles pour enfants : lot de 2 pistolets à bulles électriques - Machine à bulles automatique LED pour enfants à partir de 4 à 12 ans",
+    description: "Lot de 2 pistolets à bulles électriques avec LED, machine à bulles automatique pour enfants de 4 à 12 ans, jouet de plein air avec réservoir et piles incluses",
+    price: 15,
+    originalPrice: 29.99,
+    rating: 4.5,
+    reviews: 42,
+    category: "Jeux et Jouets",
+    image: "https://m.media-amazon.com/images/I/81zkhU5rvvL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F62ZJCWZ"
+  },
+  {
+    id: 42,
+    name: "Réveil Lumineux Simulateur d'Aube,Machine à Bruit Blanc avec Veilleuse 2 Couleurs, Lampe de Reveil avec 30 Sons pour Dormir, Lampe de Chevet à Intensité Variable",
+    description: "Réveil Lumineux Simulateur d'Aube,Machine à Bruit Blanc avec Veilleuse 2 Couleurs, Lampe de Reveil avec 30 Sons pour Dormir, Lampe de Chevet à Intensité Variable",
+    price: 15,
+    originalPrice: 29.99,
+    rating: 5.0,
+    reviews: 1,
+    category: "Cuisine et Maison",
+    image: "https://m.media-amazon.com/images/I/710uTPDM7QL._AC_SY500_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F5HG1WFH"
   }
 ];
 
