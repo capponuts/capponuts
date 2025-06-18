@@ -488,21 +488,6 @@ const products = [
   }
 ];
 
-const categories = [
-  "Toutes catégories",
-  "High-Tech",
-  "Cuisine et Maison",
-  "Auto et Moto",
-  "Informatique",
-  "Bricolage",
-  "Mode",
-  "Sports et Loisirs",
-  "Hygiène et Santé",
-  "Jardin",
-  "Jeux et Jouets",
-  "Beauté et Soins"
-];
-
 // Composant pour afficher les étoiles avec Lucide
 const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) => {
   const fullStars = Math.floor(rating);
