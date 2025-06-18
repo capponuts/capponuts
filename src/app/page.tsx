@@ -531,7 +531,7 @@ const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) =>
 };
 
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] = useState("Toutes catégories");
+  const [selectedCategory, setSelectedCategory] = useState("Sélectionnez une catégorie");
   const [showIntro, setShowIntro] = useState(true);
   const [typedText, setTypedText] = useState("");
   const welcomeText = "Bienvenue sur la boutique de Capponuts";
@@ -571,6 +571,14 @@ export default function Home() {
   const filteredProducts = (() => {
     let filtered = [...products];
     
+    // Si aucune catégorie n'est sélectionnée, afficher seulement le produit le plus cher
+    if (selectedCategory === "Sélectionnez une catégorie") {
+      const mostExpensiveProduct = products.reduce((max, current) => 
+        current.price > max.price ? current : max
+      );
+      return [mostExpensiveProduct];
+    }
+    
     // Filtrer par catégorie
     if (selectedCategory !== "Toutes catégories") {
       filtered = filtered.filter((p) => p.category === selectedCategory);
@@ -609,15 +617,28 @@ export default function Home() {
       </div>
 
       {/* Menu déroulant catégories - visible uniquement sur mobile */}
-      <div className="block sm:hidden w-full sticky top-[64px] z-20 bg-white px-2 pt-3 shadow-md border-b border-gray-200">
+      <div className="block sm:hidden w-full sticky top-[64px] z-20 bg-white px-3 pt-4 pb-3 shadow-lg border-b border-gray-200">
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          📱 Choisissez une catégorie
+        </label>
         <select
-          className="w-full rounded-md border border-gray-300 py-2 px-3 text-gray-900 font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-orange-400 text-base"
+          className="w-full rounded-lg border-2 border-gray-300 py-3 px-4 text-gray-900 font-medium bg-white focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 text-base shadow-sm"
           value={selectedCategory}
           onChange={e => setSelectedCategory(e.target.value)}
         >
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
+          <option value="Sélectionnez une catégorie" disabled>Sélectionnez une catégorie</option>
+          <option value="Toutes catégories">🏠 Toutes les catégories</option>
+          <option value="High-Tech">📱 High-Tech</option>
+          <option value="Cuisine et Maison">🏠 Cuisine et Maison</option>
+          <option value="Auto et Moto">🚗 Auto et Moto</option>
+          <option value="Informatique">💻 Informatique</option>
+          <option value="Bricolage">🔧 Bricolage</option>
+          <option value="Mode">👕 Mode</option>
+          <option value="Sports et Loisirs">⚽ Sports et Loisirs</option>
+          <option value="Hygiène et Santé">🧴 Hygiène et Santé</option>
+          <option value="Jardin">🌱 Jardin</option>
+          <option value="Jeux et Jouets">🧸 Jeux et Jouets</option>
+          <option value="Beauté et Soins">💅 Beauté et Soins</option>
         </select>
       </div>
 
@@ -706,13 +727,24 @@ export default function Home() {
       <main className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6">
         <div className="mb-4 sm:mb-6 bg-gray-800 p-3 sm:p-4 rounded-lg">
           <h2 className="text-white text-lg sm:text-xl font-bold mb-2">
-            Catalogue des articles disponibles
-            {selectedCategory !== "Toutes catégories" && (
-              <span className="ml-2 text-orange-400">- {selectedCategory}</span>
+            {selectedCategory === "Sélectionnez une catégorie" ? (
+              <>
+                💎 Produit Vedette - Le Plus Cher
+              </>
+            ) : (
+              <>
+                Catalogue des articles disponibles
+                {selectedCategory !== "Toutes catégories" && (
+                  <span className="ml-2 text-orange-400">- {selectedCategory}</span>
+                )}
+              </>
             )}
           </h2>
           <p className="text-gray-300 text-sm">
-            💬 Pour commander un article, contactez-moi par message • 📱 Paiement et livraison à convenir
+            {selectedCategory === "Sélectionnez une catégorie" 
+              ? "💎 Découvrez notre produit premium • 📱 Paiement et livraison à convenir"
+              : "💬 Pour commander un article, contactez-moi par message • 📱 Paiement et livraison à convenir"
+            }
           </p>
         </div>
         
