@@ -517,7 +517,6 @@ const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) =>
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("Sélectionnez une catégorie");
-  const [showFeaturedProduct, setShowFeaturedProduct] = useState(true);
   const [showIntro, setShowIntro] = useState(true);
   const [typedText, setTypedText] = useState("");
   const welcomeText = "Bienvenue sur la boutique de Capponuts";
