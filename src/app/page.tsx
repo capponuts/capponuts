@@ -274,7 +274,7 @@ const products = [
     rating: 4.6,
     reviews: 45,
     category: "High-Tech",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/81rTL0ebWbL._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/81rTL0ebWbL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F6LV4H3M"
   },
   {
@@ -286,7 +286,7 @@ const products = [
     rating: 4.5,
     reviews: 42,
     category: "High-Tech",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/81jM5HBKXML._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/81jM5HBKXML._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F6LNPSVR"
   },
   {
@@ -298,7 +298,7 @@ const products = [
     rating: 4.5,
     reviews: 38,
     category: "High-Tech",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71PYK0WEeUL._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/71PYK0WEeUL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F5WDMS4V",
     isTrending: true
   },
@@ -335,7 +335,7 @@ const products = [
     rating: 4.5,
     reviews: 42,
     category: "Beauté et Soins",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71rbWfB0CYL._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/71rbWfB0CYL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F36H4N1T"
   },
   {
@@ -347,7 +347,7 @@ const products = [
     rating: 4.6,
     reviews: 48,
     category: "Beauté et Soins",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61UwpS7tl6L._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/61UwpS7tl6L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DSSKVCC7",
     isTrending: true
   },
@@ -485,6 +485,42 @@ const products = [
     category: "Cuisine et Maison",
     image: "https://m.media-amazon.com/images/I/710uTPDM7QL._AC_SY500_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F5HG1WFH"
+  },
+  {
+    id: 43,
+    name: "Machine à Bulles Automatique, Souffleur de Bulles Electrique Portable pour Enfants 42 Trous avec 20000+ Bulles/Batterie Rechargeable",
+    description: "Souffleur de bulles électrique avec 42 trous, produisant plus de 20 000 bulles par minute, batterie rechargeable incluse, idéal pour les fêtes et les jeux d'enfants en plein air.",
+    price: 15,
+    originalPrice: 27.99,
+    rating: 4.4,
+    reviews: 25,
+    category: "Jeux et Jouets",
+    image: "https://m.media-amazon.com/images/I/71Hyuk1MxPL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F248JLV6?th=1"
+  },
+  {
+    id: 44,
+    name: "Appareil Photo Enfants, Impression Instantanée, Appareil Photo Numérique à Double Objectif Avant et Arrière pour Selfies, Prise de Vidéos en 1080p, Jouet Portable pour Voyages avec Jeux et Musique",
+    description: "Appareil photo pour enfants avec impression instantanée, double objectif pour selfies, enregistrement vidéo 1080p, jeux et musique intégrés.",
+    price: 10,
+    originalPrice: 19.99,
+    rating: 4.5,
+    reviews: 30,
+    category: "Jeux et Jouets",
+    image: "https://m.media-amazon.com/images/I/7173dawQ0-L._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F18V2HYW"
+  },
+  {
+    id: 45,
+    name: "Montre Connectée Enfant 4G GPS, Smartwatch Téléphone pour Filles Garçons avec Appel Vidéo SOS Podomètre Mode Classe, Montre Cadeau pour Enfants 5-12 Ans",
+    description: "Montre connectée 4G pour enfants avec GPS, appels vidéo, SOS, podomètre et mode classe. Cadeau idéal pour les 5-12 ans.",
+    price: 30,
+    originalPrice: 59.99,
+    rating: 4.3,
+    reviews: 20,
+    category: "High-Tech",
+    image: "https://m.media-amazon.com/images/I/71rIe+rQflL._AC_SX425_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F7W76G79?th=1"
   }
 ];
 
