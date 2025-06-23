@@ -100,6 +100,7 @@ body {
 }
 
 /* Style pour l'emoji flamme des produits tendance */
+/* SUPPRIMER :
 .trending-flame {
   display: inline-block;
   animation: pulse 1.5s infinite;
@@ -172,3 +173,4 @@ body {
   vertical-align: middle;
   font-size: 1.1em;
 }
+*/

@@ -214,8 +214,7 @@ const products = [
     reviews: 42,
     category: "Jeux et Jouets",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/81kAK5Di29L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F7LVQ4JP",
-    isTrending: true
+    amazonLink: "https://www.amazon.fr/dp/B0F7LVQ4JP"
   },
   {
     id: 20,
@@ -299,8 +298,7 @@ const products = [
     reviews: 38,
     category: "High-Tech",
     image: "https://m.media-amazon.com/images/I/71PYK0WEeUL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F5WDMS4V",
-    isTrending: true
+    amazonLink: "https://www.amazon.fr/dp/B0F5WDMS4V"
   },
   {
     id: 27,
@@ -348,8 +346,7 @@ const products = [
     reviews: 48,
     category: "Beauté et Soins",
     image: "https://m.media-amazon.com/images/I/61UwpS7tl6L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DSSKVCC7",
-    isTrending: true
+    amazonLink: "https://www.amazon.fr/dp/B0DSSKVCC7"
   },
   {
     id: 32,
@@ -373,8 +370,7 @@ const products = [
     reviews: 0,
     category: "Beauté et Soins",
     image: "https://m.media-amazon.com/images/I/71TOwi7JSYL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DQSMBV9L",
-    isTrending: true
+    amazonLink: "https://www.amazon.fr/dp/B0DQSMBV9L"
   },
   {
     id: 34,
@@ -422,8 +418,7 @@ const products = [
     reviews: 0,
     category: "Beauté et Soins",
     image: "https://m.media-amazon.com/images/I/71m-Vq7AEKL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DSTL823V?th=1",
-    isTrending: true
+    amazonLink: "https://www.amazon.fr/dp/B0DSTL823V?th=1"
   },
   {
     id: 38,
@@ -435,8 +430,7 @@ const products = [
     reviews: 0,
     category: "Beauté et Soins",
     image: "https://m.media-amazon.com/images/I/71TOwi7JSYL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DQSMBV9L",
-    isTrending: true
+    amazonLink: "https://www.amazon.fr/dp/B0DQSMBV9L"
   },
   {
     id: 39,
@@ -627,27 +621,16 @@ export default function Home() {
   // Filtrage et tri des produits
   const filteredProducts = (() => {
     let filtered = [...products];
-    
     // Si aucune catégorie n'est sélectionnée, afficher tous les produits (comportement par défaut)
     if (selectedCategory === "Sélectionnez une catégorie") {
-      return filtered.sort((a, b) => {
-        if (a.isTrending && !b.isTrending) return -1;
-        if (!a.isTrending && b.isTrending) return 1;
-        return b.id - a.id; // Plus récents en premier
-      });
+      return filtered.sort((a, b) => b.id - a.id); // Plus récents en premier
     }
-    
     // Filtrer par catégorie
     if (selectedCategory !== "Toutes catégories") {
       filtered = filtered.filter((p) => p.category === selectedCategory);
     }
-    
-    // Trier : produits tendance en premier, puis par ID décroissant (plus récents en premier)
-    return filtered.sort((a, b) => {
-      if (a.isTrending && !b.isTrending) return -1;
-      if (!a.isTrending && b.isTrending) return 1;
-      return b.id - a.id; // Plus récents en premier
-    });
+    // Tri simple par id décroissant
+    return filtered.sort((a, b) => b.id - a.id);
   })();
 
   // Produit vedette (le plus cher) pour mobile
@@ -839,12 +822,6 @@ export default function Home() {
                 <div className="p-2 sm:p-3">
                   <h3 className="text-sm sm:text-sm font-medium text-gray-800 mb-1 sm:mb-2 line-clamp-2 group-hover:text-orange-600 flex items-center">
                     {featuredProduct.name}
-                    {featuredProduct.isTrending && (
-                      <span className="ml-2 flex items-center">
-                        <span className="trending-flame text-2xl sm:text-3xl">🔥</span>
-                        <span className="hot-label">HOT</span>
-                      </span>
-                    )}
                   </h3>
                   
                   {/* Rating - Caché sur très petit écran */}
@@ -917,12 +894,6 @@ export default function Home() {
               <div className="p-1.5 sm:p-3">
                 <h3 className="text-xs sm:text-sm font-medium text-gray-800 mb-1 sm:mb-2 line-clamp-2 group-hover:text-orange-600 flex items-center">
                   {product.name}
-                  {product.isTrending && (
-                    <span className="ml-1 sm:ml-2 flex items-center">
-                      <span className="trending-flame text-lg sm:text-3xl">🔥</span>
-                      <span className="hot-label text-xs">HOT</span>
-                    </span>
-                  )}
                 </h3>
                 
                 {/* Rating - Caché sur très petit écran */}
