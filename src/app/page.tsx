@@ -481,18 +481,6 @@ const products = [
     amazonLink: "https://www.amazon.fr/dp/B0F5HG1WFH"
   },
   {
-    id: 43,
-    name: "Machine à Bulles Automatique, Souffleur de Bulles Electrique Portable pour Enfants 42 Trous avec 20000+ Bulles/Batterie Rechargeable",
-    description: "Souffleur de bulles électrique avec 42 trous, produisant plus de 20 000 bulles par minute, batterie rechargeable incluse, idéal pour les fêtes et les jeux d'enfants en plein air.",
-    price: 15,
-    originalPrice: 27.99,
-    rating: 4.4,
-    reviews: 25,
-    category: "Jeux et Jouets",
-    image: "https://m.media-amazon.com/images/I/71Hyuk1MxPL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F248JLV6?th=1"
-  },
-  {
     id: 44,
     name: "Appareil Photo Enfants, Impression Instantanée, Appareil Photo Numérique à Double Objectif Avant et Arrière pour Selfies, Prise de Vidéos en 1080p, Jouet Portable pour Voyages avec Jeux et Musique",
     description: "Appareil photo pour enfants avec impression instantanée, double objectif pour selfies, enregistrement vidéo 1080p, jeux et musique intégrés.",
