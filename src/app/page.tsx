@@ -521,6 +521,42 @@ const products = [
     category: "High-Tech",
     image: "https://m.media-amazon.com/images/I/71rIe+rQflL._AC_SX425_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F7W76G79?th=1"
+  },
+  {
+    id: 46,
+    name: "Panier à linge à 2 compartiments, avec étagère, capacité totale : 2 x 50 l, sac à linge en tissu Oxford extensible amovible, avec poches latérales et support en forme de X",
+    description: "Panier à linge double compartiment (2 x 50L) avec étagère supérieure, sacs en tissu Oxford amovibles et extensibles, poches latérales pratiques, support robuste en X. Idéal pour organiser le linge dans la salle de bain ou la buanderie.",
+    price: 30,
+    originalPrice: 49.99,
+    rating: 4.5,
+    reviews: 12,
+    category: "Cuisine et Maison",
+    image: "https://m.media-amazon.com/images/I/71z+263ZUzL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F2LSQM96"
+  },
+  {
+    id: 47,
+    name: "Panamalar Machine à Bulles Automatique, Souffleur de Bulles Electrique Portable pour Enfants 42 Trous avec 20000+ Bulles/Batterie Rechargeable/Solution à Bulles pour Fêtes Mariage Extérieur (Noir)",
+    description: "Machine à bulles automatique Panamalar, 42 trous, plus de 20 000 bulles/min, batterie rechargeable, idéale pour les fêtes, mariages et jeux d'extérieur. Couleur : noir.",
+    price: 13,
+    originalPrice: 26.99,
+    rating: 4.5,
+    reviews: 18,
+    category: "Jeux et Jouets",
+    image: "https://m.media-amazon.com/images/I/71Hyuk1MxPL.__AC_SX300_SY300_QL70_ML2_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F248JLV6?th=1"
+  },
+  {
+    id: 48,
+    name: "Rainpal Matelas gonflable pour voiture, tente de camping, portable, confortable et durable, pour petites voitures, SUV, monospaces dans le coffre (gris)",
+    description: "Matelas gonflable Rainpal, portable et confortable, conçu pour voiture, tente de camping, SUV et monospaces. Idéal pour le coffre, durable et facile à transporter. Couleur : gris.",
+    price: 30,
+    originalPrice: 69.99,
+    rating: 4.4,
+    reviews: 16,
+    category: "Auto et Moto",
+    image: "https://m.media-amazon.com/images/I/61SbfIavWeL.__AC_SX300_SY300_QL70_ML2_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0DY6ZT359"
   }
 ];
 
@@ -633,7 +669,7 @@ export default function Home() {
               <span className="ml-3 inline-block bg-red-600 text-white text-xs sm:text-sm font-bold px-2 py-1 rounded shadow-sm align-middle animate-pulse" style={{letterSpacing: '0.05em'}}>
                 -50%
               </span>
-            </span>
+                </span>
           </div>
         </div>
       </header>
@@ -760,7 +796,7 @@ export default function Home() {
               </>
             ) : (
               <>
-                Catalogue des articles disponibles
+            Catalogue des articles disponibles
                 {selectedCategory !== "Toutes catégories" && (
                   <span className="ml-2 text-orange-400">- {selectedCategory}</span>
                 )}
@@ -864,10 +900,10 @@ export default function Home() {
               {/* Image du produit */}
               <div className="relative h-24 sm:h-48 bg-gray-100 p-1 sm:p-4">
                 {product.image && product.image.startsWith('http') ? (
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
                     className="object-contain p-1 sm:p-4"
                   />
                 ) : (
