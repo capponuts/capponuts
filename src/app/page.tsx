@@ -539,6 +539,18 @@ const products = [
     category: "Auto et Moto",
     image: "https://m.media-amazon.com/images/I/61SbfIavWeL.__AC_SX300_SY300_QL70_ML2_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DY6ZT359"
+  },
+  {
+    id: 49,
+    name: "Seche Cheveux Professionnel, 200 Millions ionique Négatifs, Moteur Haute Vitesse 110000 TR/Min, 57dB Faible Bruit",
+    description: "Séchage rapide, moteur 110 000 tr/min, 200 millions d'ions négatifs, silencieux (57dB), léger, idéal maison et voyage. Protège les cheveux, 3 modes température, accessoires inclus.",
+    price: 30,
+    originalPrice: 59.99,
+    rating: 4.5,
+    reviews: 0,
+    category: "Beauté et Soins",
+    image: "https://m.media-amazon.com/images/I/61n3Z7Z1G7L._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0DP8QNLQJ"
   }
 ];
 
