@@ -361,18 +361,6 @@ const products = [
     amazonLink: "https://www.amazon.fr/dp/B0F5452M6L"
   },
   {
-    id: 33,
-    name: "Airbrush 6 en 1, Seche Cheveux 6 en 1,1000w Air Styler Brosse Soufflante,Hair Styler avec 30mm boucleur,Sèche-cheveux Ionique Pour Cheveux Bouclés et Lissés,Température Vitesse du vent Réglable, Noir",
-    description: "Airbrush 6 en 1, Seche Cheveux 6 en 1,1000w Air Styler Brosse Soufflante,Hair Styler avec 30mm boucleur,Sèche-cheveux Ionique Pour Cheveux Bouclés et Lissés,Température Vitesse du vent Réglable, Noir",
-    price: 40,
-    originalPrice: 75.99,
-    rating: 4.5,
-    reviews: 0,
-    category: "Beauté et Soins",
-    image: "https://m.media-amazon.com/images/I/71TOwi7JSYL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DQSMBV9L"
-  },
-  {
     id: 34,
     name: "Support Sèche Cheveux sans Perçage, Fixation Auto-Adhésive, Porte Sèche Cheveux Mural Noir Stable Et Antirouille, Idéal pour Salle De Bain",
     description: "Support Sèche Cheveux sans Perçage, Fixation Auto-Adhésive, Porte Sèche Cheveux Mural Noir Stable Et Antirouille, Idéal pour Salle De Bain",
@@ -421,18 +409,6 @@ const products = [
     amazonLink: "https://www.amazon.fr/dp/B0DSTL823V?th=1"
   },
   {
-    id: 38,
-    name: "Airbrush 6 en 1, Seche Cheveux 6 en 1,1000w Air Styler Brosse Soufflante,Hair Styler avec 30mm boucleur,Sèche-cheveux Ionique Pour Cheveux Bouclés et Lissés,Température Vitesse du vent Réglable, Noir",
-    description: "Airbrush 6 en 1, Seche Cheveux 6 en 1,1000w Air Styler Brosse Soufflante,Hair Styler avec 30mm boucleur,Sèche-cheveux Ionique Pour Cheveux Bouclés et Lissés,Température Vitesse du vent Réglable, Noir",
-    price: 40,
-    originalPrice: 75.99,
-    rating: 4.5,
-    reviews: 0,
-    category: "Beauté et Soins",
-    image: "https://m.media-amazon.com/images/I/71TOwi7JSYL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DQSMBV9L"
-  },
-  {
     id: 39,
     name: "CIVO Montre Connectée Femme Sport: Fitness Smartwatch avec Appel Bluetooth - 110+ Sportifs Montre avec Podometre - Etanche IP67 Smart Watch pour Android iOS",
     description: "Montre Connectée Femme Sport: Fitness Smartwatch avec Appel Bluetooth - 110+ Sportifs Montre avec Podometre - Etanche IP67 Smart Watch pour Android iOS",
@@ -469,7 +445,7 @@ const products = [
     amazonLink: "https://www.amazon.fr/dp/B0F62ZJCWZ"
   },
   {
-    id: 42,
+    id: 43,
     name: "Réveil Lumineux Simulateur d'Aube,Machine à Bruit Blanc avec Veilleuse 2 Couleurs, Lampe de Reveil avec 30 Sons pour Dormir, Lampe de Chevet à Intensité Variable",
     description: "Réveil Lumineux Simulateur d'Aube,Machine à Bruit Blanc avec Veilleuse 2 Couleurs, Lampe de Reveil avec 30 Sons pour Dormir, Lampe de Chevet à Intensité Variable",
     price: 15,
@@ -479,18 +455,6 @@ const products = [
     category: "Cuisine et Maison",
     image: "https://m.media-amazon.com/images/I/710uTPDM7QL._AC_SY500_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F5HG1WFH"
-  },
-  {
-    id: 44,
-    name: "Appareil Photo Enfants, Impression Instantanée, Appareil Photo Numérique à Double Objectif Avant et Arrière pour Selfies, Prise de Vidéos en 1080p, Jouet Portable pour Voyages avec Jeux et Musique",
-    description: "Appareil photo pour enfants avec impression instantanée, double objectif pour selfies, enregistrement vidéo 1080p, jeux et musique intégrés.",
-    price: 10,
-    originalPrice: 19.99,
-    rating: 4.5,
-    reviews: 30,
-    category: "Jeux et Jouets",
-    image: "https://m.media-amazon.com/images/I/7173dawQ0-L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F18V2HYW"
   },
   {
     id: 45,
@@ -551,6 +515,30 @@ const products = [
     category: "Beauté et Soins",
     image: "https://m.media-amazon.com/images/I/61n3Z7Z1G7L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DP8QNLQJ"
+  },
+  {
+    id: 50,
+    name: "Lampe Statue de La Liberté [Classe énergétique A]",
+    description: "Lampe Statue de La Liberté [Classe énergétique A]",
+    price: 30,
+    originalPrice: 49.99,
+    rating: 4.5,
+    reviews: 15,
+    category: "Cuisine et Maison",
+    image: "https://m.media-amazon.com/images/I/519ymw+-FZL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0DHT1KC4K"
+  },
+  {
+    id: 51,
+    name: "Grue Telecommandée, Gruejouet Enfant à 12 Canaux, Jouet Grue avec Lumières et Sons Réalistes",
+    description: "Grue télécommandée pour enfants avec 12 canaux, lumières et sons réalistes, jouet de construction interactif",
+    price: 15,
+    originalPrice: 29.99,
+    rating: 4.4,
+    reviews: 25,
+    category: "Jeux et Jouets",
+    image: "https://m.media-amazon.com/images/I/71bI+WzZUQL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F8VRTTQN"
   }
 ];
 
