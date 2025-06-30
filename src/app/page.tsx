@@ -470,15 +470,15 @@ const products = [
   },
   {
     id: 46,
-    name: "Panier à linge à 2 compartiments, avec étagère, capacité totale : 2 x 50 l, sac à linge en tissu Oxford extensible amovible, avec poches latérales et support en forme de X",
-    description: "Panier à linge double compartiment (2 x 50L) avec étagère supérieure, sacs en tissu Oxford amovibles et extensibles, poches latérales pratiques, support robuste en X. Idéal pour organiser le linge dans la salle de bain ou la buanderie.",
-    price: 30,
-    originalPrice: 49.99,
-    rating: 4.5,
-    reviews: 12,
+    name: "Panier à linge 120 L avec 2 compartiments – Couvercle et sac organisateur 4 poches – Rangement pour salle de bain, vêtements sales, linge foncé et clair",
+    description: "Panier à linge 120L avec 2 compartiments, couvercle et sac organisateur 4 poches, idéal pour organiser le linge foncé et clair dans la salle de bain",
+    price: 25,
+    originalPrice: 55,
+    rating: 4.4,
+    reviews: 18,
     category: "Cuisine et Maison",
-    image: "https://m.media-amazon.com/images/I/71z+263ZUzL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F2LSQM96"
+    image: "https://m.media-amazon.com/images/I/61Lh+rWwBvL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0DZJ8HPY4?tag=monsieurconso-21&linkCode=ogi&th=1&psc=1"
   },
   {
     id: 47,
