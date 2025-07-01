@@ -551,6 +551,18 @@ const products = [
     category: "Cuisine et Maison",
     image: "https://m.media-amazon.com/images/I/71Ofjkh8o1L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F1MZP2QY"
+  },
+  {
+    id: 53,
+    name: "Air Styler 6 en 1 Brosse Séchante Brosse Soufflante 1200W Brosse Soufflante Rotative Cheveux Court Hair Dryer Brush Seche Cheveux",
+    description: "Kit coiffure 6 en 1 avec brosse séchante, brosse soufflante rotative 1200W, idéal pour cheveux courts et styling professionnel",
+    price: 30,
+    originalPrice: 59.99,
+    rating: 4.4,
+    reviews: 28,
+    category: "Beauté et Soins",
+    image: "https://m.media-amazon.com/images/I/714A5av1K+L._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F1MZP2QY"
   }
 ];
 
