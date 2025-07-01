@@ -539,6 +539,18 @@ const products = [
     category: "Jeux et Jouets",
     image: "https://m.media-amazon.com/images/I/71bI+WzZUQL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F8VRTTQN"
+  },
+  {
+    id: 52,
+    name: "Aspirateur à main sans fil，20000PA Mini aspirateur à main avec moteur sans balai, aspirateur avec 2 niveaux réglables, 6000mAh pour la voiture, la maison, le bureau, la cuisine, les poils d'animaux",
+    description: "Aspirateur à main sans fil puissant 20000PA avec moteur sans balai, batterie 6000mAh et 2 niveaux réglables, idéal pour voiture, maison et poils d'animaux",
+    price: 30,
+    originalPrice: 59.99,
+    rating: 4.5,
+    reviews: 32,
+    category: "Cuisine et Maison",
+    image: "https://m.media-amazon.com/images/I/71Ofjkh8o1L._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F1MZP2QY"
   }
 ];
 
