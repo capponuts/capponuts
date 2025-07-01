@@ -679,7 +679,7 @@ export default function Home() {
       {/* Header Amazon-style - Optimisé mobile */}
       <header className="bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 py-2 sm:py-3">
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-center sm:justify-start gap-2 sm:gap-4 w-full">
             <span className="flex items-center select-none">
               <Image src="/logo.png" alt="Logo Capponuts'Shop" width={36} height={36} className="mr-2 w-9 h-9 object-contain" priority />
               <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>
@@ -689,14 +689,6 @@ export default function Home() {
                 -50%
               </span>
             </span>
-            
-            {/* Lien vers la croisière */}
-            <a 
-              href="/croisiere" 
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-xs sm:text-sm transition-colors flex items-center gap-1 sm:gap-2"
-            >
-              🚢 <span className="hidden sm:inline">Croisière</span><span className="sm:hidden">🚢</span> Capponuts
-            </a>
           </div>
         </div>
       </header>

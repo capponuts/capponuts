@@ -26,14 +26,8 @@ export default function CroisierePage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative h-96 overflow-hidden">
-        <Image
-          src="https://www.abcroisiere.com/fstrz/r/s/static.abcroisiere.com/images/fr/itineraires/720x450,france--espagne--tunisie--italie-,2780582,537201.jpg"
-          alt="Itinéraire de la croisière"
-          fill
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <section className="relative h-96 overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600">
+        <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white">
             <h1 className="text-5xl font-bold mb-4">🚢 Croisière de Capponuts !</h1>
             <p className="text-2xl font-light mb-2">France • Espagne • Tunisie • Italie</p>
@@ -96,17 +90,12 @@ export default function CroisierePage() {
             </div>
           </div>
 
-          {/* Le navire Costa Smeralda */}
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">🛳️ Costa Smeralda</h2>
-            <div className="relative h-48 mb-4 rounded-lg overflow-hidden">
-              <Image
-                src="https://www.abcroisiere.com/fstrz/r/s/static.abcroisiere.com/images/fr/navires/navire,costa-smeralda_720x450,1376,60656.jpg"
-                alt="Costa Smeralda"
-                fill
-                className="object-cover"
-              />
-            </div>
+                     {/* Le navire Costa Smeralda */}
+           <div className="bg-white rounded-xl shadow-lg p-8">
+             <h2 className="text-3xl font-bold text-gray-800 mb-6">🛳️ Costa Smeralda</h2>
+             <div className="relative h-48 mb-4 rounded-lg overflow-hidden bg-blue-100 flex items-center justify-center">
+               <span className="text-6xl">🛳️</span>
+             </div>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="font-semibold">Capacité</p>
@@ -137,60 +126,45 @@ export default function CroisierePage() {
           <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">🗺️ Notre Itinéraire</h2>
           
           <div className="grid md:grid-cols-4 gap-6">
-            {/* Barcelone */}
-            <div className="text-center">
-              <div className="relative h-32 mb-4 rounded-lg overflow-hidden">
-                <Image
-                  src="https://www.abcroisiere.com/fstrz/r/s/static.abcroisiere.com/images/fr/escales/escale,Barcelone-Espagne_720x450,ES,BCN,516901.jpg"
-                  alt="Barcelone"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <h3 className="font-bold text-lg">🇪🇸 Barcelone</h3>
-              <p className="text-sm text-gray-600">Jour 2 • 09h-19h</p>
-              <p className="text-xs text-gray-500 mt-2">Sagrada Família, Las Ramblas, Parc Güell</p>
-            </div>
+                         {/* Barcelone */}
+             <div className="text-center">
+               <div className="relative h-32 mb-4 rounded-lg overflow-hidden bg-red-100 flex items-center justify-center">
+                 <span className="text-4xl">🇪🇸</span>
+               </div>
+               <h3 className="font-bold text-lg">🇪🇸 Barcelone</h3>
+               <p className="text-sm text-gray-600">Jour 2 • 09h-19h</p>
+               <p className="text-xs text-gray-500 mt-2">Sagrada Família, Las Ramblas, Parc Güell</p>
+             </div>
 
-            {/* Tunisie */}
-            <div className="text-center">
-              <div className="relative h-32 mb-4 rounded-lg overflow-hidden">
-                <Image
-                  src="https://www.abcroisiere.com/fstrz/r/s/static.abcroisiere.com/images/fr/escales/escale,La%20Goulette-Tunisie_720x450,TN,LGN,522227.jpg"
-                  alt="La Goulette - Tunisie"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <h3 className="font-bold text-lg">🇹🇳 Tunis (La Goulette)</h3>
-              <p className="text-sm text-gray-600">Jour 4 • 08h-16h</p>
-              <p className="text-xs text-gray-500 mt-2">Médina de Tunis, Carthage, Sidi Bou Saïd</p>
-            </div>
+             {/* Tunisie */}
+             <div className="text-center">
+               <div className="relative h-32 mb-4 rounded-lg overflow-hidden bg-green-100 flex items-center justify-center">
+                 <span className="text-4xl">🇹🇳</span>
+               </div>
+               <h3 className="font-bold text-lg">🇹🇳 Tunis (La Goulette)</h3>
+               <p className="text-sm text-gray-600">Jour 4 • 08h-16h</p>
+               <p className="text-xs text-gray-500 mt-2">Médina de Tunis, Carthage, Sidi Bou Saïd</p>
+             </div>
 
-            {/* Palerme */}
-            <div className="text-center">
-              <div className="relative h-32 mb-4 rounded-lg overflow-hidden">
-                <Image
-                  src="https://www.abcroisiere.com/fstrz/r/s/static.abcroisiere.com/images/fr/escales/escale,Palerme-Italie_720x450,IT,PMO,529267.jpg"
-                  alt="Palerme - Sicile"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <h3 className="font-bold text-lg">🇮🇹 Palerme (Sicile)</h3>
-              <p className="text-sm text-gray-600">Jour 5 • 08h-16h30</p>
-              <p className="text-xs text-gray-500 mt-2">Cathédrale, Palais des Normands, Marchés</p>
-            </div>
+             {/* Palerme */}
+             <div className="text-center">
+               <div className="relative h-32 mb-4 rounded-lg overflow-hidden bg-green-100 flex items-center justify-center">
+                 <span className="text-4xl">🇮🇹</span>
+               </div>
+               <h3 className="font-bold text-lg">🇮🇹 Palerme (Sicile)</h3>
+               <p className="text-sm text-gray-600">Jour 5 • 08h-16h30</p>
+               <p className="text-xs text-gray-500 mt-2">Cathédrale, Palais des Normands, Marchés</p>
+             </div>
 
-            {/* Rome */}
-            <div className="text-center">
-              <div className="relative h-32 mb-4 rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center">
-                <span className="text-4xl">🏛️</span>
-              </div>
-              <h3 className="font-bold text-lg">🇮🇹 Rome (Civitavecchia)</h3>
-              <p className="text-sm text-gray-600">Jour 6 • 08h-16h30</p>
-              <p className="text-xs text-gray-500 mt-2">Colisée, Vatican, Fontaine de Trevi</p>
-            </div>
+             {/* Rome */}
+             <div className="text-center">
+               <div className="relative h-32 mb-4 rounded-lg overflow-hidden bg-yellow-100 flex items-center justify-center">
+                 <span className="text-4xl">🏛️</span>
+               </div>
+               <h3 className="font-bold text-lg">🇮🇹 Rome (Civitavecchia)</h3>
+               <p className="text-sm text-gray-600">Jour 6 • 08h-16h30</p>
+               <p className="text-xs text-gray-500 mt-2">Colisée, Vatican, Fontaine de Trevi</p>
+             </div>
           </div>
 
           <div className="mt-8 p-4 bg-blue-50 rounded-lg">
@@ -216,15 +190,10 @@ export default function CroisierePage() {
         <div className="bg-white rounded-xl shadow-lg p-8 mb-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">🏨 Types de Cabines</h2>
           
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="relative h-48 rounded-lg overflow-hidden">
-              <Image
-                src="https://www.abcroisiere.com/fstrz/r/s/static.abcroisiere.com/images/fr/navires/cabine_720x450,costa-smeralda_balcon,1376,55508.jpg"
-                alt="Cabine avec balcon"
-                fill
-                className="object-cover"
-              />
-            </div>
+                     <div className="grid md:grid-cols-2 gap-8">
+             <div className="relative h-48 rounded-lg overflow-hidden bg-blue-100 flex items-center justify-center">
+               <span className="text-6xl">🏨</span>
+             </div>
             
             <div>
               <h3 className="text-xl font-bold mb-4">🏠 Cabines Disponibles</h3>
