@@ -290,34 +290,22 @@ export default function CroisierePage() {
            </div>
           
                      <div className="bg-blue-800 bg-opacity-80 rounded-lg p-6 mb-6 border border-white border-opacity-30">
-             <h3 className="text-2xl font-bold mb-4 text-white">💰 Prix Spécial Groupe Capponuts</h3>
+             <h3 className="text-2xl font-bold mb-4 text-white">💰 Prix de la Croisière</h3>
              <p className="text-3xl font-bold mb-2 text-white">À partir de 869€ par personne</p>
              <p className="text-sm text-white opacity-90">Prix susceptible d&apos;évoluer selon la date de réservation et le type de cabine</p>
            </div>
           
-          <div className="space-y-4">
-                         <h3 className="text-xl font-bold text-white">📞 Intéressé(e) ? Contactez-moi !</h3>
-                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-               <a 
-                 href="https://wa.me/33658657987" 
-                 target="_blank" 
-                 rel="noopener noreferrer"
-                 className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors"
-               >
-                 <Phone className="w-5 h-5" />
-                 WhatsApp : 06 58 65 79 87
-               </a>
-               <a 
-                 href="https://www.abcroisiere.com/croisiere-france-espagne-tunisie-italie-2780582.html"
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors"
-               >
-                 <Ship className="w-5 h-5" />
-                 Voir sur ABC Croisière
-               </a>
-             </div>
-          </div>
+                     <div className="text-center">
+             <a 
+               href="https://www.abcroisiere.com/croisiere-france-espagne-tunisie-italie-2780582.html"
+               target="_blank"
+               rel="noopener noreferrer"
+               className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg inline-flex items-center gap-2 transition-colors"
+             >
+               <Ship className="w-5 h-5" />
+               Voir les détails sur ABC Croisière
+             </a>
+           </div>
         </div>
 
         {/* Note importante */}
