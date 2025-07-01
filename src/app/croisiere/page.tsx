@@ -18,7 +18,7 @@ export default function CroisierePage() {
               </div>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-600">Du 10 au 17 Mai 2027</p>
+              <p className="text-sm text-gray-600">Du 10 au 17 Mai 2025</p>
               <p className="text-lg font-semibold text-blue-600">8 jours • 7 nuits</p>
             </div>
           </div>
@@ -57,7 +57,7 @@ export default function CroisierePage() {
                 <Calendar className="text-blue-600 w-5 h-5" />
                 <div>
                   <p className="font-semibold">Dates</p>
-                  <p className="text-gray-600">Du 10 Mai au 17 Mai 2027</p>
+                  <p className="text-gray-600">Du 10 Mai au 17 Mai 2025</p>
                 </div>
               </div>
               
