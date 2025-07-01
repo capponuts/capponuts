@@ -13,7 +13,7 @@ export default function CroisierePage() {
             <div className="flex items-center gap-3">
               <Image src="/logo.png" alt="Logo Capponuts" width={50} height={50} className="rounded-full" />
               <div>
-                <h1 className="text-2xl font-bold text-gray-800">Capponuts'Shop</h1>
+                <h1 className="text-2xl font-bold text-gray-800">Capponuts&apos;Shop</h1>
                 <p className="text-sm text-gray-600">Présente</p>
               </div>
             </div>
@@ -125,10 +125,10 @@ export default function CroisierePage() {
                 <p className="text-gray-600">20 ponts</p>
               </div>
             </div>
-            <p className="text-gray-600 mt-4 text-sm">
-              Le Costa Smeralda incarne l'hospitalité italienne avec ses espaces inspirés des places emblématiques d'Italie. 
-              Navire écologique propulsé au Gaz Naturel Liquéfié.
-            </p>
+                         <p className="text-gray-600 mt-4 text-sm">
+               Le Costa Smeralda incarne l&apos;hospitalité italienne avec ses espaces inspirés des places emblématiques d&apos;Italie. 
+               Navire écologique propulsé au Gaz Naturel Liquéfié.
+             </p>
           </div>
         </div>
 
@@ -261,9 +261,9 @@ export default function CroisierePage() {
           </div>
         </div>
 
-        {/* Appel à l'action */}
+                 {/* Appel à l&apos;action */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg p-8 text-white text-center">
-          <h2 className="text-4xl font-bold mb-4">🎉 Rejoignez l'Aventure Capponuts !</h2>
+                     <h2 className="text-4xl font-bold mb-4">🎉 Rejoignez l&apos;Aventure Capponuts !</h2>
           <p className="text-xl mb-6">Plus on est de fous, plus on rit ! Venez vivre une semaine inoubliable avec nous.</p>
           
           <div className="grid md:grid-cols-3 gap-6 mb-8">
@@ -287,7 +287,7 @@ export default function CroisierePage() {
           <div className="bg-white bg-opacity-20 rounded-lg p-6 mb-6">
             <h3 className="text-2xl font-bold mb-4">💰 Prix Spécial Groupe Capponuts</h3>
             <p className="text-3xl font-bold mb-2">À partir de 869€ par personne</p>
-            <p className="text-sm opacity-90">Prix susceptible d'évoluer selon la date de réservation et le type de cabine</p>
+                         <p className="text-sm opacity-90">Prix susceptible d&apos;évoluer selon la date de réservation et le type de cabine</p>
           </div>
           
           <div className="space-y-4">
@@ -336,7 +336,7 @@ export default function CroisierePage() {
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Image src="/logo.png" alt="Logo Capponuts" width={40} height={40} className="rounded-full" />
-            <span className="text-xl font-bold">Capponuts'Shop</span>
+                         <span className="text-xl font-bold">Capponuts&apos;Shop</span>
           </div>
           <p className="text-gray-400">Croisière Capponuts • 10-17 Mai 2027 • Plus on est de fous, plus on rit ! 🎉</p>
           <div className="mt-4">
