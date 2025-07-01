@@ -233,24 +233,24 @@ export default function CroisierePage() {
             
             <div>
               <h3 className="text-xl font-bold mb-4">🏠 Cabines Disponibles</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                  <span>Cabine Intérieure</span>
-                  <span className="font-bold text-green-600">À partir de 869€</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                  <span>Cabine Extérieure</span>
-                  <span className="font-bold text-green-600">À partir de 999€</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-blue-50 rounded border-2 border-blue-200">
-                  <span>Cabine Balcon ⭐</span>
-                  <span className="font-bold text-blue-600">À partir de 1299€</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                  <span>Suite</span>
-                  <span className="font-bold text-purple-600">À partir de 1899€</span>
-                </div>
-              </div>
+                             <div className="space-y-3">
+                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
+                   <span className="text-gray-800 font-medium">Cabine Intérieure</span>
+                   <span className="font-bold text-green-600">À partir de 869€</span>
+                 </div>
+                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
+                   <span className="text-gray-800 font-medium">Cabine Extérieure</span>
+                   <span className="font-bold text-green-600">À partir de 999€</span>
+                 </div>
+                 <div className="flex justify-between items-center p-3 bg-blue-50 rounded border-2 border-blue-200">
+                   <span className="text-blue-800 font-bold">Cabine Balcon ⭐</span>
+                   <span className="font-bold text-blue-600">À partir de 1299€</span>
+                 </div>
+                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
+                   <span className="text-gray-800 font-medium">Suite</span>
+                   <span className="font-bold text-purple-600">À partir de 1899€</span>
+                 </div>
+               </div>
               
               <div className="mt-6 p-4 bg-green-50 rounded-lg">
                 <h4 className="font-bold text-green-800 mb-2">✅ Inclus dans le prix :</h4>
