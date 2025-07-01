@@ -27,14 +27,7 @@ export default function CroisierePage() {
 
       {/* Hero Section */}
       <section className="relative h-96 overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600">
-        <Image
-          src="/croisiere/itineraire-carte.jpg"
-          alt="Carte itinéraire de la croisière"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+        <div className="flex items-center justify-center h-full">
           <div className="text-center text-white">
             <h1 className="text-5xl font-bold mb-4">🚢 Croisière de Capponuts !</h1>
             <p className="text-2xl font-light mb-2">France • Espagne • Tunisie • Italie</p>
@@ -199,23 +192,37 @@ export default function CroisierePage() {
                </div>
           </div>
 
-                     <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-             <h4 className="font-bold text-center mb-2 text-blue-800">📅 Programme Complet</h4>
-             <div className="grid md:grid-cols-2 gap-4 text-sm">
-               <div>
-                 <p className="text-gray-800"><strong className="text-blue-700">Jour 1 (10 Mai) :</strong> Marseille - Embarquement à 18h</p>
-                 <p className="text-gray-800"><strong className="text-blue-700">Jour 2 (11 Mai) :</strong> Barcelone 09h-19h</p>
-                 <p className="text-gray-800"><strong className="text-blue-700">Jour 3 (12 Mai) :</strong> En mer - Navigation</p>
-                 <p className="text-gray-800"><strong className="text-blue-700">Jour 4 (13 Mai) :</strong> Tunis (La Goulette) 08h-16h</p>
-               </div>
-               <div>
-                 <p className="text-gray-800"><strong className="text-blue-700">Jour 5 (14 Mai) :</strong> Palerme (Sicile) 08h-16h30</p>
-                 <p className="text-gray-800"><strong className="text-blue-700">Jour 6 (15 Mai) :</strong> Rome (Civitavecchia) 08h-16h30</p>
-                 <p className="text-gray-800"><strong className="text-blue-700">Jour 7 (16 Mai) :</strong> Savone (Italie) 08h30-17h30</p>
-                 <p className="text-gray-800"><strong className="text-blue-700">Jour 8 (17 Mai) :</strong> Marseille - Débarquement à 09h</p>
-               </div>
-             </div>
-           </div>
+          {/* Programme et Carte Itinéraire */}
+          <div className="mt-8 grid md:grid-cols-2 gap-6">
+            <div className="p-4 bg-blue-50 rounded-lg">
+              <h4 className="font-bold text-center mb-4 text-blue-800">📅 Programme Complet</h4>
+              <div className="space-y-2 text-sm">
+                <p className="text-gray-800"><strong className="text-blue-700">Jour 1 (10 Mai) :</strong> Marseille - Embarquement à 18h</p>
+                <p className="text-gray-800"><strong className="text-blue-700">Jour 2 (11 Mai) :</strong> Barcelone 09h-19h</p>
+                <p className="text-gray-800"><strong className="text-blue-700">Jour 3 (12 Mai) :</strong> En mer - Navigation</p>
+                <p className="text-gray-800"><strong className="text-blue-700">Jour 4 (13 Mai) :</strong> Tunis (La Goulette) 08h-16h</p>
+                <p className="text-gray-800"><strong className="text-blue-700">Jour 5 (14 Mai) :</strong> Palerme (Sicile) 08h-16h30</p>
+                <p className="text-gray-800"><strong className="text-blue-700">Jour 6 (15 Mai) :</strong> Rome (Civitavecchia) 08h-16h30</p>
+                <p className="text-gray-800"><strong className="text-blue-700">Jour 7 (16 Mai) :</strong> Savone (Italie) 08h30-17h30</p>
+                <p className="text-gray-800"><strong className="text-blue-700">Jour 8 (17 Mai) :</strong> Marseille - Débarquement à 09h</p>
+              </div>
+            </div>
+            
+            <div className="p-4 bg-blue-50 rounded-lg">
+              <h4 className="font-bold text-center mb-4 text-blue-800">🗺️ Carte de l&apos;Itinéraire</h4>
+              <div className="relative h-64 rounded-lg overflow-hidden">
+                <Image
+                  src="/croisiere/itineraire-carte.jpg"
+                  alt="Carte itinéraire de la croisière"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <p className="text-xs text-gray-600 mt-2 text-center">
+                France • Espagne • Tunisie • Italie
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Types de cabines */}
