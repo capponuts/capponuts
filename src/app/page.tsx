@@ -575,6 +575,18 @@ const products = [
     category: "High-Tech",
     image: "https://m.media-amazon.com/images/I/71kj9BKXi7L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0FCBWVG7K?th=1"
+  },
+  {
+    id: 55,
+    name: "Montre Connectée Homme avec 1.62'' AMOLED Écran/LED Lampe/730mAh Batterie,Smartwatch Homme avec 100+ Modes Sportifs,24/7 Moniteur de Fréquence Cardiaque et Sommeil pour Android iOS",
+    description: "Smartwatch homme avec écran AMOLED 1.62'', LED lampe, batterie 730mAh, 100+ modes sportifs et monitoring santé 24/7, compatible Android et iOS",
+    price: 20,
+    originalPrice: 39.99,
+    rating: 4.4,
+    reviews: 31,
+    category: "High-Tech",
+    image: "https://m.media-amazon.com/images/I/81MO7bP0jML._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0FBVF5NCY"
   }
 ];
 
