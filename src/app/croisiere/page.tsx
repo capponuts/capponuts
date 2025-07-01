@@ -26,8 +26,14 @@ export default function CroisierePage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative h-96 overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600">
-        <div className="absolute inset-0 flex items-center justify-center">
+      <section className="relative h-96 overflow-hidden">
+        <Image
+          src="/croisiere/itineraire.jpg"
+          alt="Itinéraire de la croisière"
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="text-center text-white">
             <h1 className="text-5xl font-bold mb-4">🚢 Croisière de Capponuts !</h1>
             <p className="text-2xl font-light mb-2">France • Espagne • Tunisie • Italie</p>
@@ -90,12 +96,17 @@ export default function CroisierePage() {
             </div>
           </div>
 
-                     {/* Le navire Costa Smeralda */}
-           <div className="bg-white rounded-xl shadow-lg p-8">
-             <h2 className="text-3xl font-bold text-gray-800 mb-6">🛳️ Costa Smeralda</h2>
-             <div className="relative h-48 mb-4 rounded-lg overflow-hidden bg-blue-100 flex items-center justify-center">
-               <span className="text-6xl">🛳️</span>
-             </div>
+                                {/* Le navire Costa Smeralda */}
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <h2 className="text-3xl font-bold text-gray-800 mb-6">🛳️ Costa Smeralda</h2>
+              <div className="relative h-48 mb-4 rounded-lg overflow-hidden">
+                <Image
+                  src="/croisiere/costa-smeralda.jpg"
+                  alt="Costa Smeralda"
+                  fill
+                  className="object-cover"
+                />
+              </div>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="font-semibold">Capacité</p>
@@ -126,45 +137,60 @@ export default function CroisierePage() {
           <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">🗺️ Notre Itinéraire</h2>
           
           <div className="grid md:grid-cols-4 gap-6">
-                         {/* Barcelone */}
-             <div className="text-center">
-               <div className="relative h-32 mb-4 rounded-lg overflow-hidden bg-red-100 flex items-center justify-center">
-                 <span className="text-4xl">🇪🇸</span>
-               </div>
-               <h3 className="font-bold text-lg">🇪🇸 Barcelone</h3>
-               <p className="text-sm text-gray-600">Jour 2 • 09h-19h</p>
-               <p className="text-xs text-gray-500 mt-2">Sagrada Família, Las Ramblas, Parc Güell</p>
-             </div>
+                                      {/* Barcelone */}
+              <div className="text-center">
+                <div className="relative h-32 mb-4 rounded-lg overflow-hidden">
+                  <Image
+                    src="/croisiere/barcelone.jpg"
+                    alt="Barcelone"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <h3 className="font-bold text-lg text-gray-800">🇪🇸 Barcelone</h3>
+                <p className="text-sm text-gray-600">Jour 2 • 09h-19h</p>
+                <p className="text-xs text-gray-500 mt-2">Sagrada Família, Las Ramblas, Parc Güell</p>
+              </div>
 
-             {/* Tunisie */}
-             <div className="text-center">
-               <div className="relative h-32 mb-4 rounded-lg overflow-hidden bg-green-100 flex items-center justify-center">
-                 <span className="text-4xl">🇹🇳</span>
-               </div>
-               <h3 className="font-bold text-lg">🇹🇳 Tunis (La Goulette)</h3>
-               <p className="text-sm text-gray-600">Jour 4 • 08h-16h</p>
-               <p className="text-xs text-gray-500 mt-2">Médina de Tunis, Carthage, Sidi Bou Saïd</p>
-             </div>
+              {/* Tunisie */}
+              <div className="text-center">
+                <div className="relative h-32 mb-4 rounded-lg overflow-hidden">
+                  <Image
+                    src="/croisiere/tunisie.jpg"
+                    alt="La Goulette - Tunisie"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <h3 className="font-bold text-lg text-gray-800">🇹🇳 Tunis (La Goulette)</h3>
+                <p className="text-sm text-gray-600">Jour 4 • 08h-16h</p>
+                <p className="text-xs text-gray-500 mt-2">Médina de Tunis, Carthage, Sidi Bou Saïd</p>
+              </div>
 
-             {/* Palerme */}
-             <div className="text-center">
-               <div className="relative h-32 mb-4 rounded-lg overflow-hidden bg-green-100 flex items-center justify-center">
-                 <span className="text-4xl">🇮🇹</span>
-               </div>
-               <h3 className="font-bold text-lg">🇮🇹 Palerme (Sicile)</h3>
-               <p className="text-sm text-gray-600">Jour 5 • 08h-16h30</p>
-               <p className="text-xs text-gray-500 mt-2">Cathédrale, Palais des Normands, Marchés</p>
-             </div>
+              {/* Palerme */}
+              <div className="text-center">
+                <div className="relative h-32 mb-4 rounded-lg overflow-hidden">
+                  <Image
+                    src="/croisiere/palerme.jpg"
+                    alt="Palerme - Sicile"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <h3 className="font-bold text-lg text-gray-800">🇮🇹 Palerme (Sicile)</h3>
+                <p className="text-sm text-gray-600">Jour 5 • 08h-16h30</p>
+                <p className="text-xs text-gray-500 mt-2">Cathédrale, Palais des Normands, Marchés</p>
+              </div>
 
-             {/* Rome */}
-             <div className="text-center">
-               <div className="relative h-32 mb-4 rounded-lg overflow-hidden bg-yellow-100 flex items-center justify-center">
-                 <span className="text-4xl">🏛️</span>
-               </div>
-               <h3 className="font-bold text-lg">🇮🇹 Rome (Civitavecchia)</h3>
-               <p className="text-sm text-gray-600">Jour 6 • 08h-16h30</p>
-               <p className="text-xs text-gray-500 mt-2">Colisée, Vatican, Fontaine de Trevi</p>
-             </div>
+              {/* Rome */}
+              <div className="text-center">
+                <div className="relative h-32 mb-4 rounded-lg overflow-hidden bg-yellow-100 flex items-center justify-center">
+                  <span className="text-4xl">🏛️</span>
+                </div>
+                <h3 className="font-bold text-lg text-gray-800">🇮🇹 Rome (Civitavecchia)</h3>
+                <p className="text-sm text-gray-600">Jour 6 • 08h-16h30</p>
+                <p className="text-xs text-gray-500 mt-2">Colisée, Vatican, Fontaine de Trevi</p>
+              </div>
           </div>
 
           <div className="mt-8 p-4 bg-blue-50 rounded-lg">
@@ -190,10 +216,15 @@ export default function CroisierePage() {
         <div className="bg-white rounded-xl shadow-lg p-8 mb-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">🏨 Types de Cabines</h2>
           
-                     <div className="grid md:grid-cols-2 gap-8">
-             <div className="relative h-48 rounded-lg overflow-hidden bg-blue-100 flex items-center justify-center">
-               <span className="text-6xl">🏨</span>
-             </div>
+                                <div className="grid md:grid-cols-2 gap-8">
+              <div className="relative h-48 rounded-lg overflow-hidden">
+                <Image
+                  src="/croisiere/cabine-balcon.jpg"
+                  alt="Cabine avec balcon"
+                  fill
+                  className="object-cover"
+                />
+              </div>
             
             <div>
               <h3 className="text-xl font-bold mb-4">🏠 Cabines Disponibles</h3>
@@ -236,21 +267,21 @@ export default function CroisierePage() {
           <p className="text-xl mb-6">Plus on est de fous, plus on rit ! Venez vivre une semaine inoubliable avec nous.</p>
           
           <div className="grid md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white bg-opacity-20 rounded-lg p-4">
-              <Users className="mx-auto mb-2 w-8 h-8" />
-              <h3 className="font-bold">Ambiance Conviviale</h3>
-              <p className="text-sm">Retrouvailles, rires et bonne humeur garantis !</p>
-            </div>
-            <div className="bg-white bg-opacity-20 rounded-lg p-4">
-              <MapPin className="mx-auto mb-2 w-8 h-8" />
-              <h3 className="font-bold">Destinations de Rêve</h3>
-              <p className="text-sm">4 pays, 6 escales, des souvenirs pour la vie</p>
-            </div>
-            <div className="bg-white bg-opacity-20 rounded-lg p-4">
-              <Ship className="mx-auto mb-2 w-8 h-8" />
-              <h3 className="font-bold">Navire 5 Étoiles</h3>
-              <p className="text-sm">Tout le confort à bord du Costa Smeralda</p>
-            </div>
+                         <div className="bg-white bg-opacity-20 rounded-lg p-4 text-white">
+               <Users className="mx-auto mb-2 w-8 h-8 text-white" />
+               <h3 className="font-bold text-white">Ambiance Conviviale</h3>
+               <p className="text-sm text-white">Retrouvailles, rires et bonne humeur garantis !</p>
+             </div>
+             <div className="bg-white bg-opacity-20 rounded-lg p-4 text-white">
+               <MapPin className="mx-auto mb-2 w-8 h-8 text-white" />
+               <h3 className="font-bold text-white">Destinations de Rêve</h3>
+               <p className="text-sm text-white">4 pays, 6 escales, des souvenirs pour la vie</p>
+             </div>
+             <div className="bg-white bg-opacity-20 rounded-lg p-4 text-white">
+               <Ship className="mx-auto mb-2 w-8 h-8 text-white" />
+               <h3 className="font-bold text-white">Navire 5 Étoiles</h3>
+               <p className="text-sm text-white">Tout le confort à bord du Costa Smeralda</p>
+             </div>
           </div>
           
           <div className="bg-white bg-opacity-20 rounded-lg p-6 mb-6">
