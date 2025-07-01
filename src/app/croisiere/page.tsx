@@ -198,23 +198,23 @@ export default function CroisierePage() {
                </div>
           </div>
 
-          <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-            <h4 className="font-bold text-center mb-2">📅 Programme Complet</h4>
-            <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <p><strong>Jour 1 (10 Mai) :</strong> Marseille - Embarquement à 18h</p>
-                <p><strong>Jour 2 (11 Mai) :</strong> Barcelone 09h-19h</p>
-                <p><strong>Jour 3 (12 Mai) :</strong> En mer - Navigation</p>
-                <p><strong>Jour 4 (13 Mai) :</strong> Tunis (La Goulette) 08h-16h</p>
-              </div>
-              <div>
-                <p><strong>Jour 5 (14 Mai) :</strong> Palerme (Sicile) 08h-16h30</p>
-                <p><strong>Jour 6 (15 Mai) :</strong> Rome (Civitavecchia) 08h-16h30</p>
-                <p><strong>Jour 7 (16 Mai) :</strong> Savone (Italie) 08h30-17h30</p>
-                <p><strong>Jour 8 (17 Mai) :</strong> Marseille - Débarquement à 09h</p>
-              </div>
-            </div>
-          </div>
+                     <div className="mt-8 p-4 bg-blue-50 rounded-lg">
+             <h4 className="font-bold text-center mb-2 text-blue-800">📅 Programme Complet</h4>
+             <div className="grid md:grid-cols-2 gap-4 text-sm">
+               <div>
+                 <p className="text-gray-800"><strong className="text-blue-700">Jour 1 (10 Mai) :</strong> Marseille - Embarquement à 18h</p>
+                 <p className="text-gray-800"><strong className="text-blue-700">Jour 2 (11 Mai) :</strong> Barcelone 09h-19h</p>
+                 <p className="text-gray-800"><strong className="text-blue-700">Jour 3 (12 Mai) :</strong> En mer - Navigation</p>
+                 <p className="text-gray-800"><strong className="text-blue-700">Jour 4 (13 Mai) :</strong> Tunis (La Goulette) 08h-16h</p>
+               </div>
+               <div>
+                 <p className="text-gray-800"><strong className="text-blue-700">Jour 5 (14 Mai) :</strong> Palerme (Sicile) 08h-16h30</p>
+                 <p className="text-gray-800"><strong className="text-blue-700">Jour 6 (15 Mai) :</strong> Rome (Civitavecchia) 08h-16h30</p>
+                 <p className="text-gray-800"><strong className="text-blue-700">Jour 7 (16 Mai) :</strong> Savone (Italie) 08h30-17h30</p>
+                 <p className="text-gray-800"><strong className="text-blue-700">Jour 8 (17 Mai) :</strong> Marseille - Débarquement à 09h</p>
+               </div>
+             </div>
+           </div>
         </div>
 
         {/* Types de cabines */}
