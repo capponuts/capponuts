@@ -28,8 +28,8 @@ export default function CroisierePage() {
       {/* Hero Section */}
       <section className="relative h-96 overflow-hidden">
         <Image
-          src="/croisiere/itineraire.jpg"
-          alt="Itinéraire de la croisière"
+          src="/croisiere/itineraire-carte.jpg"
+          alt="Carte itinéraire de la croisière"
           fill
           className="object-cover"
         />
@@ -182,15 +182,20 @@ export default function CroisierePage() {
                 <p className="text-xs text-gray-500 mt-2">Cathédrale, Palais des Normands, Marchés</p>
               </div>
 
-              {/* Rome */}
-              <div className="text-center">
-                <div className="relative h-32 mb-4 rounded-lg overflow-hidden bg-yellow-100 flex items-center justify-center">
-                  <span className="text-4xl">🏛️</span>
-                </div>
-                <h3 className="font-bold text-lg text-gray-800">🇮🇹 Rome (Civitavecchia)</h3>
-                <p className="text-sm text-gray-600">Jour 6 • 08h-16h30</p>
-                <p className="text-xs text-gray-500 mt-2">Colisée, Vatican, Fontaine de Trevi</p>
-              </div>
+                             {/* Rome */}
+               <div className="text-center">
+                 <div className="relative h-32 mb-4 rounded-lg overflow-hidden">
+                   <Image
+                     src="/croisiere/rome.jpg"
+                     alt="Rome - Civitavecchia"
+                     fill
+                     className="object-cover"
+                   />
+                 </div>
+                 <h3 className="font-bold text-lg text-gray-800">🇮🇹 Rome (Civitavecchia)</h3>
+                 <p className="text-sm text-gray-600">Jour 6 • 08h-16h30</p>
+                 <p className="text-xs text-gray-500 mt-2">Colisée, Vatican, Fontaine de Trevi</p>
+               </div>
           </div>
 
           <div className="mt-8 p-4 bg-blue-50 rounded-lg">
