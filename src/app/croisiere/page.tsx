@@ -266,32 +266,32 @@ export default function CroisierePage() {
                      <h2 className="text-4xl font-bold mb-4">🎉 Rejoignez l&apos;Aventure Capponuts !</h2>
           <p className="text-xl mb-6">Plus on est de fous, plus on rit ! Venez vivre une semaine inoubliable avec nous.</p>
           
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-                         <div className="bg-white bg-opacity-20 rounded-lg p-4 text-white">
+                     <div className="grid md:grid-cols-3 gap-6 mb-8">
+             <div className="bg-blue-800 bg-opacity-80 rounded-lg p-4 text-white border border-white border-opacity-30">
                <Users className="mx-auto mb-2 w-8 h-8 text-white" />
                <h3 className="font-bold text-white">Ambiance Conviviale</h3>
-               <p className="text-sm text-white">Retrouvailles, rires et bonne humeur garantis !</p>
+               <p className="text-sm text-white opacity-90">Retrouvailles, rires et bonne humeur garantis !</p>
              </div>
-             <div className="bg-white bg-opacity-20 rounded-lg p-4 text-white">
+             <div className="bg-blue-800 bg-opacity-80 rounded-lg p-4 text-white border border-white border-opacity-30">
                <MapPin className="mx-auto mb-2 w-8 h-8 text-white" />
                <h3 className="font-bold text-white">Destinations de Rêve</h3>
-               <p className="text-sm text-white">4 pays, 6 escales, des souvenirs pour la vie</p>
+               <p className="text-sm text-white opacity-90">4 pays, 6 escales, des souvenirs pour la vie</p>
              </div>
-             <div className="bg-white bg-opacity-20 rounded-lg p-4 text-white">
+             <div className="bg-blue-800 bg-opacity-80 rounded-lg p-4 text-white border border-white border-opacity-30">
                <Ship className="mx-auto mb-2 w-8 h-8 text-white" />
                <h3 className="font-bold text-white">Navire 5 Étoiles</h3>
-               <p className="text-sm text-white">Tout le confort à bord du Costa Smeralda</p>
+               <p className="text-sm text-white opacity-90">Tout le confort à bord du Costa Smeralda</p>
              </div>
-          </div>
+           </div>
           
-          <div className="bg-white bg-opacity-20 rounded-lg p-6 mb-6">
-            <h3 className="text-2xl font-bold mb-4">💰 Prix Spécial Groupe Capponuts</h3>
-            <p className="text-3xl font-bold mb-2">À partir de 869€ par personne</p>
-                         <p className="text-sm opacity-90">Prix susceptible d&apos;évoluer selon la date de réservation et le type de cabine</p>
-          </div>
+                     <div className="bg-blue-800 bg-opacity-80 rounded-lg p-6 mb-6 border border-white border-opacity-30">
+             <h3 className="text-2xl font-bold mb-4 text-white">💰 Prix Spécial Groupe Capponuts</h3>
+             <p className="text-3xl font-bold mb-2 text-white">À partir de 869€ par personne</p>
+             <p className="text-sm text-white opacity-90">Prix susceptible d&apos;évoluer selon la date de réservation et le type de cabine</p>
+           </div>
           
           <div className="space-y-4">
-            <h3 className="text-xl font-bold">📞 Intéressé(e) ? Contactez-moi !</h3>
+                         <h3 className="text-xl font-bold text-white">📞 Intéressé(e) ? Contactez-moi !</h3>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="https://wa.me/33658657987" 
@@ -338,7 +338,7 @@ export default function CroisierePage() {
             <Image src="/logo.png" alt="Logo Capponuts" width={40} height={40} className="rounded-full" />
                          <span className="text-xl font-bold">Capponuts&apos;Shop</span>
           </div>
-          <p className="text-gray-400">Croisière Capponuts • 10-17 Mai 2027 • Plus on est de fous, plus on rit ! 🎉</p>
+                     <p className="text-gray-400">Croisière Capponuts • 10-17 Mai 2025 • Plus on est de fous, plus on rit ! 🎉</p>
           <div className="mt-4">
             <Image src="/capponuts.png" alt="Capponuts" width={60} height={60} className="mx-auto rounded-full" />
           </div>
