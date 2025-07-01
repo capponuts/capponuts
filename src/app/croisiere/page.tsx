@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Calendar, MapPin, Users, Euro, Ship, Clock, Phone, Mail } from "lucide-react";
+import { Calendar, MapPin, Users, Euro, Ship, Clock } from "lucide-react";
 
 export default function CroisierePage() {
   return (
