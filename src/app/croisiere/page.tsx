@@ -18,7 +18,7 @@ export default function CroisierePage() {
               </div>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-600">Du 10 au 17 Mai 2025</p>
+              <p className="text-sm text-gray-600">Du 10 au 17 Mai 2026</p>
               <p className="text-lg font-semibold text-blue-600">8 jours • 7 nuits</p>
             </div>
           </div>
@@ -57,7 +57,7 @@ export default function CroisierePage() {
                 <Calendar className="text-blue-600 w-5 h-5" />
                 <div>
                   <p className="font-semibold">Dates</p>
-                  <p className="text-gray-600">Du 10 Mai au 17 Mai 2025</p>
+                  <p className="text-gray-600">Du 10 Mai au 17 Mai 2026</p>
                 </div>
               </div>
               
@@ -297,24 +297,26 @@ export default function CroisierePage() {
           
           <div className="space-y-4">
                          <h3 className="text-xl font-bold text-white">📞 Intéressé(e) ? Contactez-moi !</h3>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="https://wa.me/33658657987" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors"
-              >
-                <Phone className="w-5 h-5" />
-                WhatsApp : 06 58 65 79 87
-              </a>
-              <a 
-                href="mailto:capponuts@example.com"
-                className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors border border-white"
-              >
-                <Mail className="w-5 h-5" />
-                Email
-              </a>
-            </div>
+                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
+               <a 
+                 href="https://wa.me/33658657987" 
+                 target="_blank" 
+                 rel="noopener noreferrer"
+                 className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors"
+               >
+                 <Phone className="w-5 h-5" />
+                 WhatsApp : 06 58 65 79 87
+               </a>
+               <a 
+                 href="https://www.abcroisiere.com/croisiere-france-espagne-tunisie-italie-2780582.html"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors"
+               >
+                 <Ship className="w-5 h-5" />
+                 Voir sur ABC Croisière
+               </a>
+             </div>
           </div>
         </div>
 
@@ -343,7 +345,7 @@ export default function CroisierePage() {
             <Image src="/logo.png" alt="Logo Capponuts" width={40} height={40} className="rounded-full" />
                          <span className="text-xl font-bold">Capponuts&apos;Shop</span>
           </div>
-                     <p className="text-gray-400">Croisière Capponuts • 10-17 Mai 2025 • Plus on est de fous, plus on rit ! 🎉</p>
+                     <p className="text-gray-400">Croisière Capponuts • 10-17 Mai 2026 • Plus on est de fous, plus on rit ! 🎉</p>
           <div className="mt-4">
             <Image src="/capponuts.png" alt="Capponuts" width={60} height={60} className="mx-auto rounded-full" />
           </div>
