@@ -26,14 +26,15 @@ export default function CroisierePage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative h-96 overflow-hidden">
+      <section className="relative h-96 overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600">
         <Image
           src="/croisiere/itineraire-carte.jpg"
           alt="Carte itinéraire de la croisière"
           fill
           className="object-cover"
+          priority
         />
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
           <div className="text-center text-white">
             <h1 className="text-5xl font-bold mb-4">🚢 Croisière de Capponuts !</h1>
             <p className="text-2xl font-light mb-2">France • Espagne • Tunisie • Italie</p>
