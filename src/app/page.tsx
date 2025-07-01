@@ -563,6 +563,18 @@ const products = [
     category: "Beauté et Soins",
     image: "https://m.media-amazon.com/images/I/714A5av1K+L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F1MZP2QY"
+  },
+  {
+    id: 54,
+    name: "Montre Connectée Enfant 4G GPS - Smartwatch Téléphone Pour Fille Garçon avec SOS, Chat, Appel Vidéo, WiFi, Mode Classe, Réveil, Caméra, Jeux, Montre Intelligente Enfants Cadeau 4 à 12 Ans, Rose Pâle",
+    description: "Smartwatch 4G pour enfants avec GPS, appels vidéo, SOS, chat, WiFi et mode classe. Cadeau parfait pour les 4-12 ans avec caméra et jeux intégrés",
+    price: 25,
+    originalPrice: 55,
+    rating: 4.3,
+    reviews: 24,
+    category: "High-Tech",
+    image: "https://m.media-amazon.com/images/I/71kj9BKXi7L._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0FCBWVG7K?th=1"
   }
 ];
 
