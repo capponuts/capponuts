@@ -97,10 +97,10 @@ export default function CroisierePage() {
       `}</style>
 
       {/* Contenu superposé */}
-      <div className="relative z-20 h-screen flex flex-col overflow-hidden">
+      <div className="relative z-20 min-h-screen flex flex-col">
         
         {/* Version Mobile - Titre seulement */}
-        <div className="md:hidden h-screen flex flex-col justify-center items-center px-4">
+        <div className="md:hidden min-h-screen flex flex-col justify-center items-center px-4">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-white mb-2 drop-shadow-2xl">
               🚢 Croisière MSC
@@ -115,9 +115,9 @@ export default function CroisierePage() {
         </div>
 
         {/* Version Desktop - Contenu complet */}
-        <div className="hidden md:flex flex-col h-screen">
+        <div className="hidden md:flex flex-col min-h-screen">
           {/* Header compact */}
-          <header className="py-4 px-6 bg-gradient-to-b from-black/60 to-transparent">
+          <header className="py-6 px-6 bg-gradient-to-b from-black/60 to-transparent">
             <div className="text-center">
               <h1 className="text-4xl lg:text-5xl font-bold text-white mb-2 drop-shadow-2xl">
                 🚢 Croisière MSC Meraviglia
@@ -129,9 +129,9 @@ export default function CroisierePage() {
           </header>
 
           {/* Contenu principal en grille compacte */}
-          <div className="flex-1 px-6 py-4 overflow-hidden">
-            <div className="max-w-7xl mx-auto h-full">
-              <div className="grid grid-cols-3 gap-6 h-full">
+          <div className="flex-1 px-6 py-6">
+            <div className="max-w-7xl mx-auto">
+              <div className="grid grid-cols-3 gap-6">
                 
                 {/* Colonne 1 - Détails */}
                 <div className="bg-white/95 backdrop-blur-sm rounded-xl p-6 shadow-2xl">
@@ -203,35 +203,44 @@ export default function CroisierePage() {
                   </div>
                 </div>
 
-                {/* Colonne 3 - Réservation */}
-                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-6 shadow-2xl flex flex-col justify-center items-center text-center">
-                  <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                      Réservez maintenant !
-                    </h2>
-                    <p className="text-gray-600 text-sm mb-4">
-                      8 jours de rêve en Méditerranée occidentale
-                    </p>
-                  </div>
-                  
-                  <a 
-                    href="https://croisiere.promovacances.com/fr/sejour-croisiere/mediterranee-occidentale-msc-croisieres-msc-meraviglia/id,3349359/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 px-6 rounded-full text-lg shadow-2xl transform hover:scale-105 transition-all duration-300"
-                  >
-                    <Ship className="w-5 h-5" />
-                    Voir & Réserver
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                  
-                  <p className="text-gray-500 text-xs mt-4">
-                    MSC Meraviglia • 04-11 Mai 2026
-                  </p>
-                </div>
+                                 {/* Colonne 3 - Réservation */}
+                 <div className="bg-white/95 backdrop-blur-sm rounded-xl p-6 shadow-2xl">
+                   <div className="text-center">
+                     <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                       Réservez maintenant !
+                     </h2>
+                     <p className="text-gray-600 text-sm mb-6">
+                       8 jours de rêve en Méditerranée occidentale
+                     </p>
+                   
+                     <a 
+                       href="https://croisiere.promovacances.com/fr/sejour-croisiere/mediterranee-occidentale-msc-croisieres-msc-meraviglia/id,3349359/"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 px-6 rounded-full text-lg shadow-2xl transform hover:scale-105 transition-all duration-300"
+                     >
+                       <Ship className="w-5 h-5" />
+                       Voir & Réserver
+                       <ExternalLink className="w-4 h-4" />
+                     </a>
+                     
+                     <p className="text-gray-500 text-xs mt-4">
+                       MSC Meraviglia • 04-11 Mai 2026
+                     </p>
+                   </div>
+                 </div>
               </div>
             </div>
           </div>
+
+          {/* Footer Desktop */}
+          <footer className="py-6 bg-gradient-to-t from-black/60 to-transparent">
+            <div className="max-w-7xl mx-auto px-6 text-center">
+              <p className="text-white/80 drop-shadow-lg text-sm">
+                MSC Croisières • MSC Meraviglia • 04-11 Mai 2026 • Méditerranée Occidentale
+              </p>
+            </div>
+          </footer>
         </div>
       </div>
     </div>
