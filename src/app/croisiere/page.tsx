@@ -6,28 +6,31 @@ export default function CroisierePage() {
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* Vidéo YouTube en arrière-plan full screen */}
-      <div className="fixed inset-0 w-full h-full z-0">
+      <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
         <iframe
-          className="absolute top-0 left-0 w-full h-full"
-          src="https://www.youtube.com/embed/HKMlDj_Wruo?autoplay=1&mute=1&loop=1&playlist=HKMlDj_Wruo&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&start=15"
+          className="absolute top-0 left-0 w-full h-full border-0"
+          src="https://www.youtube.com/embed/HKMlDj_Wruo?autoplay=1&mute=1&loop=1&playlist=HKMlDj_Wruo&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&start=15&enablejsapi=1&origin=*"
           title="MSC Croisières - Vidéo de fond"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
           style={{
-            width: '100vw',
-            height: '100vh',
-            minWidth: '100%',
-            minHeight: '100%',
-            objectFit: 'cover',
-            transform: 'scale(1.5)',
-            transformOrigin: 'center center'
+            width: '300%',
+            height: '300%',
+            marginLeft: '-100%',
+            marginTop: '-100%',
+            objectFit: 'cover'
           }}
         />
       </div>
 
+      {/* Fallback avec fond vidéo alternatif si YouTube ne marche pas */}
+      <div className="fixed inset-0 w-full h-full z-0" style={{ background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%)' }}>
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
+      </div>
+
       {/* Overlay sombre pour améliorer la lisibilité */}
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-10"></div>
+      <div className="fixed inset-0 bg-black bg-opacity-40 z-10"></div>
 
       {/* Contenu superposé */}
       <div className="relative z-20 min-h-screen flex flex-col">
