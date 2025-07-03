@@ -100,17 +100,122 @@ export default function CroisierePage() {
       <div className="relative z-20 min-h-screen flex flex-col">
         
         {/* Version Mobile - Titre seulement */}
-        <div className="md:hidden min-h-screen flex flex-col justify-center items-center px-4">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-white mb-2 drop-shadow-2xl">
-              🚢 Croisière MSC
-            </h1>
-            <p className="text-lg text-white/90 drop-shadow-lg mb-8">
-              Méditerranée Occidentale
-            </p>
-            <p className="text-white/80 drop-shadow-lg text-sm">
-              04-11 Mai 2026 • MSC Meraviglia
-            </p>
+        <div className="md:hidden">
+          <div className="min-h-screen flex flex-col justify-center items-center px-4">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-white mb-2 drop-shadow-2xl">
+                🚢 Croisière MSC
+              </h1>
+              <p className="text-lg text-white/90 drop-shadow-lg mb-8">
+                Méditerranée Occidentale
+              </p>
+              <p className="text-white/80 drop-shadow-lg text-sm">
+                04-11 Mai 2026 • MSC Meraviglia
+              </p>
+            </div>
+          </div>
+          
+          {/* Contenu additionnel mobile pour permettre le scroll */}
+          <div className="px-4 pb-8">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl mb-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <Ship className="text-blue-600 w-5 h-5" />
+                Détails de la Croisière
+              </h2>
+              
+              <div className="space-y-3 text-sm">
+                <div className="flex items-start gap-3">
+                  <Ship className="text-blue-600 w-4 h-4 mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold text-gray-800">Compagnie</p>
+                    <p className="text-gray-600">MSC Croisières</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <Ship className="text-blue-600 w-4 h-4 mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold text-gray-800">Navire</p>
+                    <p className="text-gray-600">MSC Meraviglia</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <Clock className="text-blue-600 w-4 h-4 mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold text-gray-800">Durée</p>
+                    <p className="text-gray-600">8 Jours</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <Calendar className="text-blue-600 w-4 h-4 mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold text-gray-800">Dates</p>
+                    <p className="text-gray-600">04/05/2026 au 11/05/2026</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <MapPin className="text-blue-600 w-4 h-4 mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold text-gray-800">Départ/Retour</p>
+                    <p className="text-gray-600">Marseille</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl mb-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <MapPin className="text-blue-600 w-5 h-5" />
+                Escales
+              </h2>
+              
+              <div className="space-y-2">
+                {[
+                  "Marseille",
+                  "Barcelone", 
+                  "En mer",
+                  "Tunis (La Goulette)",
+                  "Sicile (Palerme)",
+                  "Naples",
+                  "Florence (Livourne)",
+                  "Marseille"
+                ].map((escale, index) => (
+                  <div key={index} className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
+                    <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                      {index + 1}
+                    </div>
+                    <p className="text-gray-800 font-medium text-sm">{escale}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl text-center">
+              <h2 className="text-xl font-bold text-gray-800 mb-2">
+                Réservez maintenant !
+              </h2>
+              <p className="text-gray-600 text-sm mb-6">
+                8 jours de rêve en Méditerranée occidentale
+              </p>
+            
+              <a 
+                href="https://croisiere.promovacances.com/fr/sejour-croisiere/mediterranee-occidentale-msc-croisieres-msc-meraviglia/id,3349359/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 px-6 rounded-full text-lg shadow-2xl transform hover:scale-105 transition-all duration-300"
+              >
+                <Ship className="w-5 h-5" />
+                Voir & Réserver
+                <ExternalLink className="w-4 h-4" />
+              </a>
+              
+              <p className="text-gray-500 text-xs mt-4">
+                MSC Meraviglia • 04-11 Mai 2026
+              </p>
+            </div>
           </div>
         </div>
 
