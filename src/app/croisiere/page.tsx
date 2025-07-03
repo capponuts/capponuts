@@ -4,33 +4,30 @@ import { Calendar, MapPin, Ship, Clock, ExternalLink } from "lucide-react";
 
 export default function CroisierePage() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-black">
+    <div className="relative min-h-screen overflow-hidden">
       {/* Vidéo YouTube en arrière-plan full screen */}
-      <div className="absolute inset-0 w-full h-full">
+      <div className="fixed inset-0 w-full h-full z-0">
         <iframe
-          className="w-full h-full object-cover"
-          src="https://www.youtube.com/embed/HKMlDj_Wruo?autoplay=1&mute=1&loop=1&playlist=HKMlDj_Wruo&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0"
+          className="absolute top-0 left-0 w-full h-full"
+          src="https://www.youtube.com/embed/HKMlDj_Wruo?autoplay=1&mute=1&loop=1&playlist=HKMlDj_Wruo&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&start=15"
           title="MSC Croisières - Vidéo de fond"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
           style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
             width: '100vw',
             height: '100vh',
-            transform: 'translate(-50%, -50%)',
             minWidth: '100%',
             minHeight: '100%',
             objectFit: 'cover',
-            zIndex: -1
+            transform: 'scale(1.5)',
+            transformOrigin: 'center center'
           }}
         />
       </div>
 
       {/* Overlay sombre pour améliorer la lisibilité */}
-      <div className="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-10"></div>
 
       {/* Contenu superposé */}
       <div className="relative z-20 min-h-screen flex flex-col">
