@@ -86,7 +86,7 @@ export default function CroisierePage() {
                     <Calendar className="text-blue-600 w-5 h-5 mt-1 flex-shrink-0" />
                     <div>
                       <p className="font-semibold text-gray-800">Dates</p>
-                      <p className="text-gray-600">du 11/05/2026 au 18/05/2026</p>
+                      <p className="text-gray-600">du 04/05/2026 au 11/05/2026</p>
                     </div>
                   </div>
                   
@@ -157,7 +157,7 @@ export default function CroisierePage() {
         <footer className="p-6 bg-gradient-to-t from-black/60 to-transparent">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-white/80 drop-shadow-lg">
-              MSC Croisières • MSC Meraviglia • 11-18 Mai 2026 • Méditerranée Occidentale
+              MSC Croisières • MSC Meraviglia • 04-11 Mai 2026 • Méditerranée Occidentale
             </p>
           </div>
         </footer>
