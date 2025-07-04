@@ -587,6 +587,18 @@ const products = [
     category: "High-Tech",
     image: "https://m.media-amazon.com/images/I/81MO7bP0jML._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0FBVF5NCY"
+  },
+  {
+    id: 56,
+    name: "Voiture Télécommandée Tout Terrain, 2.4GHz Voiture Rc avec Lumière LED Fonction de pulvérisation, 2WD 15KM/H Buggy RC Cadeau pour Enfants 6+ Ans",
+    description: "Voiture télécommandée tout terrain 2.4GHz avec lumières LED et fonction de pulvérisation, vitesse 15KM/H, buggy RC parfait cadeau pour enfants de 6 ans et plus",
+    price: 15,
+    originalPrice: 29.99,
+    rating: 4.3,
+    reviews: 18,
+    category: "Jeux et Jouets",
+    image: "https://m.media-amazon.com/images/I/71qPt2MP77L._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F6BYYQ4J?th=1"
   }
 ];
 
