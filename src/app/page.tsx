@@ -24,18 +24,7 @@ const products = [
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/91mKK7NFi3L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DSHZ2RP5"
   },
-  {
-    id: 2,
-    name: "Seche Cheveux Ionique 1600W Diffuseur de Cheveux Professionnel 150 000 t/m 4 Températures 3 Vitesses Bouton Chaud/Froid Hair Dryer Concentrateur/Diffuseur Magnétique Faible Bruit Voyage Maison",
-    description: "Sèche-cheveux profesfix catégoriesionnel ionique 1600W avec diffuseur, 4 températures, 3 vitesses, fonction chaud/froid, concentrateur magnétique",
-    price: 15,
-    originalPrice: 29.99,
-    rating: 4.5,
-    reviews: 28,
-    category: "Beauté et Soins",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61aH3xKghuL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DSL9VW8D?th=1"
-  },
+
   {
     id: 3,
     name: "4 Pièces Étagère de Douche sans Percage - Noir Porte Savon Douche Sans PerçAge Avec Crochets- Avec 1 Support De Dentifrice Et 1 Porte-Savon - Organiseur De Salle De Bain Et Cuisine",
@@ -57,19 +46,19 @@ const products = [
     rating: 4.4,
     reviews: 22,
     category: "Hygiène et Santé",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61QvIGuSFaL.__AC_SX300_SY300_QL70_ML2_.jpg",
+    image: "https://m.media-amazon.com/images/I/61QvIGuSFaL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DLNYRJW5"
   },
   {
     id: 5,
     name: "Tondeuse Corporelle pour Hommes Sans fil étanchéité IPX7",
     description: "Tondeuse corporelle sans fil étanche IPX7 pour hommes, rechargeable, lames en acier inoxydable pour un rasage précis et confortable",
-    price: 25,
-    originalPrice: 50,
+    price: 15,
+    originalPrice: 29.99,
     rating: 4.3,
     reviews: 18,
     category: "Hygiène et Santé",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71gcIR7IBmL._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/718vIzUB24L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DZCSNCZ9"
   },
   {
@@ -144,18 +133,7 @@ const products = [
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/712vVca5uML._AC_SX425_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F2H2CPR4?th=1"
   },
-  {
-    id: 13,
-    name: "Routeur Wi-FI 6 VPN - Alimentation USB-C Compact, Ports Gigabit LAN/WAN, OpenVPN/WireGuard/ZeroTier - Hôtels,Camping-Car",
-    description: "Routeur Wi-Fi 6 compact avec alimentation USB-C, ports Gigabit, support VPN (OpenVPN/WireGuard/ZeroTier), idéal pour hôtels et camping-cars",
-    price: 30,
-    originalPrice: 69.99,
-    rating: 4.5,
-    reviews: 52,
-    category: "High-Tech",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/518ZPXN-zwL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F43HSKD5"
-  },
+
   {
     id: 14,
     name: "Jeu musical de saut à anneau et lanceur de fusée à pied 3 en 1",
@@ -204,30 +182,8 @@ const products = [
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61xM2Q23jIL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DR7SCPKF"
   },
-  {
-    id: 19,
-    name: "Parc enfant 120×120cm, Parc de Jeu pour Bébé, Barrière de Sécurité pour Enfants, Parc d'Activités pour Bébé avec Filet de Protection",
-    description: "Parc de jeu sécurisé pour bébé de 120x120cm avec filet de protection, barrière de sécurité et espace d'activités",
-    price: 30,
-    originalPrice: 69.99,
-    rating: 4.5,
-    reviews: 42,
-    category: "Jeux et Jouets",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/81kAK5Di29L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F7LVQ4JP"
-  },
-  {
-    id: 20,
-    name: "Tapis de Danse pour Enfants 3 à 12 Ans, Tapis de Jeu Musical avec 8 Modes de Jeu, Tapis de Danse Électronique avec Musique et Lumières",
-    description: "Tapis de danse interactif pour enfants avec 8 modes de jeu, effets lumineux et musique, adapté aux 3-12 ans",
-    price: 20,
-    originalPrice: 39.99,
-    rating: 4.4,
-    reviews: 35,
-    category: "Jeux et Jouets",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71vWnd1R0SL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F18YF2Q6?th=1"
-  },
+
+
   {
     id: 21,
     name: "Montre Connectée, Écran AMOLED Ultra-Clair, Étanche 3ATM Natation, Appels Bluetooth, Suivi Cardio/Sommeil/100 Sports, Compatible Téléphones Android et iOS",
@@ -360,18 +316,7 @@ const products = [
     image: "https://m.media-amazon.com/images/I/4168hTUNfPL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F5452M6L"
   },
-  {
-    id: 34,
-    name: "Support Sèche Cheveux sans Perçage, Fixation Auto-Adhésive, Porte Sèche Cheveux Mural Noir Stable Et Antirouille, Idéal pour Salle De Bain",
-    description: "Support Sèche Cheveux sans Perçage, Fixation Auto-Adhésive, Porte Sèche Cheveux Mural Noir Stable Et Antirouille, Idéal pour Salle De Bain",
-    price: 10,
-    originalPrice: 19.99,
-    rating: 4.5,
-    reviews: 0,
-    category: "Beauté et Soins",
-    image: "https://m.media-amazon.com/images/I/71KJ7xmCB3L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F1T392LH"
-  },
+
   {
     id: 35,
     name: "Raquette Anti Moustiques Électrique, Raquette Electrique Insectes 4000V 1500mAh Rechargeable avec Base Stable Contre Moustiques Mouches Insectes Volants, Blanc 2PCS",
@@ -504,30 +449,8 @@ const products = [
     image: "https://m.media-amazon.com/images/I/61SbfIavWeL.__AC_SX300_SY300_QL70_ML2_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DY6ZT359"
   },
-  {
-    id: 49,
-    name: "Seche Cheveux Professionnel, 200 Millions ionique Négatifs, Moteur Haute Vitesse 110000 TR/Min, 57dB Faible Bruit",
-    description: "Séchage rapide, moteur 110 000 tr/min, 200 millions d'ions négatifs, silencieux (57dB), léger, idéal maison et voyage. Protège les cheveux, 3 modes température, accessoires inclus.",
-    price: 30,
-    originalPrice: 59.99,
-    rating: 4.5,
-    reviews: 0,
-    category: "Beauté et Soins",
-    image: "https://m.media-amazon.com/images/I/61n3Z7Z1G7L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DP8QNLQJ"
-  },
-  {
-    id: 50,
-    name: "Lampe Statue de La Liberté [Classe énergétique A]",
-    description: "Lampe Statue de La Liberté [Classe énergétique A]",
-    price: 30,
-    originalPrice: 49.99,
-    rating: 4.5,
-    reviews: 15,
-    category: "Cuisine et Maison",
-    image: "https://m.media-amazon.com/images/I/519ymw+-FZL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DHT1KC4K"
-  },
+
+
   {
     id: 51,
     name: "Grue Telecommandée, Gruejouet Enfant à 12 Canaux, Jouet Grue avec Lumières et Sons Réalistes",
@@ -540,18 +463,7 @@ const products = [
     image: "https://m.media-amazon.com/images/I/71bI+WzZUQL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F8VRTTQN"
   },
-  {
-    id: 52,
-    name: "Aspirateur à main sans fil，20000PA Mini aspirateur à main avec moteur sans balai, aspirateur avec 2 niveaux réglables, 6000mAh pour la voiture, la maison, le bureau, la cuisine, les poils d'animaux",
-    description: "Aspirateur à main sans fil puissant 20000PA avec moteur sans balai, batterie 6000mAh et 2 niveaux réglables, idéal pour voiture, maison et poils d'animaux",
-    price: 30,
-    originalPrice: 59.99,
-    rating: 4.5,
-    reviews: 32,
-    category: "Cuisine et Maison",
-    image: "https://m.media-amazon.com/images/I/71Ofjkh8o1L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F1MZP2QY"
-  },
+
   {
     id: 53,
     name: "Air Styler 6 en 1 Brosse Séchante Brosse Soufflante 1200W Brosse Soufflante Rotative Cheveux Court Hair Dryer Brush Seche Cheveux",
@@ -599,6 +511,30 @@ const products = [
     category: "Jeux et Jouets",
     image: "https://m.media-amazon.com/images/I/71qPt2MP77L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F6BYYQ4J?th=1"
+  },
+  {
+    id: 57,
+    name: "Roller Enfant Fille Patins à roulettes réglables pour Enfants 3 à 9 Ans, 32-36",
+    description: "Rollers réglables pour enfants filles de 3 à 9 ans, tailles 32-36, patins à roulettes sécurisés et confortables pour l'apprentissage",
+    price: 25,
+    originalPrice: 49.99,
+    rating: 4.4,
+    reviews: 22,
+    category: "Sports et Loisirs",
+    image: "https://m.media-amazon.com/images/I/71KNkxUP+kL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F6ND1K3D?th=1"
+  },
+  {
+    id: 58,
+    name: "Destructeur d'insectes LED, 3800 V, puissant, 3 lampes, durée de vie de 10 ans, durable avec faible consommation d'énergie, lampe anti-moustiques, anti-moustiques, piège à insectes",
+    description: "Destructeur d'insectes LED haute puissance 3800V avec 3 lampes, durée de vie de 10 ans, faible consommation d'énergie, efficace contre les moustiques et tous types d'insectes volants",
+    price: 20,
+    originalPrice: 39.99,
+    rating: 4.5,
+    reviews: 28,
+    category: "Cuisine et Maison",
+    image: "https://m.media-amazon.com/images/I/81PccppHRcL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F3XCXR4Q"
   }
 ];
 
