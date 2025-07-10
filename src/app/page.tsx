@@ -535,6 +535,18 @@ const products = [
     category: "Cuisine et Maison",
     image: "https://m.media-amazon.com/images/I/81PccppHRcL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F3XCXR4Q"
+  },
+  {
+    id: 59,
+    name: "Microphone sans Fil Professionnel, système de Microphones Quadruple 2,4 GHz, Micro karaoké Dynamique Rechargeable avec récepteur, portée 160ft, pour Chant, fête, K604 Argent Noir Vert Pourpre",
+    description: "Système de microphones sans fil professionnel quadruple 2,4 GHz avec récepteur, portée de 160ft, microphones rechargeables pour karaoké, chant et fêtes. Disponible en argent, noir, vert et pourpre",
+    price: 40,
+    originalPrice: 80,
+    rating: 4.4,
+    reviews: 32,
+    category: "High-Tech",
+    image: "https://m.media-amazon.com/images/I/716-n6zyLsL._AC_SX425_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F7LKVSKR"
   }
 ];
 
