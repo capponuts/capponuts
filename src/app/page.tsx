@@ -547,6 +547,42 @@ const products = [
     category: "High-Tech",
     image: "https://m.media-amazon.com/images/I/716-n6zyLsL._AC_SX425_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F7LKVSKR"
+  },
+  {
+    id: 60,
+    name: "Pompe à air électrique 150 PSI, Batterie Portable, LED numérique, Rechargeable pour vélo, vélo électrique",
+    description: "Pompe à air électrique portable 150 PSI avec batterie rechargeable, écran LED numérique, idéale pour vélo et vélo électrique. Compacte et pratique pour tous vos besoins de gonflage",
+    price: 25,
+    originalPrice: 49.99,
+    rating: 4.3,
+    reviews: 24,
+    category: "Auto et Moto",
+    image: "https://m.media-amazon.com/images/I/61ob23b7PmL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F6MJTXTP"
+  },
+  {
+    id: 61,
+    name: "Éclairage Mural Chambre à Coucher éclairage De La Tête De Lit",
+    description: "Éclairage mural moderne pour chambre à coucher, parfait pour l'éclairage de tête de lit. Design élégant et éclairage doux pour créer une ambiance relaxante et confortable",
+    price: 18,
+    originalPrice: 35.99,
+    rating: 4.4,
+    reviews: 26,
+    category: "Cuisine et Maison",
+    image: "https://m.media-amazon.com/images/I/6145O9w+PQL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0BHLCWKRW"
+  },
+  {
+    id: 62,
+    name: "Babyphone Caméra 5\" Caméra Bébe Surveillance Rotation 350° 5000 mAh 720P HD Mode VOX Vision Nocturne Capteur de Température 8 Berceuses",
+    description: "Babyphone avec caméra 5 pouces, surveillance bébé HD 720P, rotation 350°, batterie 5000mAh, mode VOX, vision nocturne, capteur de température et 8 berceuses intégrées",
+    price: 35,
+    originalPrice: 89.99,
+    rating: 4.5,
+    reviews: 29,
+    category: "High-Tech",
+    image: "https://m.media-amazon.com/images/I/61LNS+g9dCL._AC_SX679_.jpg",
+    amazonLink: "https://www.amazon.fr/dp/B0F48B9LCD"
   }
 ];
 
