@@ -143,7 +143,7 @@ const products = [
     rating: 4.4,
     reviews: 28,
     category: "Jeux et Jouets",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71lKQMSKbuL._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/71lKQMSKbuL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F1TRF9LR"
   },
   {
@@ -155,7 +155,7 @@ const products = [
     rating: 4.3,
     reviews: 35,
     category: "Sports et Loisirs",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61rY4dKV++L._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/61rY4dKV++L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DRBDSZ6F"
   },
   {
@@ -167,7 +167,7 @@ const products = [
     rating: 4.5,
     reviews: 28,
     category: "Cuisine et Maison",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61gbRhTYGGL._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/61gbRhTYGGL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DYNK433T?th=1"
   },
   {
@@ -179,7 +179,7 @@ const products = [
     rating: 4.3,
     reviews: 25,
     category: "Jeux et Jouets",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/61xM2Q23jIL._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/61xM2Q23jIL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DR7SCPKF"
   },
 
@@ -205,7 +205,7 @@ const products = [
     rating: 4.4,
     reviews: 42,
     category: "Beauté et Soins",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/6107jSxaF3L._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/6107jSxaF3L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F1MFPZZS"
   },
   {
@@ -265,7 +265,7 @@ const products = [
     rating: 4.4,
     reviews: 35,
     category: "Jeux et Jouets",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71cJy9YMVXL._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/71cJy9YMVXL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DYNT8VGG"
   },
   {
@@ -277,7 +277,7 @@ const products = [
     rating: 4.3,
     reviews: 28,
     category: "Jeux et Jouets",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/81SzbregZgL._AC_SX679_.jpg",
+    image: "https://m.media-amazon.com/images/I/81XjS1E8ZBL.__AC_SX300_SY300_QL70_ML2_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0F4XB1NWR?th=1"
   },
   {
