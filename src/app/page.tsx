@@ -38,30 +38,6 @@ const products = [
     amazonLink: "https://www.amazon.fr/dp/B0DSTNYLRV"
   },
   {
-    id: 4,
-    name: "Rasoir intime 5 en 1 pour femme, rasoir électrique, pour la zone intime IPX7, étanche avec station de charge USB, tondeuse pour le visage, les sourcils, le corps, le bikini",
-    description: "Rasoir électrique 5 en 1 étanche IPX7 avec station de charge USB, tondeuse multifonction pour visage, sourcils, corps et zone bikini",
-    price: 13,
-    originalPrice: 26.99,
-    rating: 4.4,
-    reviews: 22,
-    category: "Hygiène et Santé",
-    image: "https://m.media-amazon.com/images/I/61QvIGuSFaL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DLNYRJW5"
-  },
-  {
-    id: 5,
-    name: "Tondeuse Corporelle pour Hommes Sans fil étanchéité IPX7",
-    description: "Tondeuse corporelle sans fil étanche IPX7 pour hommes, rechargeable, lames en acier inoxydable pour un rasage précis et confortable",
-    price: 15,
-    originalPrice: 29.99,
-    rating: 4.3,
-    reviews: 18,
-    category: "Hygiène et Santé",
-    image: "https://m.media-amazon.com/images/I/718vIzUB24L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DZCSNCZ9"
-  },
-  {
     id: 6,
     name: "Testeur pH et Sel Piscine, Le Testeur Salinité PPT et pH Metre pour Piscine au Sel, Le Testeur TDS EC de Salinité pH 5 en 1 pour Aquarium, Eau Potable, Hydroponie, Eau Salée, SPA, Brassage",
     description: "Testeur 5 en 1 pH et salinité pour piscine, aquarium, hydroponie et SPA. Mesure pH, TDS, EC, salinité PPT et température",
@@ -72,30 +48,6 @@ const products = [
     category: "Jardin",
     image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71-Xk00pIJL._SX522_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DJ57SPLX"
-  },
-  {
-    id: 7,
-    name: "Air Styler 5 en 1 Air Brush Brosse Chauffante Brushing Sèche-Cheveux Ionique Brosse Soufflante Airstyler Boucleur a Cheveux à Air Brosse à Lissante Ensemble Airbrush Coiffure Femme",
-    description: "Kit coiffure 5 en 1 avec brosse chauffante, brushing, sèche-cheveux ionique, brosse soufflante et boucleur à air pour un style parfait",
-    price: 30,
-    originalPrice: 61.99,
-    rating: 4.5,
-    reviews: 32,
-    category: "Beauté et Soins",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/81yHHEvYP2L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F9KS6B6D?th=1"
-  },
-  {
-    id: 8,
-    name: "Lisseur Boucleur Cheveux 2-en-1: Fer a Lisser Twisté Idéal pour Lissage Boucles & Ondulations - Des Cheveux Plus Lisses et Plus Brillants",
-    description: "Lisseur et boucleur 2-en-1 avec technologie twistée pour des cheveux lisses, brillants et des boucles parfaites",
-    price: 17,
-    originalPrice: 39.99,
-    rating: 4.4,
-    reviews: 28,
-    category: "Beauté et Soins",
-    image: "https://m.media-amazon.com/images/W/MEDIAX_1215821-T1/images/I/71o4ssW8JsL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0D25VKZXZ"
   },
   {
     id: 9,
@@ -257,18 +209,6 @@ const products = [
     amazonLink: "https://www.amazon.fr/dp/B0F5WDMS4V"
   },
   {
-    id: 27,
-    name: "Voiture Télécommandée Drift 2.4GHz 4WD avec Pulvérisation et Lumière, Voiture RC Radiocommandée de Course Jouet Cadeau de Jouet pour Les Enfants de Plus de 6 Ans",
-    description: "Voiture RC drift 2.4GHz 4 roues motrices avec effets lumineux et pulvérisation, parfaite pour les enfants de 6 ans et plus",
-    price: 15,
-    originalPrice: 32,
-    rating: 4.4,
-    reviews: 35,
-    category: "Jeux et Jouets",
-    image: "https://m.media-amazon.com/images/I/71cJy9YMVXL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0DYNT8VGG"
-  },
-  {
     id: 28,
     name: "Talkie Walkie Spider, Toki Walki Enfant pour Maison, Jardin, Camping, Randonnée (sans Fil)",
     description: "Talkies-walkies pour enfants avec design Spider, idéal pour la maison, le jardin, le camping et la randonnée",
@@ -304,31 +244,7 @@ const products = [
     image: "https://m.media-amazon.com/images/I/61UwpS7tl6L._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0DSSKVCC7"
   },
-  {
-    id: 32,
-    name: "Sèche Cheveux 6 EN 1, Sèche Cheveux Professionnel avec Diffuseur, Brosse Soufflante, Brosse Brushing Soufflante, Auto Boucleur Air, Brosse Lissante, pour Sécher, Boucler, Lisser",
-    description: "Kit coiffure 6 en 1 avec sèche-cheveux professionnel, diffuseur, brosse soufflante, brushing, boucleur automatique et brosse lissante",
-    price: 20,
-    originalPrice: 39,
-    rating: 4.5,
-    reviews: 35,
-    category: "Beauté et Soins",
-    image: "https://m.media-amazon.com/images/I/4168hTUNfPL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F5452M6L"
-  },
 
-  {
-    id: 35,
-    name: "Raquette Anti Moustiques Électrique, Raquette Electrique Insectes 4000V 1500mAh Rechargeable avec Base Stable Contre Moustiques Mouches Insectes Volants, Blanc 2PCS",
-    description: "Raquette Anti Moustiques Électrique, Raquette Electrique Insectes 4000V 1500mAh Rechargeable avec Base Stable Contre Moustiques Mouches Insectes Volants, Blanc 2PCS",
-    price: 20,
-    originalPrice: 35.99,
-    rating: 4.5,
-    reviews: 0,
-    category: "Cuisine et Maison",
-    image: "https://m.media-amazon.com/images/I/81zcz0q2gfL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F1FBML57"
-  },
   {
     id: 36,
     name: "Chargeur de Voiture 5-en-1 Multifonctionnel avec aromathérapie et Adaptateur rétractable et projecteur lumière ambiance",
@@ -477,18 +393,6 @@ const products = [
     amazonLink: "https://www.amazon.fr/dp/B0F1MZP2QY"
   },
   {
-    id: 54,
-    name: "Montre Connectée Enfant 4G GPS - Smartwatch Téléphone Pour Fille Garçon avec SOS, Chat, Appel Vidéo, WiFi, Mode Classe, Réveil, Caméra, Jeux, Montre Intelligente Enfants Cadeau 4 à 12 Ans, Rose Pâle",
-    description: "Smartwatch 4G pour enfants avec GPS, appels vidéo, SOS, chat, WiFi et mode classe. Cadeau parfait pour les 4-12 ans avec caméra et jeux intégrés",
-    price: 25,
-    originalPrice: 55,
-    rating: 4.3,
-    reviews: 24,
-    category: "High-Tech",
-    image: "https://m.media-amazon.com/images/I/71kj9BKXi7L._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0FCBWVG7K?th=1"
-  },
-  {
     id: 55,
     name: "Montre Connectée Homme avec 1.62'' AMOLED Écran/LED Lampe/730mAh Batterie,Smartwatch Homme avec 100+ Modes Sportifs,24/7 Moniteur de Fréquence Cardiaque et Sommeil pour Android iOS",
     description: "Smartwatch homme avec écran AMOLED 1.62'', LED lampe, batterie 730mAh, 100+ modes sportifs et monitoring santé 24/7, compatible Android et iOS",
@@ -525,30 +429,6 @@ const products = [
     amazonLink: "https://www.amazon.fr/dp/B0F6ND1K3D?th=1"
   },
   {
-    id: 58,
-    name: "Destructeur d'insectes LED, 3800 V, puissant, 3 lampes, durée de vie de 10 ans, durable avec faible consommation d'énergie, lampe anti-moustiques, anti-moustiques, piège à insectes",
-    description: "Destructeur d'insectes LED haute puissance 3800V avec 3 lampes, durée de vie de 10 ans, faible consommation d'énergie, efficace contre les moustiques et tous types d'insectes volants",
-    price: 20,
-    originalPrice: 39.99,
-    rating: 4.5,
-    reviews: 28,
-    category: "Cuisine et Maison",
-    image: "https://m.media-amazon.com/images/I/81PccppHRcL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F3XCXR4Q"
-  },
-  {
-    id: 59,
-    name: "Microphone sans Fil Professionnel, système de Microphones Quadruple 2,4 GHz, Micro karaoké Dynamique Rechargeable avec récepteur, portée 160ft, pour Chant, fête, K604 Argent Noir Vert Pourpre",
-    description: "Système de microphones sans fil professionnel quadruple 2,4 GHz avec récepteur, portée de 160ft, microphones rechargeables pour karaoké, chant et fêtes. Disponible en argent, noir, vert et pourpre",
-    price: 40,
-    originalPrice: 80,
-    rating: 4.4,
-    reviews: 32,
-    category: "High-Tech",
-    image: "https://m.media-amazon.com/images/I/716-n6zyLsL._AC_SX425_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F7LKVSKR"
-  },
-  {
     id: 60,
     name: "Pompe à air électrique 150 PSI, Batterie Portable, LED numérique, Rechargeable pour vélo, vélo électrique",
     description: "Pompe à air électrique portable 150 PSI avec batterie rechargeable, écran LED numérique, idéale pour vélo et vélo électrique. Compacte et pratique pour tous vos besoins de gonflage",
@@ -571,18 +451,6 @@ const products = [
     category: "Cuisine et Maison",
     image: "https://m.media-amazon.com/images/I/6145O9w+PQL._AC_SX679_.jpg",
     amazonLink: "https://www.amazon.fr/dp/B0BHLCWKRW"
-  },
-  {
-    id: 62,
-    name: "Babyphone Caméra 5\" Caméra Bébe Surveillance Rotation 350° 5000 mAh 720P HD Mode VOX Vision Nocturne Capteur de Température 8 Berceuses",
-    description: "Babyphone avec caméra 5 pouces, surveillance bébé HD 720P, rotation 350°, batterie 5000mAh, mode VOX, vision nocturne, capteur de température et 8 berceuses intégrées",
-    price: 35,
-    originalPrice: 89.99,
-    rating: 4.5,
-    reviews: 29,
-    category: "High-Tech",
-    image: "https://m.media-amazon.com/images/I/61LNS+g9dCL._AC_SX679_.jpg",
-    amazonLink: "https://www.amazon.fr/dp/B0F48B9LCD"
   }
 ];
 
