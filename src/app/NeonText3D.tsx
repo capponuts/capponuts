@@ -17,6 +17,7 @@ export default function NeonText3D() {
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     
     renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setClearColor(0x000000)
     mountRef.current.appendChild(renderer.domElement)
 
@@ -92,7 +93,7 @@ export default function NeonText3D() {
         letters.forEach((letter, index) => {
           const textGeometry = new TextGeometry(letter, {
             font: font,
-            size: 0.8,
+            size: window.innerWidth < 768 ? 0.6 : 0.8,
             depth: 0.1,
             curveSegments: 12,
           })
@@ -105,7 +106,7 @@ export default function NeonText3D() {
           
           const material = new THREE.MeshBasicMaterial({ color: 0x00ff88 })
           const mesh = new THREE.Mesh(textGeometry, material)
-          mesh.position.x = (index - 4) * 1.2
+          mesh.position.x = (index - 4) * (window.innerWidth < 768 ? 1.0 : 1.2)
           mesh.position.y = 0
           mesh.position.z = 0
           scene.add(mesh)
@@ -117,10 +118,11 @@ export default function NeonText3D() {
         console.warn('Police non chargée, utilisation de cubes:', error)
         // Fallback vers des cubes si la police ne charge pas
         letters.forEach((letter, index) => {
-          const geometry = new THREE.BoxGeometry(0.8, 1, 0.2)
+          const boxSize = window.innerWidth < 768 ? 0.6 : 0.8
+          const geometry = new THREE.BoxGeometry(boxSize, boxSize * 1.25, 0.2)
           const material = new THREE.MeshBasicMaterial({ color: 0x00ff88 })
           const mesh = new THREE.Mesh(geometry, material)
-          mesh.position.x = (index - 4) * 1.2
+          mesh.position.x = (index - 4) * (window.innerWidth < 768 ? 1.0 : 1.2)
           mesh.position.y = 0
           mesh.position.z = 0
           scene.add(mesh)
@@ -129,8 +131,8 @@ export default function NeonText3D() {
       }
     )
 
-    // Position caméra
-    camera.position.z = 10
+    // Position caméra adaptée à l'écran
+    camera.position.z = window.innerWidth < 768 ? 12 : 10
 
     // Variables pour souris
     let mouseX = 0
@@ -171,6 +173,7 @@ export default function NeonText3D() {
       camera.aspect = window.innerWidth / window.innerHeight
       camera.updateProjectionMatrix()
       renderer.setSize(window.innerWidth, window.innerHeight)
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     }
     window.addEventListener('resize', onResize)
 
@@ -189,8 +192,8 @@ export default function NeonText3D() {
   return (
     <div className="w-full h-screen bg-black relative">
       <div ref={mountRef} className="w-full h-full" />
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center z-50">
-        <p className="text-green-300 text-xl font-mono tracking-wider opacity-90 bg-black/50 px-4 py-2 rounded">
+      <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 text-center z-50 w-full px-4">
+        <p className="text-green-300 text-lg sm:text-xl md:text-2xl font-mono tracking-wider opacity-95 bg-black/70 px-3 py-2 sm:px-4 sm:py-3 rounded-lg shadow-lg border border-green-500/30">
           I&apos;m inevitable...
         </p>
       </div>
