@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 
 export default function NeonText3D() {
   const mountRef = useRef<HTMLDivElement>(null)
@@ -39,20 +41,54 @@ export default function NeonText3D() {
     const stars = new THREE.Points(starsGeometry, starsMaterial)
     scene.add(stars)
 
-    // Créer des cubes pour chaque lettre CAPPONUTS
+    // Créer du texte 3D pour CAPPONUTS
     const letters = ['C', 'A', 'P', 'P', 'O', 'N', 'U', 'T', 'S']
     const letterMeshes: THREE.Mesh[] = []
     
-    letters.forEach((letter, index) => {
-      const geometry = new THREE.BoxGeometry(0.8, 1, 0.2)
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff88 })
-      const mesh = new THREE.Mesh(geometry, material)
-      mesh.position.x = (index - 4) * 1.2
-      mesh.position.y = 0
-      mesh.position.z = 0
-      scene.add(mesh)
-      letterMeshes.push(mesh)
-    })
+    // Charger la police et créer le texte
+    const fontLoader = new FontLoader()
+    fontLoader.load(
+      'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json',
+      (font) => {
+        letters.forEach((letter, index) => {
+          const textGeometry = new TextGeometry(letter, {
+            font: font,
+            size: 0.8,
+            depth: 0.1,
+            curveSegments: 12,
+          })
+          textGeometry.computeBoundingBox()
+          textGeometry.translate(
+            -textGeometry.boundingBox!.max.x * 0.5,
+            -textGeometry.boundingBox!.max.y * 0.5,
+            -textGeometry.boundingBox!.max.z * 0.5
+          )
+          
+          const material = new THREE.MeshBasicMaterial({ color: 0x00ff88 })
+          const mesh = new THREE.Mesh(textGeometry, material)
+          mesh.position.x = (index - 4) * 1.2
+          mesh.position.y = 0
+          mesh.position.z = 0
+          scene.add(mesh)
+          letterMeshes.push(mesh)
+        })
+      },
+      undefined,
+      (error) => {
+        console.warn('Police non chargée, utilisation de cubes:', error)
+        // Fallback vers des cubes si la police ne charge pas
+        letters.forEach((letter, index) => {
+          const geometry = new THREE.BoxGeometry(0.8, 1, 0.2)
+          const material = new THREE.MeshBasicMaterial({ color: 0x00ff88 })
+          const mesh = new THREE.Mesh(geometry, material)
+          mesh.position.x = (index - 4) * 1.2
+          mesh.position.y = 0
+          mesh.position.z = 0
+          scene.add(mesh)
+          letterMeshes.push(mesh)
+        })
+      }
+    )
 
     // Position caméra
     camera.position.z = 10
