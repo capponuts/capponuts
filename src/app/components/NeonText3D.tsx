@@ -13,9 +13,9 @@ function StarField() {
     const positions = new Float32Array(1000 * 3)
     
     for (let i = 0; i < 1000; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 2000
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 2000
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 2000
+      positions[i * 3] = (Math.random() - 0.5) * 100
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 100
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 100
     }
     
     return positions
@@ -23,8 +23,8 @@ function StarField() {
 
   useFrame(() => {
     if (starsRef.current) {
-      starsRef.current.rotation.x += 0.0001
-      starsRef.current.rotation.y += 0.0002
+      starsRef.current.rotation.x += 0.001
+      starsRef.current.rotation.y += 0.002
     }
   })
 
@@ -35,7 +35,7 @@ function StarField() {
       </bufferGeometry>
       <pointsMaterial
         color="#ffffff"
-        size={2}
+        size={5}
         sizeAttenuation={false}
       />
     </points>
@@ -80,20 +80,16 @@ function IndividualLetters({ mouse }: { mouse: { x: number; y: number } }) {
           ref={(el) => {
             if (el) letterRefs.current[index] = el
           }}
-          position={[(index - 4) * 1.5, 0, 0]}
-          fontSize={2}
+          position={[(index - 4) * 1.5, 0, 5]}
+          fontSize={3}
           color="#00ff88"
           anchorX="center"
           anchorY="middle"
           font="https://fonts.gstatic.com/s/orbitron/v31/yMJMMIlzdpvBhQQL_SC3X9yhF25-T1nyGy6BoWgz.woff2"
         >
           {letter}
-          <meshStandardMaterial
+          <meshBasicMaterial
             color="#00ff88"
-            emissive="#004400"
-            emissiveIntensity={0.5}
-            metalness={0.8}
-            roughness={0.2}
           />
         </Text>
       ))}
@@ -120,8 +116,8 @@ function SpaceScene() {
   return (
     <>
       {/* Éclairage */}
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[10, 10, 5]} intensity={0.6} />
+      <ambientLight intensity={1} />
+      <directionalLight position={[10, 10, 5]} intensity={1} />
       
       {/* Fond d'étoiles animé */}
       <StarField />
