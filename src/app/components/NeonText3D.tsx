@@ -93,7 +93,7 @@ function EpicBlackHole({ mouse }: { mouse: { x: number; y: number } }) {
     time: { value: 0 },
     resolution: { value: new THREE.Vector2(1920, 1080) },
     mouse: { value: new THREE.Vector2(0.5, 0.5) },
-    blackHolePos: { value: new THREE.Vector3(0, 0, -20) },
+    blackHolePos: { value: new THREE.Vector3(0, 0, -30) },
     accretionIntensity: { value: 2.0 },
     distortionStrength: { value: 1.5 },
                 eventHorizonRadius: { value: 4.0 },
@@ -110,8 +110,8 @@ function EpicBlackHole({ mouse }: { mouse: { x: number; y: number } }) {
   })
 
   return (
-    <mesh ref={blackHoleRef} position={[0, 0, -20]}>
-      <planeGeometry args={[60, 40]} />
+    <mesh ref={blackHoleRef} position={[0, 0, -30]}>
+      <planeGeometry args={[80, 50]} />
       <shaderMaterial
         uniforms={uniforms}
         vertexShader={`
@@ -187,8 +187,8 @@ function EpicBlackHole({ mouse }: { mouse: { x: number; y: number } }) {
                 temperature
               );
               
-              diskColor *= (ringPattern * 0.8 + 0.2) * accretionIntensity;
-              diskColor += rings * vec3(1.0, 0.6, 0.0) * 2.0;
+                        diskColor *= (ringPattern * 0.6 + 0.3) * accretionIntensity * 0.7;
+          diskColor += rings * vec3(1.0, 0.6, 0.0) * 1.2;
               
               float rotation = atan(distortedCoord.y - bhPos.y, distortedCoord.x - bhPos.x);
               float rotationSpeed = 1.0 / (distToCenter + 0.1);
@@ -219,9 +219,9 @@ function EpicBlackHole({ mouse }: { mouse: { x: number; y: number } }) {
             vec3 finalColor = backgroundColor + nebulaColor + diskColor + jetColor;
             
             float brightness = dot(finalColor, vec3(0.299, 0.587, 0.114));
-            if(brightness > 0.5) {
-              finalColor *= 1.0 + (brightness - 0.5) * 2.0;
-            }
+                    if(brightness > 0.6) {
+          finalColor *= 1.0 + (brightness - 0.6) * 1.2;
+        }
             
             gl_FragColor = vec4(finalColor, 1.0);
           }
@@ -299,46 +299,66 @@ function HighQualityStars() {
   )
 }
 
-// Texte CAPPONUTS avec police spatiale et fallback
-function SpaceInvadersText({ mouse }: { mouse: { x: number; y: number } }) {
-  const textRef = useRef<THREE.Mesh>(null)
-  
+// Lettres individuelles en 3D qui bougent séparément
+function Individual3DLetters({ mouse }: { mouse: { x: number; y: number } }) {
+  const letters = ['C', 'A', 'P', 'P', 'O', 'N', 'U', 'T', 'S']
+  const letterRefs = useRef<THREE.Mesh[]>([])
+
   useEffect(() => {
     loadSpaceFont()
   }, [])
-  
+
   useFrame((state) => {
-    if (textRef.current) {
-      textRef.current.rotation.y = THREE.MathUtils.lerp(textRef.current.rotation.y, mouse.x * 0.15, 0.08)
-      textRef.current.rotation.x = THREE.MathUtils.lerp(textRef.current.rotation.x, -mouse.y * 0.08, 0.08)
-      
-      const time = state.clock.elapsedTime
-      textRef.current.position.y = Math.sin(time * 1.2) * 0.03
-      textRef.current.scale.setScalar(1 + Math.sin(time * 2) * 0.008)
-    }
+    letterRefs.current.forEach((letterRef, index) => {
+      if (letterRef) {
+        const time = state.clock.elapsedTime
+        const offset = index * 0.2
+        
+        // Mouvement individuel avec la souris
+        letterRef.rotation.x = THREE.MathUtils.lerp(
+          letterRef.rotation.x,
+          mouse.y * 0.15 + Math.sin(time + offset) * 0.1,
+          0.03
+        )
+        letterRef.rotation.y = THREE.MathUtils.lerp(
+          letterRef.rotation.y,
+          mouse.x * 0.15 + Math.cos(time + offset) * 0.1,
+          0.03
+        )
+        letterRef.rotation.z = Math.sin(time * 0.5 + offset) * 0.05
+        
+        // Mouvement vertical léger
+        letterRef.position.y = Math.sin(time + offset * 2) * 0.3
+        letterRef.position.z = 5 + Math.sin(time * 0.3 + offset) * 0.5
+      }
+    })
   })
 
   return (
-    <Text
-      ref={textRef}
-      position={[0, 0, 5]}
-      fontSize={2.2}
-      maxWidth={200}
-      lineHeight={1}
-      letterSpacing={0.15}
-      textAlign="center"
-      anchorX="center"
-      anchorY="middle"
-    >
-      CAPPONUTS
-      <meshStandardMaterial
-        color="#00ff88"
-        emissive="#00cc66"
-        emissiveIntensity={3}
-        roughness={0}
-        metalness={1}
-      />
-    </Text>
+    <group>
+      {letters.map((letter, index) => (
+        <Text
+          key={index}
+          ref={(el) => {
+            if (el) letterRefs.current[index] = el
+          }}
+          position={[(index - 4) * 1.2, 0, 5]}
+          fontSize={1.8}
+          color="#00ff88"
+          anchorX="center"
+          anchorY="middle"
+        >
+          {letter}
+          <meshStandardMaterial
+            color="#00ff88"
+            emissive="#00cc66"
+            emissiveIntensity={2}
+            roughness={0.1}
+            metalness={0.8}
+          />
+        </Text>
+      ))}
+    </group>
   )
 }
 
@@ -373,7 +393,7 @@ function EpicBlackHoleScene() {
       <EpicBlackHole mouse={mouse} />
       
       {/* Texte réactif */}
-      <SpaceInvadersText mouse={mouse} />
+                <Individual3DLetters mouse={mouse} />
     </>
   )
 }
@@ -412,7 +432,7 @@ export default function NeonText3D() {
   return (
     <div className="w-full h-screen bg-black relative overflow-hidden">
       <Canvas
-        camera={{ position: [0, 0, 25], fov: 60 }}
+        camera={{ position: [0, 0, 35], fov: 75 }}
         style={{ background: '#000000' }}
         onCreated={({ gl }) => {
           // Configuration WebGL robuste
@@ -424,14 +444,14 @@ export default function NeonText3D() {
         
         {/* Post-processing intense pour trou noir */}
         <EffectComposer>
-          <Bloom 
-            intensity={2.5} 
-            luminanceThreshold={0.02} 
-            luminanceSmoothing={0.05}
-          />
-          <ChromaticAberration 
-            offset={[0.001, 0.001]} 
-          />
+                                <Bloom
+                        intensity={1.5}
+                        luminanceThreshold={0.1}
+                        luminanceSmoothing={0.1}
+                      />
+                      <ChromaticAberration
+                        offset={[0.0005, 0.0005]}
+                      />
         </EffectComposer>
       </Canvas>
       
