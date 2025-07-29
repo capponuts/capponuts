@@ -1,35 +1,79 @@
 'use client'
 
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Text, Environment, useTexture } from '@react-three/drei'
+import { Text, Environment } from '@react-three/drei'
 import { useRef, useState, useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { EffectComposer, Bloom, ChromaticAberration } from '@react-three/postprocessing'
 
-// Images 3D haute résolution gratuites du système solaire et nébuleuses
-const REAL_SPACE_IMAGES = {
-  solarSystemBackground: 'https://images.unsplash.com/photo-1634307006082-46275a5dbe29?w=2048&h=1024&fit=crop&crop=center&q=80',
-  nebulaColorful: 'https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=1024&h=1024&fit=crop&crop=center&q=80',
-  nebulaVeil: 'https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=1024&h=1024&fit=crop&crop=center&q=80',
-  nebulaHubble: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1024&h=1024&fit=crop&crop=center&q=80',
-  planetSystem: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1024&h=1024&fit=crop&crop=center&q=80',
-}
-
-
-
-// Charger une police spatiale via Google Fonts
+// Charger une police spatiale via Google Fonts avec fallback
 function loadSpaceFont() {
   if (typeof document !== 'undefined') {
-    const link = document.createElement('link')
-    link.href = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap'
-    link.rel = 'stylesheet'
-    document.head.appendChild(link)
+    try {
+      const link = document.createElement('link')
+      link.href = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap'
+      link.rel = 'stylesheet'
+      link.onerror = () => {
+        console.warn('Police Orbitron non chargée, utilisation de la police système')
+      }
+      document.head.appendChild(link)
+    } catch (error) {
+      console.warn('Erreur chargement police:', error)
+    }
   }
 }
 
-// Fond 3D du système solaire avec vraie image
-function SolarSystemBackground() {
-  const backgroundTexture = useTexture(REAL_SPACE_IMAGES.solarSystemBackground)
+// Créer un fond d'espace procédural (fallback si images ne se chargent pas)
+function createProceduralSpaceBackground() {
+  const canvas = document.createElement('canvas')
+  canvas.width = 2048
+  canvas.height = 1024
+  const ctx = canvas.getContext('2d')!
+  
+  // Gradient d'espace profond
+  const gradient = ctx.createRadialGradient(1024, 512, 0, 1024, 512, 1024)
+  gradient.addColorStop(0, '#001122')
+  gradient.addColorStop(0.5, '#000011')
+  gradient.addColorStop(1, '#000000')
+  
+  ctx.fillStyle = gradient
+  ctx.fillRect(0, 0, 2048, 1024)
+  
+  // Étoiles procédurales
+  for (let i = 0; i < 800; i++) {
+    const x = Math.random() * 2048
+    const y = Math.random() * 1024
+    const brightness = Math.random() * 0.8 + 0.2
+    const size = Math.random() > 0.95 ? 2 : 1
+    
+    ctx.fillStyle = `rgba(255, 255, 255, ${brightness})`
+    ctx.fillRect(x, y, size, size)
+  }
+  
+  // Nébuleuses procédurales
+  for (let i = 0; i < 5; i++) {
+    const x = Math.random() * 2048
+    const y = Math.random() * 1024
+    const radius = 100 + Math.random() * 200
+    
+    const nebulaGradient = ctx.createRadialGradient(x, y, 0, x, y, radius)
+    const colors = ['#ff4080', '#4080ff', '#80ff40', '#ff8040', '#8040ff']
+    const color = colors[Math.floor(Math.random() * colors.length)]
+    
+    nebulaGradient.addColorStop(0, color + '20')
+    nebulaGradient.addColorStop(0.5, color + '10')
+    nebulaGradient.addColorStop(1, 'transparent')
+    
+    ctx.fillStyle = nebulaGradient
+    ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2)
+  }
+  
+  return new THREE.CanvasTexture(canvas)
+}
+
+// Fond d'espace avec fallback procédural
+function SpaceBackground() {
+  const backgroundTexture = useMemo(() => createProceduralSpaceBackground(), [])
   
   useMemo(() => {
     backgroundTexture.mapping = THREE.EquirectangularReflectionMapping
@@ -188,56 +232,6 @@ function EpicBlackHole({ mouse }: { mouse: { x: number; y: number } }) {
   )
 }
 
-// Vraies nébuleuses 3D avec images haute résolution
-function RealNebulas() {
-  const nebulaTextures = useTexture([
-    REAL_SPACE_IMAGES.nebulaColorful,
-    REAL_SPACE_IMAGES.nebulaVeil,
-    REAL_SPACE_IMAGES.nebulaHubble
-  ])
-  
-  const nebulas = useMemo(() => [
-    { 
-      position: [-80, 40, -120], 
-      scale: 25, 
-      opacity: 0.08,
-      texture: nebulaTextures[0],
-      color: '#ff6080'
-    },
-    { 
-      position: [60, -30, -100], 
-      scale: 30, 
-      opacity: 0.06,
-      texture: nebulaTextures[1],
-      color: '#6080ff'
-    },
-    { 
-      position: [-40, -60, -140], 
-      scale: 20, 
-      opacity: 0.1,
-      texture: nebulaTextures[2],
-      color: '#80ff60'
-    }
-  ], [nebulaTextures])
-
-  return (
-    <group>
-      {nebulas.map((nebula, i) => (
-        <mesh key={i} position={nebula.position as [number, number, number]}>
-          <sphereGeometry args={[nebula.scale, 32, 32]} />
-          <meshBasicMaterial
-            map={nebula.texture}
-            color={nebula.color}
-            transparent
-            opacity={nebula.opacity}
-            blending={THREE.AdditiveBlending}
-          />
-        </mesh>
-      ))}
-    </group>
-  )
-}
-
 // Étoiles réalistes haute qualité
 function HighQualityStars() {
   const starsRef = useRef<THREE.Points>(null)
@@ -305,7 +299,7 @@ function HighQualityStars() {
   )
 }
 
-// Texte CAPPONUTS avec police spatiale
+// Texte CAPPONUTS avec police spatiale et fallback
 function SpaceInvadersText({ mouse }: { mouse: { x: number; y: number } }) {
   const textRef = useRef<THREE.Mesh>(null)
   
@@ -335,7 +329,6 @@ function SpaceInvadersText({ mouse }: { mouse: { x: number; y: number } }) {
       textAlign="center"
       anchorX="center"
       anchorY="middle"
-      font="https://fonts.gstatic.com/s/orbitron/v31/yMJMMIlzdpvBhQQL_SC3X9yhF25-T1nyGy6BoWgz.woff2"
     >
       CAPPONUTS
       <meshStandardMaterial
@@ -366,8 +359,8 @@ function EpicBlackHoleScene() {
 
   return (
     <>
-      {/* Fond système solaire */}
-      <SolarSystemBackground />
+      {/* Fond d'espace procédural */}
+      <SpaceBackground />
       
       {/* Éclairage pour trou noir */}
       <ambientLight intensity={0.02} color="#000044" />
@@ -375,7 +368,6 @@ function EpicBlackHoleScene() {
       
       {/* Éléments spatiaux */}
       <HighQualityStars />
-      <RealNebulas />
       
       {/* TROU NOIR ÉPIQUE */}
       <EpicBlackHole mouse={mouse} />
@@ -387,11 +379,46 @@ function EpicBlackHoleScene() {
 }
 
 export default function NeonText3D() {
+  // Gestion des erreurs WebGL
+  const [hasWebGLError, setHasWebGLError] = useState(false)
+
+  useEffect(() => {
+    const handleWebGLContextLost = () => {
+      console.warn('Contexte WebGL perdu, rechargement...')
+      setHasWebGLError(true)
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
+    }
+
+    const canvas = document.querySelector('canvas')
+    if (canvas) {
+      canvas.addEventListener('webglcontextlost', handleWebGLContextLost)
+      return () => canvas.removeEventListener('webglcontextlost', handleWebGLContextLost)
+    }
+  }, [])
+
+  if (hasWebGLError) {
+    return (
+      <div className="w-full h-screen bg-black flex items-center justify-center">
+        <div className="text-center text-green-300 font-mono">
+          <div className="text-2xl mb-4">🔄 Rechargement du contexte WebGL...</div>
+          <div className="text-sm opacity-70">Le rendu 3D va redémarrer automatiquement</div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="w-full h-screen bg-black relative overflow-hidden">
       <Canvas
         camera={{ position: [0, 0, 20], fov: 45 }}
         style={{ background: '#000000' }}
+        onCreated={({ gl }) => {
+          // Configuration WebGL robuste
+          gl.setClearColor('#000000')
+          gl.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        }}
       >
         <EpicBlackHoleScene />
         
@@ -411,7 +438,7 @@ export default function NeonText3D() {
       {/* Interface rétro gaming */}
       <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center">
         <p className="text-green-300 text-xl font-mono tracking-[0.4em] opacity-90 drop-shadow-lg" 
-           style={{ fontFamily: 'Orbitron, monospace' }}>
+           style={{ fontFamily: 'Orbitron, Courier, monospace' }}>
           I&apos;m inevitable...
         </p>
         <div className="mt-3 h-0.5 w-full bg-gradient-to-r from-transparent via-green-400 to-transparent opacity-70"></div>
@@ -419,16 +446,16 @@ export default function NeonText3D() {
       
       {/* Indicateur trou noir */}
       <div className="absolute top-4 left-4 text-orange-300 text-xs font-mono opacity-80 bg-black/70 p-3 rounded">
-        <div>🕳️ TROU NOIR avec Distorsion Gravitationnelle</div>
-        <div>🔥 Disque d&apos;Accrétion avec Cercles Intenses</div>
-        <div>⚡ Jets de Particules Relativistes</div>
-        <div>🌀 Shader GLSL Physiquement Correct</div>
-        <div>🚀 Police Spatiale: Orbitron</div>
+        <div>🕳️ TROU NOIR Procédural avec Distorsion</div>
+        <div>🔥 Disque d&apos;Accrétion avec Cercles</div>
+        <div>⚡ Jets Relativistes</div>
+        <div>🌀 Shader GLSL Optimisé</div>
+        <div>🚀 Police Système avec Fallback</div>
       </div>
       
       {/* Footer black hole */}
       <div className="absolute bottom-4 right-4 text-orange-400 text-xs font-mono opacity-60">
-        ★ EPIC BLACK HOLE SHADER ★
+        ★ ROBUSTE BLACK HOLE ★
       </div>
       
       {/* Effet de distorsion gravitationnelle */}
