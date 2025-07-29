@@ -93,10 +93,10 @@ function EpicBlackHole({ mouse }: { mouse: { x: number; y: number } }) {
     time: { value: 0 },
     resolution: { value: new THREE.Vector2(1920, 1080) },
     mouse: { value: new THREE.Vector2(0.5, 0.5) },
-    blackHolePos: { value: new THREE.Vector3(0, 0, -50) },
+    blackHolePos: { value: new THREE.Vector3(0, 0, -20) },
     accretionIntensity: { value: 2.0 },
     distortionStrength: { value: 1.5 },
-    eventHorizonRadius: { value: 8.0 },
+                eventHorizonRadius: { value: 4.0 },
   }), [])
   
   useFrame((state) => {
@@ -110,8 +110,8 @@ function EpicBlackHole({ mouse }: { mouse: { x: number; y: number } }) {
   })
 
   return (
-    <mesh ref={blackHoleRef} position={[0, 0, -50]}>
-      <planeGeometry args={[120, 80]} />
+    <mesh ref={blackHoleRef} position={[0, 0, -20]}>
+      <planeGeometry args={[60, 40]} />
       <shaderMaterial
         uniforms={uniforms}
         vertexShader={`
@@ -321,8 +321,8 @@ function SpaceInvadersText({ mouse }: { mouse: { x: number; y: number } }) {
   return (
     <Text
       ref={textRef}
-      position={[0, 0, 0]}
-      fontSize={2.8}
+      position={[0, 0, 5]}
+      fontSize={2.2}
       maxWidth={200}
       lineHeight={1}
       letterSpacing={0.15}
@@ -412,7 +412,7 @@ export default function NeonText3D() {
   return (
     <div className="w-full h-screen bg-black relative overflow-hidden">
       <Canvas
-        camera={{ position: [0, 0, 20], fov: 45 }}
+        camera={{ position: [0, 0, 25], fov: 60 }}
         style={{ background: '#000000' }}
         onCreated={({ gl }) => {
           // Configuration WebGL robuste
