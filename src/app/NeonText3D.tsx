@@ -104,8 +104,29 @@ export default function NeonText3D() {
             -textGeometry.boundingBox!.max.z * 0.5
           )
           
-          const material = new THREE.MeshBasicMaterial({ color: 0x00ff88 })
+          // Style The Mask : vert avec bordure violette
+          const material = new THREE.MeshBasicMaterial({ 
+            color: 0x00ff00,
+            transparent: true,
+            opacity: 0.9
+          })
+          
+          // Créer la bordure violette
+          const borderMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0x8B00FF,
+            transparent: true,
+            opacity: 0.8,
+            side: THREE.BackSide
+          })
+          
           const mesh = new THREE.Mesh(textGeometry, material)
+          
+          // Créer une bordure en dupliquant la géométrie
+          const borderGeometry = textGeometry.clone()
+          borderGeometry.scale(1.05, 1.05, 1.05)
+          const borderMesh = new THREE.Mesh(borderGeometry, borderMaterial)
+          borderMesh.position.copy(mesh.position)
+          scene.add(borderMesh)
           mesh.position.x = (index - 4) * (window.innerWidth < 768 ? 1.0 : 1.2)
           mesh.position.y = 0
           mesh.position.z = 0
@@ -120,16 +141,82 @@ export default function NeonText3D() {
         letters.forEach((letter, index) => {
           const boxSize = window.innerWidth < 768 ? 0.6 : 0.8
           const geometry = new THREE.BoxGeometry(boxSize, boxSize * 1.25, 0.2)
-          const material = new THREE.MeshBasicMaterial({ color: 0x00ff88 })
+          
+          // Style The Mask pour les cubes aussi
+          const material = new THREE.MeshBasicMaterial({ 
+            color: 0x00ff00,
+            transparent: true,
+            opacity: 0.9
+          })
+          
+          // Bordure violette pour les cubes
+          const borderGeometry = new THREE.BoxGeometry(boxSize * 1.1, boxSize * 1.35, 0.25)
+          const borderMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0x8B00FF,
+            transparent: true,
+            opacity: 0.7
+          })
+          
           const mesh = new THREE.Mesh(geometry, material)
+          const borderMesh = new THREE.Mesh(borderGeometry, borderMaterial)
+          
           mesh.position.x = (index - 4) * (window.innerWidth < 768 ? 1.0 : 1.2)
           mesh.position.y = 0
           mesh.position.z = 0
+          
+          borderMesh.position.copy(mesh.position)
+          borderMesh.position.z = -0.05
+          
+          scene.add(borderMesh)
           scene.add(mesh)
           letterMeshes.push(mesh)
         })
       }
     )
+
+    // Créer des éclairs dans l'espace
+    const lightningInstances: THREE.Mesh[] = []
+    const createLightning = () => {
+      const points = []
+      const startX = (Math.random() - 0.5) * 40
+      const startY = (Math.random() - 0.5) * 40
+      const startZ = (Math.random() - 0.5) * 40
+      
+      // Créer un éclair en zigzag
+      for (let i = 0; i < 8; i++) {
+        points.push(new THREE.Vector3(
+          startX + (Math.random() - 0.5) * 5,
+          startY + (Math.random() - 0.5) * 5,
+          startZ + (Math.random() - 0.5) * 5
+        ))
+      }
+      
+      const curve = new THREE.CatmullRomCurve3(points)
+      const tubeGeometry = new THREE.TubeGeometry(curve, 20, 0.02, 8, false)
+      const tubeMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x00ffff,
+        transparent: true,
+        opacity: 0.8
+      })
+      
+      const lightning = new THREE.Mesh(tubeGeometry, tubeMaterial)
+      scene.add(lightning)
+      lightningInstances.push(lightning)
+      
+      // Supprimer l'éclair après 2 secondes
+      setTimeout(() => {
+        scene.remove(lightning)
+        const index = lightningInstances.indexOf(lightning)
+        if (index > -1) lightningInstances.splice(index, 1)
+      }, 2000)
+    }
+
+    // Créer des éclairs aléatoirement
+    const lightningInterval = setInterval(() => {
+      if (Math.random() < 0.3) {
+        createLightning()
+      }
+    }, 1000)
 
     // Position caméra adaptée à l'écran
     camera.position.z = window.innerWidth < 768 ? 12 : 10
@@ -182,6 +269,7 @@ export default function NeonText3D() {
       const currentMount = mountRef.current
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('resize', onResize)
+      clearInterval(lightningInterval)
       if (currentMount && renderer.domElement) {
         currentMount.removeChild(renderer.domElement)
       }
