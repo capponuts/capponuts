@@ -1,4 +1,4 @@
-import NeonText3D from './components/NeonText3D'
+import NeonText3D from './NeonText3D'
 
 export default function Home() {
   return (
