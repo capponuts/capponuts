@@ -20,13 +20,13 @@ function SimpleStars() {
   const starsRef = useRef<THREE.Points>(null)
   
   const starGeometry = useMemo(() => {
-    const positions = new Float32Array(2000 * 3)
-    const colors = new Float32Array(2000 * 3)
-    const sizes = new Float32Array(2000)
+    const positions = new Float32Array(500 * 3)
+    const colors = new Float32Array(500 * 3)
+    const sizes = new Float32Array(500)
     
-    for (let i = 0; i < 2000; i++) {
-      // Position aléatoire dans une sphère
-      const radius = 200 + Math.random() * 300
+    for (let i = 0; i < 500; i++) {
+      // Position aléatoire plus proche
+      const radius = 50 + Math.random() * 100
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(Math.random() * 2 - 1)
       
@@ -35,26 +35,10 @@ function SimpleStars() {
       positions[i * 3 + 2] = radius * Math.cos(phi)
       
       // Couleurs d'étoiles naturelles
-      const starType = Math.random()
-      if (starType < 0.7) {
-        // Étoiles blanches
-        colors[i * 3] = 1
-        colors[i * 3 + 1] = 1
-        colors[i * 3 + 2] = 1
-        sizes[i] = 0.5 + Math.random() * 1
-      } else if (starType < 0.9) {
-        // Étoiles jaunes
-        colors[i * 3] = 1
-        colors[i * 3 + 1] = 0.9
-        colors[i * 3 + 2] = 0.7
-        sizes[i] = 0.8 + Math.random() * 1.5
-      } else {
-        // Étoiles bleues brillantes
-        colors[i * 3] = 0.7
-        colors[i * 3 + 1] = 0.8
-        colors[i * 3 + 2] = 1
-        sizes[i] = 1 + Math.random() * 2
-      }
+      colors[i * 3] = 1
+      colors[i * 3 + 1] = 1
+      colors[i * 3 + 2] = 1
+      sizes[i] = 2 + Math.random() * 3
     }
     
     return { positions, colors, sizes }
@@ -62,8 +46,8 @@ function SimpleStars() {
 
   useFrame(() => {
     if (starsRef.current) {
-      starsRef.current.rotation.y += 0.0002
-      starsRef.current.rotation.x += 0.0001
+      starsRef.current.rotation.y += 0.001
+      starsRef.current.rotation.x += 0.0005
     }
   })
 
@@ -75,9 +59,9 @@ function SimpleStars() {
         <bufferAttribute attach="attributes-size" args={[starGeometry.sizes, 1]} />
       </bufferGeometry>
       <pointsMaterial
-        size={1}
+        size={3}
         transparent
-        opacity={0.8}
+        opacity={1}
         vertexColors
         sizeAttenuation={true}
         blending={THREE.AdditiveBlending}
@@ -94,17 +78,17 @@ function DistantGalaxy() {
     if (galaxyRef.current) {
       galaxyRef.current.rotation.z += 0.001
       const material = galaxyRef.current.material as THREE.MeshBasicMaterial
-      material.opacity = 0.1 + Math.sin(state.clock.elapsedTime * 0.5) * 0.05
+      material.opacity = 0.3 + Math.sin(state.clock.elapsedTime * 0.5) * 0.1
     }
   })
 
   return (
-    <mesh ref={galaxyRef} position={[0, 0, -100]}>
-      <ringGeometry args={[30, 80, 64]} />
+    <mesh ref={galaxyRef} position={[0, 0, -20]}>
+      <ringGeometry args={[10, 25, 64]} />
       <meshBasicMaterial
-        color="#4a0e4e"
+        color="#8a4e8a"
         transparent
-        opacity={0.1}
+        opacity={0.3}
         side={THREE.DoubleSide}
       />
     </mesh>
@@ -138,20 +122,17 @@ function CAPPONUTSText({ mouse }: { mouse: { x: number; y: number } }) {
   return (
     <Text
       ref={textRef}
-      position={[0, 0, 0]}
-      fontSize={3}
+      position={[0, 0, 2]}
+      fontSize={4}
       color="#00ff88"
       anchorX="center"
       anchorY="middle"
-      font="https://fonts.gstatic.com/s/orbitron/v31/yMJMMIlzdpvBhQQL_SC3X9yhF25-T1nyGy6BoWgz.woff2"
     >
       CAPPONUTS
-      <meshStandardMaterial
+      <meshBasicMaterial
         color="#00ff88"
-        emissive="#00cc44"
-        emissiveIntensity={0.5}
-        roughness={0.3}
-        metalness={0.7}
+        transparent
+        opacity={1}
       />
     </Text>
   )
@@ -175,18 +156,18 @@ function SimpleSpaceScene() {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
-  return (
-    <>
-      {/* Éclairage doux */}
-      <ambientLight intensity={0.2} color="#ffffff" />
-      <directionalLight position={[10, 10, 5]} intensity={0.3} color="#ffffff" />
-      
-      {/* Éléments de la scène */}
-      <SimpleStars />
-      <DistantGalaxy />
-      <CAPPONUTSText mouse={mouse} />
-    </>
-  )
+      return (
+      <>
+        {/* Éclairage fort pour bien voir */}
+        <ambientLight intensity={1} color="#ffffff" />
+        <directionalLight position={[10, 10, 5]} intensity={1} color="#ffffff" />
+        
+        {/* Éléments de la scène */}
+        <SimpleStars />
+        <DistantGalaxy />
+        <CAPPONUTSText mouse={mouse} />
+      </>
+    )
 }
 
 // Composant principal
@@ -194,8 +175,8 @@ export default function NeonText3D() {
   return (
     <div className="w-full h-screen bg-black">
       <Canvas
-        camera={{ position: [0, 0, 10], fov: 50 }}
-        style={{ background: 'linear-gradient(to bottom, #000000, #001122)' }}
+        camera={{ position: [0, 0, 15], fov: 60 }}
+        style={{ background: 'linear-gradient(to bottom, #000011, #001122)' }}
       >
         <SimpleSpaceScene />
       </Canvas>
