@@ -27,19 +27,58 @@ export default function NeonText3D() {
     directionalLight.position.set(1, 1, 1)
     scene.add(directionalLight)
 
-    // Étoiles simples
-    const starsGeometry = new THREE.BufferGeometry()
-    const starsCount = 500
-    const positions = new Float32Array(starsCount * 3)
+    // Créer une forme d'étoile
+    const createStarShape = () => {
+      const starShape = new THREE.Shape()
+      const outerRadius = 0.1
+      const innerRadius = 0.04
+      const points = 5
 
-    for (let i = 0; i < starsCount * 3; i++) {
-      positions[i] = (Math.random() - 0.5) * 50
+      for (let i = 0; i < points * 2; i++) {
+        const angle = (i / (points * 2)) * Math.PI * 2
+        const radius = i % 2 === 0 ? outerRadius : innerRadius
+        const x = Math.cos(angle) * radius
+        const y = Math.sin(angle) * radius
+        
+        if (i === 0) {
+          starShape.moveTo(x, y)
+        } else {
+          starShape.lineTo(x, y)
+        }
+      }
+      starShape.closePath()
+      return starShape
     }
 
-    starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.5 })
-    const stars = new THREE.Points(starsGeometry, starsMaterial)
-    scene.add(stars)
+    // Créer les étoiles avec géométrie personnalisée
+    const starShape = createStarShape()
+    const extrudeSettings = { depth: 0.02, bevelEnabled: false }
+    const starGeometry = new THREE.ExtrudeGeometry(starShape, extrudeSettings)
+    
+    const starInstances: THREE.Mesh[] = []
+    const starsCount = 100
+
+    for (let i = 0; i < starsCount; i++) {
+      const starMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff })
+      const starMesh = new THREE.Mesh(starGeometry, starMaterial)
+      
+      // Position aléatoire
+      starMesh.position.x = (Math.random() - 0.5) * 50
+      starMesh.position.y = (Math.random() - 0.5) * 50
+      starMesh.position.z = (Math.random() - 0.5) * 50
+      
+      // Rotation aléatoire
+      starMesh.rotation.x = Math.random() * Math.PI * 2
+      starMesh.rotation.y = Math.random() * Math.PI * 2
+      starMesh.rotation.z = Math.random() * Math.PI * 2
+      
+      // Taille aléatoire
+      const scale = 0.5 + Math.random() * 1.5
+      starMesh.scale.setScalar(scale)
+      
+      scene.add(starMesh)
+      starInstances.push(starMesh)
+    }
 
     // Créer du texte 3D pour CAPPONUTS
     const letters = ['C', 'A', 'P', 'P', 'O', 'N', 'U', 'T', 'S']
@@ -109,8 +148,11 @@ export default function NeonText3D() {
       requestAnimationFrame(animate)
 
       // Rotation des étoiles
-      stars.rotation.x += 0.001
-      stars.rotation.y += 0.002
+      starInstances.forEach((star, index) => {
+        star.rotation.x += 0.001 + (index * 0.0001)
+        star.rotation.y += 0.002 + (index * 0.0001)
+        star.rotation.z += 0.001 + (index * 0.0001)
+      })
 
       // Animation des lettres avec souris
       letterMeshes.forEach((mesh, index) => {
