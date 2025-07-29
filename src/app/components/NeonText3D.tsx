@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Text, OrbitControls } from '@react-three/drei'
+import { Text } from '@react-three/drei'
 import { useRef, useState, useEffect } from 'react'
 import * as THREE from 'three'
 
@@ -124,15 +124,16 @@ function Scene() {
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            array={new Float32Array(
-              Array.from({ length: 200 }, () => [
-                (Math.random() - 0.5) * 20,
-                (Math.random() - 0.5) * 20,
-                (Math.random() - 0.5) * 20
-              ]).flat()
-            )}
-            count={200}
-            itemSize={3}
+            args={[
+              new Float32Array(
+                Array.from({ length: 200 }, () => [
+                  (Math.random() - 0.5) * 20,
+                  (Math.random() - 0.5) * 20,
+                  (Math.random() - 0.5) * 20
+                ]).flat()
+              ),
+              3
+            ]}
           />
         </bufferGeometry>
         <pointsMaterial size={0.05} color="#00ffff" transparent opacity={0.6} />
@@ -154,7 +155,7 @@ export default function NeonText3D() {
       {/* Texte fixe en bas */}
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-center">
         <p className="text-white text-xl font-mono tracking-wider opacity-80 animate-pulse">
-          I'm inevitable...
+          I&apos;m inevitable...
         </p>
       </div>
     </div>
