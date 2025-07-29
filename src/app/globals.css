@@ -36,3 +36,39 @@ body {
 .bg-gradient-radial {
   background: radial-gradient(circle, var(--tw-gradient-stops));
 }
+
+/* Gradient conique pour effet de fumée */
+.bg-gradient-conic {
+  background: conic-gradient(var(--tw-gradient-stops));
+}
+
+/* Animations personnalisées */
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(34, 197, 94, 0.7),
+                 0 0 20px rgba(34, 197, 94, 0.5),
+                 0 0 30px rgba(34, 197, 94, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(34, 197, 94, 0.9),
+                 0 0 25px rgba(34, 197, 94, 0.7),
+                 0 0 35px rgba(34, 197, 94, 0.5);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 10s linear infinite;
+}

@@ -192,10 +192,18 @@ export default function NeonText3D() {
   return (
     <div className="w-full h-screen bg-black relative">
       <div ref={mountRef} className="w-full h-full" />
-      <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 text-center z-50 w-full px-4">
-        <p className="text-green-300 text-lg sm:text-xl md:text-2xl font-mono tracking-wider opacity-95 bg-black/70 px-3 py-2 sm:px-4 sm:py-3 rounded-lg shadow-lg border border-green-500/30">
-          I&apos;m inevitable...
-        </p>
+      {/* Phrase sous CAPPONUTS avec effet de fumée verte */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-8 sm:translate-y-12 text-center z-50 w-full px-4">
+        <div className="relative">
+          {/* Effet de fumée verte */}
+          <div className="absolute inset-0 bg-gradient-radial from-green-500/20 via-green-500/5 to-transparent blur-xl animate-pulse"></div>
+          <div className="absolute inset-0 bg-gradient-conic from-green-400/10 via-transparent to-green-600/10 blur-lg animate-spin-slow"></div>
+          
+          {/* Texte principal */}
+          <p className="relative text-green-300 text-base sm:text-lg md:text-xl font-mono tracking-[0.3em] opacity-90 drop-shadow-[0_0_10px_rgba(34,197,94,0.7)] animate-glow">
+            I&apos;m inevitable...
+          </p>
+        </div>
       </div>
     </div>
   )
