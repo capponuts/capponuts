@@ -267,6 +267,21 @@ body {
   animation: ping-slowest 3s ease-out infinite 0.6s;
 }
 
+/* Bouton volume spatial */
+.cyber-volume-button {
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.cyber-volume-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  filter: drop-shadow(0 8px 16px rgba(0, 255, 136, 0.3));
+}
+
+.cyber-volume-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
 /* Animation de fondu d'entrée */
 .fade-in {
   animation: fadeIn 1s ease-in-out;

@@ -63,12 +63,12 @@ function createArcadeBeep() {
     
     // Enveloppe sonore rapide
     gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+    gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
     
     oscillator.type = 'square'; // Son carré typique des arcades
     oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.1);
+    oscillator.stop(audioContext.currentTime + 0.15);
     
     return oscillator;
   } catch {
@@ -82,6 +82,7 @@ export default function CyberText() {
   const [isMuted, setIsMuted] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
   const [loadingProgress, setLoadingProgress] = useState(0)
+  const [soundEnabled, setSoundEnabled] = useState(false)
   const playerRef = useRef<YouTubePlayer | null>(null)
 
   useEffect(() => {
@@ -138,13 +139,13 @@ export default function CyberText() {
             rel: 0,
             showinfo: 0,
             mute: 1,
-            start: 15, // Commence à 15 secondes
+            start: 20, // Commence à 20 secondes
             playlist: '3w_A-qMxsDw' // Pour le loop
           },
           events: {
             onReady: (event: { target: YouTubePlayer }) => {
               event.target.mute()
-              event.target.seekTo(15) // Force le démarrage à 15 secondes
+              event.target.seekTo(20) // Force le démarrage à 20 secondes
               event.target.playVideo()
             }
           }
@@ -172,7 +173,19 @@ export default function CyberText() {
   }
 
   const playArcadeBeep = () => {
-    createArcadeBeep()
+    // Activer le son au premier clic utilisateur si nécessaire
+    if (!soundEnabled) {
+      setSoundEnabled(true)
+    }
+    
+    if (soundEnabled) {
+      createArcadeBeep()
+    }
+  }
+
+  const enableSound = () => {
+    setSoundEnabled(true)
+    createArcadeBeep() // Test du son
   }
 
   const letters = ['C', 'A', 'P', 'P', 'O', 'N', 'U', 'T', 'S']
@@ -245,25 +258,75 @@ export default function CyberText() {
       <div className="relative z-30 w-full h-full flex flex-col">
         {/* Lettres CAPPONUTS - Centré dans l'écran */}
         <div className="flex-1 flex items-center justify-center px-4">
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-4 max-w-7xl">
-            {letters.map((letter, index) => (
-              <div
-                key={index}
-                className="cyber-letter-glitch select-none"
-                style={{
-                  transform: `
-                    perspective(1000px) 
-                    rotateX(${mousePosition.y * 0.1 - 5}deg) 
-                    rotateY(${mousePosition.x * 0.1 - 5}deg)
-                    translateZ(${Math.sin(Date.now() * 0.001 + index) * 10}px)
-                  `,
-                  animationDelay: `${index * 0.1}s`,
-                }}
-                onMouseEnter={playArcadeBeep}
-              >
-                {letter}
+          <div className="text-center">
+            {/* CAPPONUTS */}
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-4 max-w-7xl mb-8">
+              {letters.map((letter, index) => (
+                <div
+                  key={index}
+                  className="cyber-letter-glitch select-none"
+                  style={{
+                    transform: `
+                      perspective(1000px) 
+                      rotateX(${mousePosition.y * 0.1 - 5}deg) 
+                      rotateY(${mousePosition.x * 0.1 - 5}deg)
+                      translateZ(${Math.sin(Date.now() * 0.001 + index) * 10}px)
+                    `,
+                    animationDelay: `${index * 0.1}s`,
+                  }}
+                  onMouseEnter={playArcadeBeep}
+                  onClick={playArcadeBeep}
+                >
+                  {letter}
+                </div>
+              ))}
+            </div>
+
+            {/* Bouton volume sous CAPPONUTS */}
+            <div className="flex justify-center">
+              <div className="relative">
+                {/* Ondes sonores quand le son est activé */}
+                {!isMuted && (
+                  <>
+                    <div className="absolute inset-0 border-2 border-green-400/30 rounded-full animate-ping-slow scale-150" />
+                    <div className="absolute inset-0 border-2 border-green-400/20 rounded-full animate-ping-slower scale-200" />
+                    <div className="absolute inset-0 border-2 border-green-400/10 rounded-full animate-ping-slowest scale-250" />
+                  </>
+                )}
+                
+                {/* Bouton stylé spatial */}
+                <button
+                  onClick={() => {
+                    enableSound()
+                    toggleMute()
+                  }}
+                  className="cyber-volume-button group relative"
+                  aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
+                >
+                  {/* Effet néon du bouton */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 via-green-400/30 to-green-500/20 rounded-lg blur-sm group-hover:blur-md transition-all duration-300" />
+                  
+                  {/* Contenu du bouton */}
+                  <div className="relative bg-black/80 border-2 border-green-400/50 rounded-lg px-6 py-3 backdrop-blur-sm hover:border-green-400/80 transition-all duration-300 group-hover:scale-105">
+                    <div className="flex items-center gap-3">
+                      {isMuted ? <VolumeX size={20} className="text-green-400" /> : <Volume2 size={20} className="text-green-400" />}
+                      <span className="text-green-400 font-mono text-sm tracking-wider">
+                        {isMuted ? 'AUDIO OFF' : 'AUDIO ON'}
+                      </span>
+                    </div>
+                    
+                    {/* Indicateur de niveau */}
+                    <div className="mt-2 flex gap-1 justify-center">
+                      <div className={`w-1 h-2 bg-green-400 rounded-full ${!isMuted ? 'animate-pulse' : 'opacity-30'}`} />
+                      <div className={`w-1 h-3 bg-green-400 rounded-full ${!isMuted ? 'animate-pulse' : 'opacity-30'}`} style={{animationDelay: '0.1s'}} />
+                      <div className={`w-1 h-4 bg-green-400 rounded-full ${!isMuted ? 'animate-pulse' : 'opacity-30'}`} style={{animationDelay: '0.2s'}} />
+                      <div className={`w-1 h-3 bg-green-400 rounded-full ${!isMuted ? 'animate-pulse' : 'opacity-30'}`} style={{animationDelay: '0.3s'}} />
+                      <div className={`w-1 h-2 bg-green-400 rounded-full ${!isMuted ? 'animate-pulse' : 'opacity-30'}`} style={{animationDelay: '0.4s'}} />
+                    </div>
+                  </div>
+                </button>
               </div>
-            ))}
+            </div>
           </div>
         </div>
 
@@ -278,29 +341,6 @@ export default function CyberText() {
             <p className="relative text-green-300 text-base sm:text-lg md:text-xl lg:text-2xl font-mono tracking-[0.3em] opacity-90 animate-glow-text drop-shadow-lg px-4">
               I&apos;m inevitable...
             </p>
-          </div>
-        </div>
-
-        {/* Bouton son en bas à droite avec ondes */}
-        <div className="absolute bottom-8 right-8 z-40">
-          <div className="relative">
-            {/* Ondes sonores quand le son est activé */}
-            {!isMuted && (
-              <>
-                <div className="absolute inset-0 border-2 border-green-400/30 rounded-full animate-ping-slow scale-150" />
-                <div className="absolute inset-0 border-2 border-green-400/20 rounded-full animate-ping-slower scale-200" />
-                <div className="absolute inset-0 border-2 border-green-400/10 rounded-full animate-ping-slowest scale-250" />
-              </>
-            )}
-            
-            {/* Bouton */}
-            <button
-              onClick={toggleMute}
-              className="relative bg-black/80 text-green-400 p-4 rounded-full hover:bg-black/90 transition-all duration-300 backdrop-blur-sm hover:scale-110 flex items-center justify-center border border-green-400/30"
-              aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
-            >
-              {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
-            </button>
           </div>
         </div>
       </div>
