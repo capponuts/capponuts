@@ -57,14 +57,14 @@ function createArcadeBeep() {
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
     
-    // Fréquence du bip d'arcade (plus aiguë)
-    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+    // Fréquence du bip d'arcade moins aiguë
+    oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.15);
     
     // Enveloppe sonore rapide
     gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+    gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.15);
     
     oscillator.type = 'square'; // Son carré typique des arcades
     oscillator.start(audioContext.currentTime);
@@ -247,13 +247,6 @@ export default function CyberText() {
         <div className="absolute inset-0 bg-black/50 z-10" />
       </div>
 
-      {/* Éclairs CSS par-dessus la vidéo */}
-      <div className="absolute inset-0 z-20">
-        <div className="lightning lightning-1" />
-        <div className="lightning lightning-2" />
-        <div className="lightning lightning-3" />
-      </div>
-
       {/* Container principal pour le contenu */}
       <div className="relative z-30 w-full h-full flex flex-col">
         {/* Lettres CAPPONUTS - Centré dans l'écran */}
@@ -294,26 +287,26 @@ export default function CyberText() {
                   </>
                 )}
                 
-                {/* Bouton stylé spatial simplifié */}
-                <button
-                  onClick={() => {
-                    enableSound()
-                    toggleMute()
-                  }}
-                  className="cyber-volume-button group relative"
-                  aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
-                >
-                  {/* Effet néon du bouton */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-400/30 to-pink-500/20 rounded-full blur-sm group-hover:blur-md transition-all duration-300" />
-                  
-                  {/* Contenu du bouton - icon seulement */}
-                  <div className="relative bg-black/80 border-2 border-cyan-400/50 rounded-full p-4 backdrop-blur-sm hover:border-purple-400/80 transition-all duration-300 group-hover:scale-105 flex items-center justify-center">
-                    {isMuted ? 
-                      <VolumeX size={24} className="text-cyan-400" /> : 
-                      <Volume2 size={24} className="text-cyan-400" />
-                    }
-                  </div>
-                </button>
+                                 {/* Bouton stylé spatial simplifié */}
+                 <button
+                   onClick={() => {
+                     enableSound()
+                     toggleMute()
+                   }}
+                   className="cyber-volume-button group relative"
+                   aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
+                 >
+                   {/* Effet néon du bouton */}
+                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-400/30 to-pink-500/20 rounded-full blur-sm group-hover:blur-md transition-all duration-300" />
+                   
+                   {/* Contenu du bouton - icon seulement */}
+                   <div className="relative bg-black/80 border-2 border-cyan-400/50 rounded-full p-4 backdrop-blur-sm hover:border-purple-400/80 transition-all duration-300 group-hover:scale-105 flex items-center justify-center">
+                     {isMuted ? 
+                       <VolumeX size={24} className="text-cyan-400 group-hover:text-purple-400 transition-colors duration-300" /> : 
+                       <Volume2 size={24} className="text-cyan-400 group-hover:text-purple-400 transition-colors duration-300" />
+                     }
+                   </div>
+                 </button>
               </div>
             </div>
           </div>
