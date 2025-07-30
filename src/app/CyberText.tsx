@@ -287,26 +287,26 @@ export default function CyberText() {
                   </>
                 )}
                 
-                                 {/* Bouton stylé spatial simplifié */}
-                 <button
-                   onClick={() => {
-                     enableSound()
-                     toggleMute()
-                   }}
-                   className="cyber-volume-button group relative"
-                   aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
-                 >
-                   {/* Effet néon du bouton */}
-                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-400/30 to-pink-500/20 rounded-full blur-sm group-hover:blur-md transition-all duration-300" />
-                   
-                   {/* Contenu du bouton - icon seulement */}
-                   <div className="relative bg-black/80 border-2 border-cyan-400/50 rounded-full p-4 backdrop-blur-sm hover:border-purple-400/80 transition-all duration-300 group-hover:scale-105 flex items-center justify-center">
-                     {isMuted ? 
-                       <VolumeX size={24} className="text-cyan-400 group-hover:text-purple-400 transition-colors duration-300" /> : 
-                       <Volume2 size={24} className="text-cyan-400 group-hover:text-purple-400 transition-colors duration-300" />
-                     }
-                   </div>
-                 </button>
+                {/* Bouton stylé spatial cyberpunk */}
+                <button
+                  onClick={() => {
+                    enableSound()
+                    toggleMute()
+                  }}
+                  className="cyber-volume-button group relative"
+                  aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
+                >
+                  {/* Effet néon du bouton */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-400/30 to-pink-500/20 rounded-full blur-sm group-hover:blur-md transition-all duration-300" />
+                  
+                  {/* Contenu du bouton - icon cyan */}
+                  <div className="relative bg-black/80 border-2 border-cyan-400/50 rounded-full p-4 backdrop-blur-sm group-hover:border-purple-400/80 transition-all duration-300 group-hover:scale-105 flex items-center justify-center">
+                    {isMuted ? 
+                      <VolumeX size={24} className="text-cyan-400 group-hover:text-purple-400 transition-colors duration-300" /> : 
+                      <Volume2 size={24} className="text-cyan-400 group-hover:text-purple-400 transition-colors duration-300" />
+                    }
+                  </div>
+                </button>
               </div>
             </div>
           </div>

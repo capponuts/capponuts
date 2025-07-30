@@ -240,7 +240,7 @@ body {
   animation: ping-slowest 2.5s ease-out infinite 0.4s;
 }
 
-/* Bouton volume spatial */
+/* Bouton volume spatial cyberpunk */
 .cyber-volume-button {
   transition: all 0.3s ease;
   transform-style: preserve-3d;
@@ -253,6 +253,16 @@ body {
 
 .cyber-volume-button:active {
   transform: translateY(0) scale(0.98);
+}
+
+/* Force les couleurs cyberpunk du bouton volume */
+.cyber-volume-button .text-cyan-400 {
+  color: #22d3ee !important;
+}
+
+.cyber-volume-button:hover .text-cyan-400,
+.cyber-volume-button .group-hover\:text-purple-400:hover {
+  color: #c084fc !important;
 }
 
 /* Animation de fondu d'entrée */
