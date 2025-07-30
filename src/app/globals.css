@@ -74,7 +74,7 @@ body {
 }
 
 /* Import Google Fonts - Futuriste et spatial */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@300;400;500;600;700&family=Exo+2:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@300;400;500;600;700&family=Exo+2:wght@100;200;300;400;500;600;700;800;900&family=Rubik+Glitch&display=swap');
 
 /* Styles pour la vidéo YouTube en arrière-plan */
 .youtube-background {
@@ -89,11 +89,11 @@ body {
   z-index: -1;
 }
 
-/* Lettres Cyber - Version plus douce */
-.cyber-letter-soft {
-  font-family: 'Exo 2', 'Rajdhani', 'Orbitron', sans-serif;
+/* Lettres Cyber avec police Rubik Glitch */
+.cyber-letter-glitch {
+  font-family: 'Rubik Glitch', 'Exo 2', 'Rajdhani', monospace;
   font-size: clamp(2rem, 8vw, 6rem);
-  font-weight: 600;
+  font-weight: 400;
   color: #00dd77;
   text-shadow: 
     0 0 3px #00dd77,
@@ -102,14 +102,14 @@ body {
     0 0 25px #00dd7750;
   transform-style: preserve-3d;
   animation: cyber-float-soft 4s ease-in-out infinite;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   cursor: pointer;
   position: relative;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   filter: drop-shadow(0 0 8px #00dd7730);
 }
 
-.cyber-letter-soft::before {
+.cyber-letter-glitch::before {
   content: '';
   position: absolute;
   top: 2px;
@@ -121,14 +121,15 @@ body {
   transform: translateZ(-5px);
 }
 
-.cyber-letter-soft:hover {
+.cyber-letter-glitch:hover {
   color: #00ffaa;
-  transform: scale(1.05) translateZ(15px);
+  transform: scale(1.08) translateZ(20px);
   text-shadow: 
     0 0 5px #00ffaa,
     0 0 12px #00ffaa,
     0 0 20px #00ffaa,
     0 0 30px #00ffaa60;
+  animation: glitch-effect 0.3s ease-in-out;
 }
 
 @keyframes cyber-float-soft {
@@ -264,4 +265,109 @@ body {
 
 .animate-ping-slowest {
   animation: ping-slowest 3s ease-out infinite 0.6s;
+}
+
+/* Animation de fondu d'entrée */
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Effet glitch pour les lettres */
+@keyframes glitch-effect {
+  0%, 100% {
+    transform: scale(1.08) translateZ(20px);
+  }
+  20% {
+    transform: scale(1.08) translateZ(20px) skewX(2deg);
+  }
+  40% {
+    transform: scale(1.08) translateZ(20px) skewX(-2deg);
+  }
+  60% {
+    transform: scale(1.08) translateZ(20px) skewY(1deg);
+  }
+  80% {
+    transform: scale(1.08) translateZ(20px) skewY(-1deg);
+  }
+}
+
+/* Texte glitch pour l'écran de chargement */
+.glitch-text {
+  font-family: 'Rubik Glitch', monospace;
+  position: relative;
+  animation: glitch-main 2s ease-in-out infinite;
+}
+
+@keyframes glitch-main {
+  0%, 100% {
+    text-shadow: 
+      0 0 10px #00ff88,
+      0 0 20px #00ff88,
+      0 0 30px #00ff88;
+  }
+  25% {
+    text-shadow: 
+      -2px 0 #ff0088,
+      2px 0 #00ffff,
+      0 0 20px #00ff88;
+  }
+  50% {
+    text-shadow: 
+      2px 0 #ff0088,
+      -2px 0 #00ffff,
+      0 0 25px #00ff88;
+  }
+  75% {
+    text-shadow: 
+      0 -2px #ff0088,
+      0 2px #00ffff,
+      0 0 30px #00ff88;
+  }
+}
+
+/* Barre de chargement avec effet néon */
+.loading-bar {
+  position: relative;
+  box-shadow: 
+    0 0 10px #00ff88,
+    inset 0 0 10px #00ff8850;
+  animation: loading-pulse 2s ease-in-out infinite;
+}
+
+@keyframes loading-pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 10px #00ff88,
+      inset 0 0 10px #00ff8850;
+  }
+  50% {
+    box-shadow: 
+      0 0 20px #00ff88,
+      inset 0 0 15px #00ff8870;
+  }
+}
+
+/* Animation des points de chargement */
+.loading-dots span {
+  animation: dots 1.5s ease-in-out infinite;
+}
+
+@keyframes dots {
+  0%, 60%, 100% {
+    opacity: 0.4;
+  }
+  30% {
+    opacity: 1;
+  }
 }

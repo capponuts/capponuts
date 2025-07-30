@@ -41,12 +41,47 @@ declare global {
       }) => YouTubePlayer;
     };
     onYouTubeIframeAPIReady: () => void;
+    AudioContext: typeof AudioContext;
+    webkitAudioContext: typeof AudioContext;
+  }
+}
+
+// Générateur de son de bip d'arcade synthétique
+function createArcadeBeep() {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    // Fréquence du bip d'arcade (plus aiguë)
+    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+    
+    // Enveloppe sonore rapide
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+    
+    oscillator.type = 'square'; // Son carré typique des arcades
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.1);
+    
+    return oscillator;
+  } catch {
+    console.log('Audio not supported');
+    return null;
   }
 }
 
 export default function CyberText() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isMuted, setIsMuted] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
+  const [loadingProgress, setLoadingProgress] = useState(0)
   const playerRef = useRef<YouTubePlayer | null>(null)
 
   useEffect(() => {
@@ -61,40 +96,60 @@ export default function CyberText() {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
+  // Animation de chargement
   useEffect(() => {
-    // Charger l'API YouTube
-    const tag = document.createElement('script')
-    tag.src = 'https://www.youtube.com/iframe_api'
-    const firstScriptTag = document.getElementsByTagName('script')[0]
-    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
-
-    // Fonction globale requise par l'API YouTube
-    window.onYouTubeIframeAPIReady = () => {
-      playerRef.current = new window.YT.Player('youtube-player', {
-        videoId: '3w_A-qMxsDw',
-        playerVars: {
-          autoplay: 1,
-          controls: 0,
-          disablekb: 1,
-          fs: 0,
-          iv_load_policy: 3,
-          loop: 1,
-          modestbranding: 1,
-          playsinline: 1,
-          rel: 0,
-          showinfo: 0,
-          mute: 1,
-          start: 10, // Commence à 10 secondes
-          playlist: '3w_A-qMxsDw' // Pour le loop
-        },
-        events: {
-          onReady: (event: { target: YouTubePlayer }) => {
-            event.target.mute()
-            event.target.seekTo(10) // Force le démarrage à 10 secondes
-            event.target.playVideo()
-          }
+    const interval = setInterval(() => {
+      setLoadingProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(interval)
+          setTimeout(() => setIsLoading(false), 500) // Délai pour l'animation de sortie
+          return 100
         }
+        // Progression non-linéaire pour effet plus réaliste
+        const increment = Math.random() * 15 + 5
+        return Math.min(prev + increment, 100)
       })
+    }, 200)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    // Charger l'API YouTube après le chargement
+    if (!isLoading) {
+      const tag = document.createElement('script')
+      tag.src = 'https://www.youtube.com/iframe_api'
+      const firstScriptTag = document.getElementsByTagName('script')[0]
+      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
+
+      // Fonction globale requise par l'API YouTube
+      window.onYouTubeIframeAPIReady = () => {
+        playerRef.current = new window.YT.Player('youtube-player', {
+          videoId: '3w_A-qMxsDw',
+          playerVars: {
+            autoplay: 1,
+            controls: 0,
+            disablekb: 1,
+            fs: 0,
+            iv_load_policy: 3,
+            loop: 1,
+            modestbranding: 1,
+            playsinline: 1,
+            rel: 0,
+            showinfo: 0,
+            mute: 1,
+            start: 15, // Commence à 15 secondes
+            playlist: '3w_A-qMxsDw' // Pour le loop
+          },
+          events: {
+            onReady: (event: { target: YouTubePlayer }) => {
+              event.target.mute()
+              event.target.seekTo(15) // Force le démarrage à 15 secondes
+              event.target.playVideo()
+            }
+          }
+        })
+      }
     }
 
     return () => {
@@ -102,7 +157,7 @@ export default function CyberText() {
         playerRef.current.destroy()
       }
     }
-  }, [])
+  }, [isLoading])
 
   const toggleMute = () => {
     if (playerRef.current) {
@@ -116,10 +171,54 @@ export default function CyberText() {
     }
   }
 
+  const playArcadeBeep = () => {
+    createArcadeBeep()
+  }
+
   const letters = ['C', 'A', 'P', 'P', 'O', 'N', 'U', 'T', 'S']
 
+  // Écran de chargement
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 w-full h-full bg-black flex items-center justify-center z-50">
+        <div className="text-center">
+          {/* Logo CAPPONUTS pendant le chargement */}
+          <div className="mb-8">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold text-green-400 glitch-text mb-4">
+              CAPPONUTS
+            </h1>
+            <p className="text-green-300 text-sm sm:text-base font-mono tracking-widest opacity-80">
+              CYBER EXPERIENCE
+            </p>
+          </div>
+
+          {/* Barre de progression */}
+          <div className="w-80 h-2 bg-gray-800 rounded-full overflow-hidden mx-auto mb-4">
+            <div 
+              className="h-full bg-gradient-to-r from-green-600 to-green-400 transition-all duration-300 ease-out loading-bar"
+              style={{ width: `${loadingProgress}%` }}
+            />
+          </div>
+
+          {/* Pourcentage */}
+          <p className="text-green-400 font-mono text-lg">
+            {Math.round(loadingProgress)}%
+          </p>
+
+          {/* Texte de chargement */}
+          <div className="mt-6 text-green-300 font-mono text-sm opacity-60">
+            <div className="loading-dots">
+              Initialisation du système
+              <span className="animate-pulse">...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="fixed inset-0 w-full h-full bg-black overflow-hidden">
+    <div className="fixed inset-0 w-full h-full bg-black overflow-hidden fade-in">
       {/* Vidéo YouTube en arrière-plan */}
       <div className="absolute inset-0 w-full h-full z-0">
         <div 
@@ -150,7 +249,7 @@ export default function CyberText() {
             {letters.map((letter, index) => (
               <div
                 key={index}
-                className="cyber-letter-soft select-none"
+                className="cyber-letter-glitch select-none"
                 style={{
                   transform: `
                     perspective(1000px) 
@@ -160,6 +259,7 @@ export default function CyberText() {
                   `,
                   animationDelay: `${index * 0.1}s`,
                 }}
+                onMouseEnter={playArcadeBeep}
               >
                 {letter}
               </div>
