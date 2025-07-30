@@ -1,9 +1,9 @@
-import NeonText3D from './NeonText3D'
+import CyberText from './CyberText'
 
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <NeonText3D />
+      <CyberText />
     </main>
   )
 }
