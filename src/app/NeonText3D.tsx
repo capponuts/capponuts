@@ -88,7 +88,7 @@ export default function NeonText3D() {
     // Charger la police et créer le texte
     const fontLoader = new FontLoader()
     fontLoader.load(
-      'https://threejs.org/examples/fonts/droid/droid_sans_bold.typeface.json',
+      'https://threejs.org/examples/fonts/optimer_bold.typeface.json',
       (font) => {
         letters.forEach((letter, index) => {
           const textGeometry = new TextGeometry(letter, {
@@ -104,29 +104,14 @@ export default function NeonText3D() {
             -textGeometry.boundingBox!.max.z * 0.5
           )
           
-          // Style The Mask : vert avec bordure violette
+          // Style cyber high-tech vert néon
           const material = new THREE.MeshBasicMaterial({ 
-            color: 0x00ff00,
+            color: 0x00ff88,
             transparent: true,
-            opacity: 0.9
-          })
-          
-          // Créer la bordure violette
-          const borderMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0x8B00FF,
-            transparent: true,
-            opacity: 0.8,
-            side: THREE.BackSide
+            opacity: 1.0
           })
           
           const mesh = new THREE.Mesh(textGeometry, material)
-          
-          // Créer une bordure en dupliquant la géométrie
-          const borderGeometry = textGeometry.clone()
-          borderGeometry.scale(1.05, 1.05, 1.05)
-          const borderMesh = new THREE.Mesh(borderGeometry, borderMaterial)
-          borderMesh.position.copy(mesh.position)
-          scene.add(borderMesh)
           mesh.position.x = (index - 4) * (window.innerWidth < 768 ? 1.0 : 1.2)
           mesh.position.y = 0
           mesh.position.z = 0
@@ -142,32 +127,19 @@ export default function NeonText3D() {
           const boxSize = window.innerWidth < 768 ? 0.6 : 0.8
           const geometry = new THREE.BoxGeometry(boxSize, boxSize * 1.25, 0.2)
           
-          // Style The Mask pour les cubes aussi
+          // Style cyber simple sans bordure
           const material = new THREE.MeshBasicMaterial({ 
-            color: 0x00ff00,
+            color: 0x00ff88,
             transparent: true,
-            opacity: 0.9
-          })
-          
-          // Bordure violette pour les cubes
-          const borderGeometry = new THREE.BoxGeometry(boxSize * 1.1, boxSize * 1.35, 0.25)
-          const borderMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0x8B00FF,
-            transparent: true,
-            opacity: 0.7
+            opacity: 1.0
           })
           
           const mesh = new THREE.Mesh(geometry, material)
-          const borderMesh = new THREE.Mesh(borderGeometry, borderMaterial)
           
           mesh.position.x = (index - 4) * (window.innerWidth < 768 ? 1.0 : 1.2)
           mesh.position.y = 0
           mesh.position.z = 0
           
-          borderMesh.position.copy(mesh.position)
-          borderMesh.position.z = -0.05
-          
-          scene.add(borderMesh)
           scene.add(mesh)
           letterMeshes.push(mesh)
         })
