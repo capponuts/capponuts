@@ -240,22 +240,30 @@ body {
   animation: ping-slowest 2.5s ease-out infinite 0.4s;
 }
 
-/* Bouton volume spatial cyberpunk */
+/* Bouton volume transparent cyberpunk */
 .cyber-volume-button {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
   transition: all 0.3s ease;
   transform-style: preserve-3d;
 }
 
 .cyber-volume-button:hover {
-  transform: translateY(-2px) scale(1.05);
-  filter: drop-shadow(0 8px 16px rgba(0, 212, 255, 0.3));
+  transform: translateY(-3px);
+  filter: drop-shadow(0 10px 20px rgba(0, 212, 255, 0.4));
 }
 
 .cyber-volume-button:active {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(-1px);
 }
 
-/* Force les couleurs cyberpunk du bouton volume */
+.cyber-volume-button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Force les couleurs cyberpunk de l'icône */
 .cyber-volume-button .text-cyan-400 {
   color: #22d3ee !important;
 }
@@ -263,6 +271,15 @@ body {
 .cyber-volume-button:hover .text-cyan-400,
 .cyber-volume-button .group-hover\:text-purple-400:hover {
   color: #c084fc !important;
+}
+
+/* Supprime tout fond blanc possible */
+.cyber-volume-button,
+.cyber-volume-button:hover,
+.cyber-volume-button:focus,
+.cyber-volume-button:active {
+  background-color: transparent !important;
+  background: transparent !important;
 }
 
 /* Animation de fondu d'entrée */

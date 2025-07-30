@@ -287,25 +287,23 @@ export default function CyberText() {
                   </>
                 )}
                 
-                {/* Bouton stylé spatial cyberpunk */}
+                {/* Bouton volume transparent avec grosse icône */}
                 <button
                   onClick={() => {
                     enableSound()
                     toggleMute()
                   }}
-                  className="cyber-volume-button group relative"
+                  className="cyber-volume-button group relative p-4"
                   aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
                 >
-                  {/* Effet néon du bouton */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-400/30 to-pink-500/20 rounded-full blur-sm group-hover:blur-md transition-all duration-300" />
+                  {/* Effet néon autour de l'icône */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-purple-400/15 to-pink-500/10 rounded-full blur-lg group-hover:blur-xl transition-all duration-300" />
                   
-                  {/* Contenu du bouton - icon cyan */}
-                  <div className="relative bg-black/80 border-2 border-cyan-400/50 rounded-full p-4 backdrop-blur-sm group-hover:border-purple-400/80 transition-all duration-300 group-hover:scale-105 flex items-center justify-center">
-                    {isMuted ? 
-                      <VolumeX size={24} className="text-cyan-400 group-hover:text-purple-400 transition-colors duration-300" /> : 
-                      <Volume2 size={24} className="text-cyan-400 group-hover:text-purple-400 transition-colors duration-300" />
-                    }
-                  </div>
+                  {/* Grosse icône sur fond transparent */}
+                  {isMuted ? 
+                    <VolumeX size={40} className="relative text-cyan-400 group-hover:text-purple-400 transition-all duration-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.8)] group-hover:drop-shadow-[0_0_15px_rgba(192,132,252,0.8)] group-hover:scale-110" /> : 
+                    <Volume2 size={40} className="relative text-cyan-400 group-hover:text-purple-400 transition-all duration-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.8)] group-hover:drop-shadow-[0_0_15px_rgba(192,132,252,0.8)] group-hover:scale-110" />
+                  }
                 </button>
               </div>
             </div>
