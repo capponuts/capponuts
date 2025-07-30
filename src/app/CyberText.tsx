@@ -197,10 +197,10 @@ export default function CyberText() {
         <div className="text-center">
           {/* Logo CAPPONUTS pendant le chargement */}
           <div className="mb-8">
-            <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold text-green-400 glitch-text mb-4">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold text-cyan-400 glitch-text mb-4">
               CAPPONUTS
             </h1>
-            <p className="text-green-300 text-sm sm:text-base font-mono tracking-widest opacity-80">
+            <p className="text-purple-300 text-sm sm:text-base font-mono tracking-widest opacity-80">
               CYBER EXPERIENCE
             </p>
           </div>
@@ -214,12 +214,12 @@ export default function CyberText() {
           </div>
 
           {/* Pourcentage */}
-          <p className="text-green-400 font-mono text-lg">
+          <p className="text-cyan-400 font-mono text-lg">
             {Math.round(loadingProgress)}%
           </p>
 
           {/* Texte de chargement */}
-          <div className="mt-6 text-green-300 font-mono text-sm opacity-60">
+          <div className="mt-6 text-purple-300 font-mono text-sm opacity-60">
             <div className="loading-dots">
               Initialisation du système
               <span className="animate-pulse">...</span>
@@ -288,9 +288,9 @@ export default function CyberText() {
                 {/* Ondes sonores qui se dispersent quand le son est activé */}
                 {!isMuted && (
                   <>
-                    <div className="absolute inset-0 rounded-full border-2 border-green-400/40 animate-ping-slow" />
-                    <div className="absolute inset-0 rounded-full border-2 border-green-400/30 animate-ping-slower" />
-                    <div className="absolute inset-0 rounded-full border-2 border-green-400/20 animate-ping-slowest" />
+                    <div className="absolute inset-0 rounded-full border-2 border-cyan-400/40 animate-ping-slow" />
+                    <div className="absolute inset-0 rounded-full border-2 border-purple-400/30 animate-ping-slower" />
+                    <div className="absolute inset-0 rounded-full border-2 border-pink-400/20 animate-ping-slowest" />
                   </>
                 )}
                 
@@ -304,13 +304,13 @@ export default function CyberText() {
                   aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
                 >
                   {/* Effet néon du bouton */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 via-green-400/30 to-green-500/20 rounded-full blur-sm group-hover:blur-md transition-all duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-400/30 to-pink-500/20 rounded-full blur-sm group-hover:blur-md transition-all duration-300" />
                   
                   {/* Contenu du bouton - icon seulement */}
-                  <div className="relative bg-black/80 border-2 border-green-400/50 rounded-full p-4 backdrop-blur-sm hover:border-green-400/80 transition-all duration-300 group-hover:scale-105 flex items-center justify-center">
+                  <div className="relative bg-black/80 border-2 border-cyan-400/50 rounded-full p-4 backdrop-blur-sm hover:border-purple-400/80 transition-all duration-300 group-hover:scale-105 flex items-center justify-center">
                     {isMuted ? 
-                      <VolumeX size={24} className="text-green-400" /> : 
-                      <Volume2 size={24} className="text-green-400" />
+                      <VolumeX size={24} className="text-cyan-400" /> : 
+                      <Volume2 size={24} className="text-cyan-400" />
                     }
                   </div>
                 </button>
@@ -322,12 +322,12 @@ export default function CyberText() {
         {/* Phrase "I'm inevitable..." - Positionnée en bas */}
         <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 z-40">
           <div className="relative text-center">
-            {/* Effet de fumée verte */}
-            <div className="absolute inset-0 bg-gradient-radial from-green-500/20 via-green-500/5 to-transparent blur-xl animate-pulse" />
-            <div className="absolute inset-0 bg-gradient-conic from-green-400/10 via-transparent to-green-600/10 blur-lg animate-spin-slow" />
+            {/* Effet de fumée cyberpunk */}
+            <div className="absolute inset-0 bg-gradient-radial from-pink-500/20 via-purple-500/5 to-transparent blur-xl animate-pulse" />
+            <div className="absolute inset-0 bg-gradient-conic from-cyan-400/10 via-transparent to-pink-600/10 blur-lg animate-spin-slow" />
             
             {/* Texte */}
-            <p className="relative text-green-300 text-base sm:text-lg md:text-xl lg:text-2xl font-mono tracking-[0.3em] opacity-90 animate-glow-text drop-shadow-lg px-4">
+            <p className="relative text-pink-300 text-base sm:text-lg md:text-xl lg:text-2xl font-mono tracking-[0.3em] opacity-90 animate-glow-text drop-shadow-lg px-4">
               I&apos;m inevitable...
             </p>
           </div>
