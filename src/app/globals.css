@@ -221,14 +221,18 @@ body {
   animation: glow-text 2s ease-in-out infinite;
 }
 
-/* Animations pour les ondes sonores */
+/* Animations pour les ondes sonores qui se dispersent */
 @keyframes ping-slow {
   0% {
     transform: scale(1);
-    opacity: 1;
+    opacity: 0.7;
   }
-  75%, 100% {
-    transform: scale(1.5);
+  70% {
+    transform: scale(2.5);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(3);
     opacity: 0;
   }
 }
@@ -236,10 +240,14 @@ body {
 @keyframes ping-slower {
   0% {
     transform: scale(1);
-    opacity: 0.8;
+    opacity: 0.6;
   }
-  75%, 100% {
-    transform: scale(2);
+  70% {
+    transform: scale(3.5);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(4);
     opacity: 0;
   }
 }
@@ -247,24 +255,28 @@ body {
 @keyframes ping-slowest {
   0% {
     transform: scale(1);
-    opacity: 0.6;
+    opacity: 0.5;
   }
-  75%, 100% {
-    transform: scale(2.5);
+  70% {
+    transform: scale(4.5);
+    opacity: 0.1;
+  }
+  100% {
+    transform: scale(5);
     opacity: 0;
   }
 }
 
 .animate-ping-slow {
-  animation: ping-slow 2s ease-out infinite;
+  animation: ping-slow 1.5s ease-out infinite;
 }
 
 .animate-ping-slower {
-  animation: ping-slower 2.5s ease-out infinite 0.3s;
+  animation: ping-slower 2s ease-out infinite 0.2s;
 }
 
 .animate-ping-slowest {
-  animation: ping-slowest 3s ease-out infinite 0.6s;
+  animation: ping-slowest 2.5s ease-out infinite 0.4s;
 }
 
 /* Bouton volume spatial */

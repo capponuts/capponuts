@@ -285,16 +285,16 @@ export default function CyberText() {
             {/* Bouton volume sous CAPPONUTS */}
             <div className="flex justify-center">
               <div className="relative">
-                {/* Ondes sonores quand le son est activé */}
+                {/* Ondes sonores qui se dispersent quand le son est activé */}
                 {!isMuted && (
                   <>
-                    <div className="absolute inset-0 border-2 border-green-400/30 rounded-full animate-ping-slow scale-150" />
-                    <div className="absolute inset-0 border-2 border-green-400/20 rounded-full animate-ping-slower scale-200" />
-                    <div className="absolute inset-0 border-2 border-green-400/10 rounded-full animate-ping-slowest scale-250" />
+                    <div className="absolute inset-0 rounded-full border-2 border-green-400/40 animate-ping-slow" />
+                    <div className="absolute inset-0 rounded-full border-2 border-green-400/30 animate-ping-slower" />
+                    <div className="absolute inset-0 rounded-full border-2 border-green-400/20 animate-ping-slowest" />
                   </>
                 )}
                 
-                {/* Bouton stylé spatial */}
+                {/* Bouton stylé spatial simplifié */}
                 <button
                   onClick={() => {
                     enableSound()
@@ -304,25 +304,14 @@ export default function CyberText() {
                   aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
                 >
                   {/* Effet néon du bouton */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 via-green-400/30 to-green-500/20 rounded-lg blur-sm group-hover:blur-md transition-all duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 via-green-400/30 to-green-500/20 rounded-full blur-sm group-hover:blur-md transition-all duration-300" />
                   
-                  {/* Contenu du bouton */}
-                  <div className="relative bg-black/80 border-2 border-green-400/50 rounded-lg px-6 py-3 backdrop-blur-sm hover:border-green-400/80 transition-all duration-300 group-hover:scale-105">
-                    <div className="flex items-center gap-3">
-                      {isMuted ? <VolumeX size={20} className="text-green-400" /> : <Volume2 size={20} className="text-green-400" />}
-                      <span className="text-green-400 font-mono text-sm tracking-wider">
-                        {isMuted ? 'AUDIO OFF' : 'AUDIO ON'}
-                      </span>
-                    </div>
-                    
-                    {/* Indicateur de niveau */}
-                    <div className="mt-2 flex gap-1 justify-center">
-                      <div className={`w-1 h-2 bg-green-400 rounded-full ${!isMuted ? 'animate-pulse' : 'opacity-30'}`} />
-                      <div className={`w-1 h-3 bg-green-400 rounded-full ${!isMuted ? 'animate-pulse' : 'opacity-30'}`} style={{animationDelay: '0.1s'}} />
-                      <div className={`w-1 h-4 bg-green-400 rounded-full ${!isMuted ? 'animate-pulse' : 'opacity-30'}`} style={{animationDelay: '0.2s'}} />
-                      <div className={`w-1 h-3 bg-green-400 rounded-full ${!isMuted ? 'animate-pulse' : 'opacity-30'}`} style={{animationDelay: '0.3s'}} />
-                      <div className={`w-1 h-2 bg-green-400 rounded-full ${!isMuted ? 'animate-pulse' : 'opacity-30'}`} style={{animationDelay: '0.4s'}} />
-                    </div>
+                  {/* Contenu du bouton - icon seulement */}
+                  <div className="relative bg-black/80 border-2 border-green-400/50 rounded-full p-4 backdrop-blur-sm hover:border-green-400/80 transition-all duration-300 group-hover:scale-105 flex items-center justify-center">
+                    {isMuted ? 
+                      <VolumeX size={24} className="text-green-400" /> : 
+                      <Volume2 size={24} className="text-green-400" />
+                    }
                   </div>
                 </button>
               </div>
