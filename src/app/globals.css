@@ -73,8 +73,8 @@ body {
   animation: spin-slow 10s linear infinite;
 }
 
-/* Import Google Font Bitcount */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+/* Import Google Fonts - Futuriste et spatial */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@300;400;500;600;700&family=Exo+2:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 /* Styles pour la vidéo YouTube en arrière-plan */
 .youtube-background {
@@ -89,54 +89,57 @@ body {
   z-index: -1;
 }
 
-/* Lettres Cyber */
-.cyber-letter {
-  font-family: 'Orbitron', 'JetBrains Mono', monospace;
+/* Lettres Cyber - Version plus douce */
+.cyber-letter-soft {
+  font-family: 'Exo 2', 'Rajdhani', 'Orbitron', sans-serif;
   font-size: clamp(2rem, 8vw, 6rem);
-  font-weight: 900;
-  color: #00ff88;
+  font-weight: 600;
+  color: #00dd77;
   text-shadow: 
-    0 0 5px #00ff88,
-    0 0 10px #00ff88,
-    0 0 15px #00ff88,
-    0 0 20px #00ff88,
-    0 0 35px #00ff88,
-    0 0 40px #00ff88;
+    0 0 3px #00dd77,
+    0 0 8px #00dd77,
+    0 0 15px #00dd77,
+    0 0 25px #00dd7750;
   transform-style: preserve-3d;
-  animation: cyber-float 3s ease-in-out infinite;
+  animation: cyber-float-soft 4s ease-in-out infinite;
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
+  letter-spacing: 0.1em;
+  filter: drop-shadow(0 0 8px #00dd7730);
 }
 
-.cyber-letter::before {
-  content: attr(data-letter);
+.cyber-letter-soft::before {
+  content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  color: #008855;
+  top: 2px;
+  left: 2px;
+  width: 100%;
+  height: 100%;
+  color: #00aa5530;
   z-index: -1;
-  transform: translateZ(-10px);
+  transform: translateZ(-5px);
 }
 
-.cyber-letter:hover {
-  color: #00ffdd;
-  transform: scale(1.1) translateZ(20px);
+.cyber-letter-soft:hover {
+  color: #00ffaa;
+  transform: scale(1.05) translateZ(15px);
   text-shadow: 
-    0 0 5px #00ffdd,
-    0 0 10px #00ffdd,
-    0 0 15px #00ffdd,
-    0 0 20px #00ffdd,
-    0 0 35px #00ffdd,
-    0 0 40px #00ffdd;
+    0 0 5px #00ffaa,
+    0 0 12px #00ffaa,
+    0 0 20px #00ffaa,
+    0 0 30px #00ffaa60;
 }
 
-@keyframes cyber-float {
+@keyframes cyber-float-soft {
   0%, 100% {
     transform: translateY(0px) rotateZ(0deg);
   }
-  50% {
-    transform: translateY(-10px) rotateZ(2deg);
+  33% {
+    transform: translateY(-8px) rotateZ(1deg);
+  }
+  66% {
+    transform: translateY(-5px) rotateZ(-1deg);
   }
 }
 
@@ -215,4 +218,50 @@ body {
 
 .animate-glow-text {
   animation: glow-text 2s ease-in-out infinite;
+}
+
+/* Animations pour les ondes sonores */
+@keyframes ping-slow {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  75%, 100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes ping-slower {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes ping-slowest {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  75%, 100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.animate-ping-slow {
+  animation: ping-slow 2s ease-out infinite;
+}
+
+.animate-ping-slower {
+  animation: ping-slower 2.5s ease-out infinite 0.3s;
+}
+
+.animate-ping-slowest {
+  animation: ping-slowest 3s ease-out infinite 0.6s;
 }

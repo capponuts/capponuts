@@ -17,6 +17,7 @@ interface YouTubePlayerVars {
   showinfo?: number;
   mute?: number;
   playlist?: string;
+  start?: number;
 }
 
 interface YouTubePlayer {
@@ -25,6 +26,7 @@ interface YouTubePlayer {
   isMuted: () => boolean;
   playVideo: () => void;
   destroy: () => void;
+  seekTo: (seconds: number) => void;
 }
 
 declare global {
@@ -82,11 +84,13 @@ export default function CyberText() {
           rel: 0,
           showinfo: 0,
           mute: 1,
+          start: 10, // Commence à 10 secondes
           playlist: '3w_A-qMxsDw' // Pour le loop
         },
         events: {
           onReady: (event: { target: YouTubePlayer }) => {
             event.target.mute()
+            event.target.seekTo(10) // Force le démarrage à 10 secondes
             event.target.playVideo()
           }
         }
@@ -140,33 +144,13 @@ export default function CyberText() {
 
       {/* Container principal pour le contenu */}
       <div className="relative z-30 w-full h-full flex flex-col">
-        {/* Header avec infos et contrôles */}
-        <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-40">
-          {/* Informations */}
-          <div className="text-green-400 text-xs font-mono opacity-80 bg-black/70 p-3 rounded backdrop-blur-sm">
-            <div>🎮 CAPPONUTS - Cyber Experience</div>
-            <div>🎬 Space Video Background</div>
-            <div>⚡ Pure CSS + Next.js</div>
-            <div>🌟 Police Orbitron Style</div>
-          </div>
-
-          {/* Bouton son */}
-          <button
-            onClick={toggleMute}
-            className="bg-black/70 text-green-400 p-3 rounded hover:bg-black/90 transition-all duration-300 backdrop-blur-sm hover:scale-110 flex items-center justify-center"
-            aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
-          >
-            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-          </button>
-        </div>
-
         {/* Lettres CAPPONUTS - Centré dans l'écran */}
         <div className="flex-1 flex items-center justify-center px-4">
           <div className="flex flex-wrap justify-center gap-2 sm:gap-4 max-w-7xl">
             {letters.map((letter, index) => (
               <div
                 key={index}
-                className="cyber-letter select-none"
+                className="cyber-letter-soft select-none"
                 style={{
                   transform: `
                     perspective(1000px) 
@@ -194,6 +178,29 @@ export default function CyberText() {
             <p className="relative text-green-300 text-base sm:text-lg md:text-xl lg:text-2xl font-mono tracking-[0.3em] opacity-90 animate-glow-text drop-shadow-lg px-4">
               I&apos;m inevitable...
             </p>
+          </div>
+        </div>
+
+        {/* Bouton son en bas à droite avec ondes */}
+        <div className="absolute bottom-8 right-8 z-40">
+          <div className="relative">
+            {/* Ondes sonores quand le son est activé */}
+            {!isMuted && (
+              <>
+                <div className="absolute inset-0 border-2 border-green-400/30 rounded-full animate-ping-slow scale-150" />
+                <div className="absolute inset-0 border-2 border-green-400/20 rounded-full animate-ping-slower scale-200" />
+                <div className="absolute inset-0 border-2 border-green-400/10 rounded-full animate-ping-slowest scale-250" />
+              </>
+            )}
+            
+            {/* Bouton */}
+            <button
+              onClick={toggleMute}
+              className="relative bg-black/80 text-green-400 p-4 rounded-full hover:bg-black/90 transition-all duration-300 backdrop-blur-sm hover:scale-110 flex items-center justify-center border border-green-400/30"
+              aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
+            >
+              {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+            </button>
           </div>
         </div>
       </div>
