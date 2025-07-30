@@ -76,57 +76,17 @@ body {
 /* Import Google Font Bitcount */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
-/* Étoiles CSS */
-.stars, .stars2, .stars3 {
+/* Styles pour la vidéo YouTube en arrière-plan */
+.youtube-background {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-}
-
-.stars {
-  background-image: 
-    radial-gradient(2px 2px at 20px 30px, #eee, transparent),
-    radial-gradient(2px 2px at 40px 70px, #fff, transparent),
-    radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-    radial-gradient(1px 1px at 130px 80px, #fff, transparent),
-    radial-gradient(2px 2px at 160px 30px, #ddd, transparent);
-  background-repeat: repeat;
-  background-size: 200px 100px;
-  animation: zoom 20s infinite linear;
-}
-
-.stars2 {
-  background-image: 
-    radial-gradient(1px 1px at 40px 60px, #fff, transparent),
-    radial-gradient(1px 1px at 120px 10px, #fff, transparent),
-    radial-gradient(1px 1px at 80px 80px, #fff, transparent);
-  background-repeat: repeat;
-  background-size: 300px 200px;
-  animation: zoom 25s infinite linear;
-}
-
-.stars3 {
-  background-image: 
-    radial-gradient(1px 1px at 10px 10px, #fff, transparent),
-    radial-gradient(1px 1px at 150px 150px, #fff, transparent),
-    radial-gradient(1px 1px at 60px 170px, #fff, transparent);
-  background-repeat: repeat;
-  background-size: 400px 300px;
-  animation: zoom 30s infinite linear;
-}
-
-@keyframes zoom {
-  from {
-    transform: scale(0) rotate(0deg);
-    opacity: 1;
-  }
-  to {
-    transform: scale(1) rotate(360deg);
-    opacity: 0;
-  }
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 56.25vw; /* 16:9 aspect ratio */
+  min-height: 100vh;
+  min-width: 177.78vh; /* 16:9 aspect ratio */
+  z-index: -1;
 }
 
 /* Lettres Cyber */
@@ -180,42 +140,7 @@ body {
   }
 }
 
-/* Planètes */
-.planet-1 {
-  box-shadow: 
-    0 0 50px rgba(59, 130, 246, 0.5),
-    inset 0 0 50px rgba(59, 130, 246, 0.2);
-  animation: orbit-1 20s linear infinite;
-}
 
-.planet-2 {
-  box-shadow: 
-    0 0 30px rgba(239, 68, 68, 0.5),
-    inset 0 0 30px rgba(239, 68, 68, 0.2);
-  animation: orbit-2 15s linear infinite;
-}
-
-.planet-3 {
-  box-shadow: 
-    0 0 20px rgba(156, 163, 175, 0.5),
-    inset 0 0 20px rgba(156, 163, 175, 0.2);
-  animation: orbit-3 25s linear infinite;
-}
-
-@keyframes orbit-1 {
-  from { transform: rotate(0deg) translateX(100px) rotate(0deg); }
-  to { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
-}
-
-@keyframes orbit-2 {
-  from { transform: rotate(0deg) translateX(80px) rotate(0deg); }
-  to { transform: rotate(-360deg) translateX(80px) rotate(360deg); }
-}
-
-@keyframes orbit-3 {
-  from { transform: rotate(0deg) translateX(60px) rotate(0deg); }
-  to { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
-}
 
 /* Éclairs */
 .lightning {
