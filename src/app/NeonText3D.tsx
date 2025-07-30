@@ -88,7 +88,7 @@ export default function NeonText3D() {
     // Charger la police et créer le texte
     const fontLoader = new FontLoader()
     fontLoader.load(
-      'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json',
+      'https://threejs.org/examples/fonts/droid/droid_sans_bold.typeface.json',
       (font) => {
         letters.forEach((letter, index) => {
           const textGeometry = new TextGeometry(letter, {
