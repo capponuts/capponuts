@@ -190,6 +190,39 @@ export default function NeonText3D() {
       }
     }, 1000)
 
+    // Créer une planète en arrière-plan
+    const planetGeometry = new THREE.SphereGeometry(15, 32, 16)
+    const planetMaterial = new THREE.MeshBasicMaterial({ 
+      color: 0x4169E1,
+      transparent: true,
+      opacity: 0.8
+    })
+    const planet = new THREE.Mesh(planetGeometry, planetMaterial)
+    planet.position.set(-30, -20, -80)
+    scene.add(planet)
+
+    // Créer une seconde planète plus petite
+    const planet2Geometry = new THREE.SphereGeometry(8, 32, 16)
+    const planet2Material = new THREE.MeshBasicMaterial({ 
+      color: 0xFF6347,
+      transparent: true,
+      opacity: 0.6
+    })
+    const planet2 = new THREE.Mesh(planet2Geometry, planet2Material)
+    planet2.position.set(40, 15, -100)
+    scene.add(planet2)
+
+    // Créer une lune plus petite
+    const moonGeometry = new THREE.SphereGeometry(3, 16, 12)
+    const moonMaterial = new THREE.MeshBasicMaterial({ 
+      color: 0xC0C0C0,
+      transparent: true,
+      opacity: 0.7
+    })
+    const moon = new THREE.Mesh(moonGeometry, moonMaterial)
+    moon.position.set(-35, 25, -60)
+    scene.add(moon)
+
     // Position caméra adaptée à l'écran
     camera.position.z = window.innerWidth < 768 ? 12 : 10
 
@@ -214,6 +247,14 @@ export default function NeonText3D() {
         star.rotation.y += 0.002 + (index * 0.0001)
         star.rotation.z += 0.001 + (index * 0.0001)
       })
+
+      // Rotation des planètes
+      planet.rotation.y += 0.002
+      planet.rotation.x += 0.001
+      planet2.rotation.y += 0.003
+      planet2.rotation.z += 0.001
+      moon.rotation.y += 0.005
+      moon.rotation.x += 0.002
 
       // Animation des lettres avec souris
       letterMeshes.forEach((mesh, index) => {
