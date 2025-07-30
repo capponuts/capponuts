@@ -275,15 +275,15 @@ export default function CyberText() {
               ))}
             </div>
 
-            {/* Bouton volume sous CAPPONUTS */}
-            <div className="flex justify-center">
-              <div className="relative">
-                {/* Ondes sonores qui se dispersent quand le son est activé */}
+            {/* Bouton volume descendu sous CAPPONUTS */}
+            <div className="flex justify-center mt-12">
+              <div className="relative flex items-center justify-center">
+                {/* Ondes d'eau qui se propagent quand le son est activé */}
                 {!isMuted && (
                   <>
-                    <div className="absolute inset-0 rounded-full border-2 border-cyan-400/40 animate-ping-slow" />
-                    <div className="absolute inset-0 rounded-full border-2 border-purple-400/30 animate-ping-slower" />
-                    <div className="absolute inset-0 rounded-full border-2 border-pink-400/20 animate-ping-slowest" />
+                    <div className="absolute top-1/2 left-1/2 w-16 h-16 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-cyan-400 animate-water-wave-1" />
+                    <div className="absolute top-1/2 left-1/2 w-16 h-16 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-blue-400 animate-water-wave-2" />
+                    <div className="absolute top-1/2 left-1/2 w-16 h-16 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-purple-400 animate-water-wave-3" />
                   </>
                 )}
                 
@@ -293,7 +293,7 @@ export default function CyberText() {
                     enableSound()
                     toggleMute()
                   }}
-                  className="cyber-volume-button group relative p-4"
+                  className="cyber-volume-button group relative p-4 z-10"
                   aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
                 >
                   {/* Effet néon autour de l'icône */}
