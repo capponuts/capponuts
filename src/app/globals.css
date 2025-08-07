@@ -23,6 +23,15 @@ body {
   overflow: hidden;
 }
 
+/* Respect des préférences utilisateur: réduire les animations */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Styles pour le texte néon */
 .neon-text {
   text-shadow:
@@ -268,8 +277,8 @@ body {
 }
 
 .cyber-volume-button:focus {
-  outline: none !important;
-  box-shadow: none !important;
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.5);
 }
 
 /* Force les couleurs cyberpunk de l'icône */

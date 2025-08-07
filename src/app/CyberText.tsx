@@ -118,10 +118,15 @@ export default function CyberText() {
   useEffect(() => {
     // Charger l'API YouTube après le chargement
     if (!isLoading) {
-      const tag = document.createElement('script')
-      tag.src = 'https://www.youtube.com/iframe_api'
-      const firstScriptTag = document.getElementsByTagName('script')[0]
-      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
+      // Éviter le double-inject si la page se réhydrate
+      const existing = document.querySelector('script[src="https://www.youtube.com/iframe_api"]')
+      if (!existing) {
+        const tag = document.createElement('script')
+        tag.src = 'https://www.youtube.com/iframe_api'
+        tag.async = true
+        const firstScriptTag = document.getElementsByTagName('script')[0]
+        firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
+      }
 
       // Fonction globale requise par l'API YouTube
       window.onYouTubeIframeAPIReady = () => {
@@ -157,8 +162,23 @@ export default function CyberText() {
       if (playerRef.current) {
         playerRef.current.destroy()
       }
+      if (window.onYouTubeIframeAPIReady) {
+        window.onYouTubeIframeAPIReady = () => {}
+      }
     }
   }, [isLoading])
+
+  // Raccourci clavier global: touche "m" pour mute/unmute
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === 'm') {
+        enableSound()
+        toggleMute()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
 
   const toggleMute = () => {
     if (playerRef.current) {
@@ -206,7 +226,7 @@ export default function CyberText() {
           </div>
 
           {/* Barre de progression */}
-          <div className="w-80 h-2 bg-gray-800 rounded-full overflow-hidden mx-auto mb-4">
+          <div className="w-80 h-2 bg-gray-800 rounded-full overflow-hidden mx-auto mb-4" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(loadingProgress)}>
             <div 
               className="h-full bg-gradient-to-r from-green-600 to-green-400 transition-all duration-300 ease-out loading-bar"
               style={{ width: `${loadingProgress}%` }}
@@ -214,12 +234,12 @@ export default function CyberText() {
           </div>
 
           {/* Pourcentage */}
-          <p className="text-cyan-400 font-mono text-lg">
+          <p className="text-cyan-400 font-mono text-lg" aria-live="polite">
             {Math.round(loadingProgress)}%
           </p>
 
           {/* Texte de chargement */}
-          <div className="mt-6 text-purple-300 font-mono text-sm opacity-60">
+          <div className="mt-6 text-purple-300 font-mono text-sm opacity-60" aria-live="polite">
             <div className="loading-dots">
               Initialisation du système
               <span className="animate-pulse">...</span>
@@ -295,6 +315,15 @@ export default function CyberText() {
                   }}
                   className="cyber-volume-button group relative p-4 z-10"
                   aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
+                  aria-pressed={!isMuted}
+                  title={isMuted ? "Activer le son (M)" : "Désactiver le son (M)"}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      enableSound()
+                      toggleMute()
+                    }
+                  }}
                 >
                   {/* Effet néon autour de l'icône */}
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-purple-400/15 to-pink-500/10 rounded-full blur-lg group-hover:blur-xl transition-all duration-300" />
@@ -318,7 +347,7 @@ export default function CyberText() {
             <div className="absolute inset-0 bg-gradient-conic from-cyan-400/10 via-transparent to-pink-600/10 blur-lg animate-spin-slow" />
             
             {/* Texte */}
-            <p className="relative text-pink-300 text-base sm:text-lg md:text-xl lg:text-2xl font-mono tracking-[0.3em] opacity-90 animate-glow-text drop-shadow-lg px-4">
+            <p className="relative text-pink-300 text-base sm:text-lg md:text-xl lg:text-2xl font-mono tracking-[0.3em] opacity-90 animate-glow-text drop-shadow-lg px-4" role="text">
               I&apos;m inevitable...
             </p>
           </div>
