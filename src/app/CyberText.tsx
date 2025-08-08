@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Volume2, VolumeX } from 'lucide-react'
+import { Volume2, VolumeX, FolderOpen, X } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 // Types pour l'API YouTube
 interface YouTubePlayerVars {
@@ -96,6 +97,15 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
 
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
+
+  // Fermer le popup avec Echap
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowProjects(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
   }, [])
 
   // Animation de chargement
@@ -340,16 +350,19 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
 
             {/* Bouton Projects sous le volume (thème cyber) */}
             <div className="flex justify-center mt-6">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => {
                   enableSound()
                   setShowProjects(true)
                 }}
-                className="group relative px-7 py-3 rounded-xl border border-cyan-400/60 text-cyan-100 bg-black/40 backdrop-blur-md hover:bg-black/60 transition-all duration-200 shadow-[0_0_20px_rgba(34,211,238,0.25)] hover:shadow-[0_0_28px_rgba(192,132,252,0.25)]"
+                className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-cyan-400/60 text-cyan-100 bg-black/40 backdrop-blur-sm hover:bg-black/55 transition-all duration-200 shadow-[0_0_14px_rgba(34,211,238,0.2)]"
               >
-                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/10 via-purple-400/10 to-pink-500/10 blur-md"></span>
-                <span className="relative z-10 tracking-[0.25em] font-mono">PROJECTS</span>
-              </button>
+                <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/10 via-purple-400/10 to-pink-500/10 blur"></span>
+                <FolderOpen size={18} className="relative z-10 text-cyan-300" />
+                <span className="relative z-10 tracking-[0.25em] font-mono text-sm">PROJECTS</span>
+              </motion.button>
             </div>
           </div>
         </div>
@@ -369,28 +382,46 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
         </div>
 
         {/* Popup Projects */}
-        {showProjects && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60">
-            <div className="relative w-[92vw] max-w-md rounded-2xl border border-cyan-500/30 bg-[#0b0b12]/90 backdrop-blur-xl p-4 shadow-[0_0_35px_rgba(34,211,238,0.25)]">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-cyan-200 tracking-widest font-mono">PROJECTS</h3>
-                <button onClick={() => setShowProjects(false)} className="text-cyan-300/80 hover:text-pink-300 transition">Close</button>
-              </div>
-              <div className="space-y-2">
-                <button
-                  onClick={() => {
-                    setShowProjects(false)
-                    if (onSelectProject) onSelectProject('saloon')
-                  }}
-                  className="w-full text-left px-4 py-3 rounded-xl border border-purple-400/30 bg-black/30 hover:bg-black/50 text-purple-100 transition flex items-center justify-between"
-                >
-                  <span className="font-mono tracking-widest">Saloon</span>
-                  <span className="text-xs text-purple-300/80">3D</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {showProjects && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowProjects(false)} />
+              <motion.div
+                role="dialog"
+                aria-modal="true"
+                initial={{ y: -16, opacity: 0, scale: 0.98 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                exit={{ y: -12, opacity: 0, scale: 0.98 }}
+                transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+                className="relative w-[86vw] max-w-sm rounded-xl border border-cyan-500/25 bg-[#0b0b12]/90 p-3 shadow-[0_0_24px_rgba(34,211,238,0.2)]"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-cyan-200 tracking-widest font-mono text-sm">PROJECTS</h3>
+                  <button onClick={() => setShowProjects(false)} className="text-cyan-300/80 hover:text-pink-300 transition" aria-label="Close projects">
+                    <X size={16} />
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  <button
+                    onClick={() => {
+                      setShowProjects(false)
+                      if (onSelectProject) onSelectProject('saloon')
+                    }}
+                    className="w-full text-left px-3 py-2.5 rounded-lg border border-purple-400/25 bg-black/30 hover:bg-black/45 text-purple-100 transition flex items-center justify-between"
+                  >
+                    <span className="font-mono tracking-widest text-sm">Saloon</span>
+                    <span className="text-[10px] text-purple-300/80">3D</span>
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )
