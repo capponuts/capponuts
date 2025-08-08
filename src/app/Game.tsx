@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useFBX, useAnimations } from '@react-three/drei'
+import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useFBX, useGLTF, useAnimations } from '@react-three/drei'
 import * as THREE from 'three'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
@@ -145,7 +145,7 @@ function Bar({ position = [0, 0, 0] as [number, number, number] }) {
   )
 }
 
-import { useGLTF } from '@react-three/drei'
+// useGLTF déjà importé en tête
 
 function Piano({ position = [0, 0, 0] as [number, number, number] }) {
   const { scene } = useGLTF('/models/props/Piano.glb') as unknown as { scene: THREE.Group }
@@ -176,20 +176,23 @@ function Pianist({ position = [0, 0, 0] as [number, number, number] }) {
 }
 
 function PlayerModel() {
-  const fbx = useFBX('/models/characters/cowboy/a_cowboy_character_wi_0226190933_texture.fbx') as unknown as THREE.Group & {
-    animations?: THREE.AnimationClip[]
-  }
+  // Nouveau modèle GLB prioritaire
+  const glb = useGLTF('/models/characters/cool_man_rigged_free.glb') as unknown as { scene: THREE.Group; animations?: THREE.AnimationClip[] }
+  const fbx = useFBX('/models/characters/cowboy/a_cowboy_character_wi_0226190933_texture.fbx') as unknown as THREE.Group & { animations?: THREE.AnimationClip[] }
   useEffect(() => {
-    fbx.traverse((obj) => {
+    const root: THREE.Object3D | null = (glb && glb.scene) ? glb.scene : (fbx as unknown as THREE.Object3D | null)
+    root?.traverse((obj: THREE.Object3D) => {
       if ((obj as THREE.Mesh).isMesh) {
         const mesh = obj as THREE.Mesh
         mesh.castShadow = true
         mesh.receiveShadow = true
       }
     })
-  }, [fbx])
+  }, [glb, fbx])
   const groupRef = useRef<THREE.Object3D | null>(null)
-  const { actions, names } = useAnimations(fbx.animations ?? [], groupRef)
+  const anims = (glb.animations && glb.animations.length ? glb.animations : (fbx.animations ?? []))
+  const rootObject = (glb.scene ?? (fbx as unknown as THREE.Object3D))
+  const { actions, names } = useAnimations(anims, groupRef)
   useEffect(() => {
     const first = names?.[0]
     if (first && actions && actions[first]) {
@@ -208,7 +211,7 @@ function PlayerModel() {
       groupRef.current.rotation.y = Math.sin(t * 0.25) * 0.1
     }
   })
-  return <primitive ref={groupRef as unknown as React.RefObject<THREE.Object3D>} object={fbx} scale={[0.01, 0.01, 0.01]} />
+  return <primitive ref={groupRef as unknown as React.RefObject<THREE.Object3D>} object={rootObject} scale={[1, 1, 1]} />
 }
 
 function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositionChange?: (pos: THREE.Vector3) => void; fallbackKeysRef: React.MutableRefObject<FallbackKeys> }) {
