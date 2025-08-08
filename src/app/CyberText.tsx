@@ -133,55 +133,39 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
   }, [])
 
   useEffect(() => {
-    // Charger l'API YouTube après le chargement
-    if (!isLoading) {
-      // Éviter le double-inject si la page se réhydrate
-      const existing = document.querySelector('script[src="https://www.youtube.com/iframe_api"]')
+    // Option anti-logs: si adblock bloque, on tombe en fond statique
+    if (isLoading) return
+    let cancelled = false
+    const existing = document.querySelector('script[src="https://www.youtube.com/iframe_api"]')
+    const loadYT = () => {
+      if (cancelled) return
+      if (typeof window.YT !== 'undefined') {
+        try {
+          playerRef.current = new window.YT.Player('youtube-player', {
+            videoId: '3w_A-qMxsDw',
+            playerVars: { autoplay: 1, controls: 0, disablekb: 1, fs: 0, iv_load_policy: 3, loop: 1, modestbranding: 1, playsinline: 1, rel: 0, showinfo: 0, mute: 1, start: 20, playlist: '3w_A-qMxsDw' },
+            events: { onReady: (event: { target: YouTubePlayer }) => { try { event.target.mute(); event.target.seekTo(20); event.target.playVideo() } catch {} } },
+          })
+        } catch {
+          // ignore si bloqué
+        }
+        return
+      }
+      window.onYouTubeIframeAPIReady = loadYT
       if (!existing) {
         const tag = document.createElement('script')
         tag.src = 'https://www.youtube.com/iframe_api'
         tag.async = true
-        const firstScriptTag = document.getElementsByTagName('script')[0]
-        firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
-      }
-
-      // Fonction globale requise par l'API YouTube
-      window.onYouTubeIframeAPIReady = () => {
-        playerRef.current = new window.YT.Player('youtube-player', {
-          videoId: '3w_A-qMxsDw',
-          playerVars: {
-            autoplay: 1,
-            controls: 0,
-            disablekb: 1,
-            fs: 0,
-            iv_load_policy: 3,
-            loop: 1,
-            modestbranding: 1,
-            playsinline: 1,
-            rel: 0,
-            showinfo: 0,
-            mute: 1,
-            start: 20, // Commence à 20 secondes
-            playlist: '3w_A-qMxsDw' // Pour le loop
-          },
-          events: {
-            onReady: (event: { target: YouTubePlayer }) => {
-              event.target.mute()
-              event.target.seekTo(20) // Force le démarrage à 20 secondes
-              event.target.playVideo()
-            }
-          }
-        })
+        document.head.appendChild(tag)
       }
     }
+    // Si adblock empêche, on n'affiche pas d'erreurs bloquantes
+    try { loadYT() } catch {}
 
     return () => {
-      if (playerRef.current) {
-        playerRef.current.destroy()
-      }
-      if (window.onYouTubeIframeAPIReady) {
-        window.onYouTubeIframeAPIReady = () => {}
-      }
+      cancelled = true
+      try { playerRef.current?.destroy() } catch {}
+      window.onYouTubeIframeAPIReady = () => {}
     }
   }, [isLoading])
 
@@ -359,9 +343,11 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
               <motion.button
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
                   enableSound()
-                  setShowProjects(true)
+                  setTimeout(() => setShowProjects(true), 0)
                 }}
                 className="relative inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-cyan-400/60 text-cyan-100 bg-black/40 backdrop-blur-sm hover:bg-black/55 transition-all duration-200 shadow-[0_0_14px_rgba(34,211,238,0.2)] focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
                 aria-haspopup="dialog"
@@ -410,6 +396,7 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
                   exit={{ y: -12, opacity: 0, scale: 0.98 }}
                   transition={{ type: 'spring', stiffness: 260, damping: 22 }}
                   className="relative w-full max-w-md rounded-xl border border-cyan-500/25 bg-[#0b0b12]/90 p-4 shadow-[0_0_24px_rgba(34,211,238,0.25)] pointer-events-auto"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <h3 id="projects-title" className="text-cyan-200 tracking-widest font-mono text-sm">PROJECTS</h3>
