@@ -10,7 +10,13 @@ type NpcProps = {
   message?: string
 }
 
-// réservé pour des orientations douces si nécessaire plus tard
+function lerpAngleShortest(current: number, target: number, t: number): number {
+  const twoPi = Math.PI * 2
+  let delta = (target - current) % twoPi
+  if (delta > Math.PI) delta -= twoPi
+  if (delta < -Math.PI) delta += twoPi
+  return current + delta * t
+}
 
 type InteractableType = 'poker' | 'blackjack' | 'bar' | 'piano'
 type Interactable = {
@@ -73,8 +79,8 @@ function PokerTable({ position = [0, 0, 0] as [number, number, number] }) {
   const { scene } = useGLTF('/models/props/sm_pokertable.glb') as unknown as { scene: THREE.Group }
   return (
     <group position={position}>
-      <primitive object={scene} scale={[1, 1, 1]} />
-      <Text position={[0, 1.1, 0]} fontSize={0.25} color="#fff" anchorX="center" anchorY="middle">Poker</Text>
+      <primitive object={scene} scale={[1.6, 1.6, 1.6]} />
+      <Text position={[0, 1.6, 0]} fontSize={0.28} color="#fff" anchorX="center" anchorY="middle">Poker</Text>
     </group>
   )
 }
@@ -100,7 +106,7 @@ function Bar({ position = [0, 0, 0] as [number, number, number] }) {
   const { scene } = useGLTF('/models/props/bar_kit.glb') as unknown as { scene: THREE.Group }
   return (
     <group position={position}>
-      <primitive object={scene} scale={[1, 1, 1]} />
+      <primitive object={scene} scale={[2.2, 1, 1]} />
       <Text position={[0, 1.6, 0]} fontSize={0.25} color="#ffecb3" anchorX="center" anchorY="middle">Bar</Text>
     </group>
   )
@@ -121,8 +127,8 @@ function Piano({ position = [0, 0, 0] as [number, number, number] }) {
   }, [scene])
   return (
     <group position={position}>
-      <primitive object={scene} scale={[1.2, 1.2, 1.2]} />
-      <Text position={[0, 1.5, 0]} fontSize={0.22} color="#e3f2fd" anchorX="center" anchorY="middle">Piano</Text>
+      <primitive object={scene} scale={[1.8, 1.8, 1.8]} />
+      <Text position={[0, 1.8, 0]} fontSize={0.24} color="#e3f2fd" anchorX="center" anchorY="middle">Piano</Text>
     </group>
   )
 }
@@ -173,7 +179,7 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
     const right = provider.right || fallback.right
     const run = provider.run || fallback.run
 
-    const speed = run ? 4 : 2.2
+    const speed = run ? 4.2 : 2.4
 
     // Compute intended direction relative to camera on XZ plane
     directionRef.current.set(0, 0, 0)
@@ -200,11 +206,19 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
       playerRef.current.position.x = THREE.MathUtils.clamp(playerRef.current.position.x, -7, 7)
       playerRef.current.position.z = THREE.MathUtils.clamp(playerRef.current.position.z, -7, 7)
 
-      // Orientation fixe (pas de retourné à l'appui de S)
+      // Orientation: on tourne seulement si on n'est pas uniquement en marche arrière
+      const moving = velocityRef.current.lengthSq() > 0.0001
+      const onlyBackward = backward && !forward && !left && !right
+      if (moving && !onlyBackward) {
+        const desiredRotation = Math.atan2(velocityRef.current.x, velocityRef.current.z)
+        const currentY = playerRef.current.rotation.y
+        const newY = lerpAngleShortest(currentY, desiredRotation, 0.2)
+        playerRef.current.rotation.set(0, newY, 0)
+      }
 
       // Third-person camera follow
-      const behindOffset = 3.0
-      const height = 1.8
+      const behindOffset = 3.8
+      const height = 2.2
       const forwardDir = new THREE.Vector3(0, 0, 1).applyAxisAngle(upVector, playerRef.current.rotation.y)
       const desiredCamPos = playerRef.current.position
         .clone()
@@ -220,7 +234,7 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
   })
 
   return (
-    <group ref={playerRef} position={[0, 0.6, 4]}>
+    <group ref={playerRef} position={[0, 0.6, 3.5]}>
       <PlayerModel />
     </group>
   )
@@ -311,11 +325,11 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       <WallsTextured />
 
       {/* Props */}
-      <PokerTable position={[-3, 0, -1.2]} />
-      <BlackjackTable position={[3, 0, -1.2]} />
+      <PokerTable position={[-3.5, 0, -1.4]} />
+      <BlackjackTable position={[3.5, 0, -1.4]} />
       <Bar position={[0, 0, -6]} />
-      <Piano position={[5.5, 0, 4]} />
-      <Pianist position={[5.2, 0, 4.6]} />
+      <Piano position={[5.2, 0, 3.6]} />
+      <Pianist position={[4.7, 0, 4.1]} />
 
       {/* NPCs */}
       <Npc position={[-5, 0, 3.8]} message={'Tu connais la martingale ?'} />
