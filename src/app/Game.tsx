@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { KeyboardControls, Text, Grid, useKeyboardControls } from '@react-three/drei'
+import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useFBX } from '@react-three/drei'
 import * as THREE from 'three'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
@@ -66,6 +66,9 @@ function Npc({ position, message = '...' }: NpcProps) {
 }
 
 function PokerTable({ position = [0, 0, 0] as [number, number, number] }) {
+  const wood = useTexture('/textures/saloon/wall_base.jpg')
+  wood.wrapS = wood.wrapT = THREE.RepeatWrapping
+  wood.repeat.set(1, 1)
   return (
     <group position={position}>
       <mesh receiveShadow castShadow position={[0, 0.8, 0]}>
@@ -74,7 +77,7 @@ function PokerTable({ position = [0, 0, 0] as [number, number, number] }) {
       </mesh>
       <mesh receiveShadow position={[0, 0.3, 0]}>
         <cylinderGeometry args={[0.2, 0.25, 0.6, 16]} />
-        <meshStandardMaterial color="#3e2723" />
+        <meshStandardMaterial map={wood} roughness={0.9} />
       </mesh>
       {[...Array(6)].map((_, i) => {
         const angle = (i / 6) * Math.PI * 2
@@ -83,7 +86,7 @@ function PokerTable({ position = [0, 0, 0] as [number, number, number] }) {
         return (
           <mesh key={i} position={[x, 0.45, z]} castShadow>
             <cylinderGeometry args={[0.18, 0.2, 0.9, 12]} />
-            <meshStandardMaterial color="#4e342e" />
+            <meshStandardMaterial map={wood} roughness={0.9} />
           </mesh>
         )
       })}
@@ -93,6 +96,9 @@ function PokerTable({ position = [0, 0, 0] as [number, number, number] }) {
 }
 
 function BlackjackTable({ position = [0, 0, 0] as [number, number, number] }) {
+  const wood = useTexture('/textures/saloon/wall_base.jpg')
+  wood.wrapS = wood.wrapT = THREE.RepeatWrapping
+  wood.repeat.set(1.5, 0.6)
   return (
     <group position={position}>
       <mesh receiveShadow castShadow position={[0, 0.8, 0]} rotation={[0, 0, 0]}>
@@ -101,7 +107,7 @@ function BlackjackTable({ position = [0, 0, 0] as [number, number, number] }) {
       </mesh>
       <mesh receiveShadow position={[0, 0.35, 0]}>
         <boxGeometry args={[0.4, 0.6, 0.4]} />
-        <meshStandardMaterial color="#3e2723" />
+        <meshStandardMaterial map={wood} roughness={0.9} />
       </mesh>
       {[...Array(4)].map((_, i) => {
         const x = -1.2 + i * 0.8
@@ -109,7 +115,7 @@ function BlackjackTable({ position = [0, 0, 0] as [number, number, number] }) {
         return (
           <mesh key={i} position={[x, 0.5, z]} castShadow>
             <cylinderGeometry args={[0.18, 0.2, 0.9, 12]} />
-            <meshStandardMaterial color="#4e342e" />
+            <meshStandardMaterial map={wood} roughness={0.9} />
           </mesh>
         )
       })}
@@ -119,16 +125,19 @@ function BlackjackTable({ position = [0, 0, 0] as [number, number, number] }) {
 }
 
 function Bar({ position = [0, 0, 0] as [number, number, number] }) {
+  const wood = useTexture('/textures/saloon/wall_base.jpg')
+  wood.wrapS = wood.wrapT = THREE.RepeatWrapping
+  wood.repeat.set(2.5, 0.8)
   return (
     <group position={position}>
       <mesh position={[0, 0.9, 0]} castShadow receiveShadow>
         <boxGeometry args={[4.5, 1.0, 1.2]} />
-        <meshStandardMaterial color="#5d4037" />
+        <meshStandardMaterial map={wood} roughness={0.95} />
       </mesh>
       {[...Array(4)].map((_, i) => (
         <mesh key={i} position={[-1.6 + i * 1.1, 0.45, 1]} castShadow>
           <cylinderGeometry args={[0.18, 0.2, 0.9, 12]} />
-          <meshStandardMaterial color="#6d4c41" />
+          <meshStandardMaterial map={wood} roughness={0.95} />
         </mesh>
       ))}
       <Text position={[0, 1.6, 0]} fontSize={0.25} color="#ffecb3" anchorX="center" anchorY="middle">Bar</Text>
@@ -166,6 +175,34 @@ function Pianist({ position = [0, 0, 0] as [number, number, number] }) {
   )
 }
 
+function PlayerModel() {
+  let fbx: THREE.Group | null = null
+  try {
+    // Cowboy FBX si disponible
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const loaded = useFBX('/models/characters/Cowboy.fbx') as unknown as THREE.Group
+    fbx = loaded
+  } catch {
+    fbx = null
+  }
+  if (!fbx) {
+    return (
+      <mesh castShadow>
+        <capsuleGeometry args={[0.4, 0.8, 8, 16]} />
+        <meshStandardMaterial color="#90caf9" />
+      </mesh>
+    )
+  }
+  fbx.traverse((obj) => {
+    if ((obj as THREE.Mesh).isMesh) {
+      const mesh = obj as THREE.Mesh
+      mesh.castShadow = true
+      mesh.receiveShadow = true
+    }
+  })
+  return <primitive object={fbx} scale={[0.01, 0.01, 0.01]} />
+}
+
 function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositionChange?: (pos: THREE.Vector3) => void; fallbackKeysRef: React.MutableRefObject<FallbackKeys> }) {
   const playerRef = useRef<THREE.Group>(null)
   const velocityRef = useRef(new THREE.Vector3())
@@ -190,14 +227,19 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
     const right = provider.right || fallback.right
     const run = provider.run || fallback.run
 
-    const speed = run ? 6 : 3
+    const speed = run ? 6 : 3.2
 
-    // Compute intended direction on XZ plane
+    // Compute intended direction relative to camera on XZ plane
     directionRef.current.set(0, 0, 0)
-    if (forward) directionRef.current.z -= 1
-    if (backward) directionRef.current.z += 1
-    if (left) directionRef.current.x -= 1
-    if (right) directionRef.current.x += 1
+    const camDir = new THREE.Vector3()
+    camera.getWorldDirection(camDir)
+    camDir.y = 0
+    camDir.normalize()
+    const camRight = new THREE.Vector3().crossVectors(camDir, upVector).normalize()
+    if (forward) directionRef.current.add(camDir)
+    if (backward) directionRef.current.add(camDir.clone().negate())
+    if (left) directionRef.current.add(camRight.clone().negate())
+    if (right) directionRef.current.add(camRight)
     directionRef.current.normalize()
 
     // Smooth velocity
@@ -239,11 +281,62 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
 
   return (
     <group ref={playerRef} position={[0, 0.6, 6]}>
-      <mesh castShadow>
-        <capsuleGeometry args={[0.4, 0.8, 8, 16]} />
-        <meshStandardMaterial color="#90caf9" />
-      </mesh>
+      <PlayerModel />
     </group>
+  )
+}
+
+function FloorTextured() {
+  const [base, normal, rough] = useTexture([
+    '/textures/saloon/floor_base.jpg',
+    '/textures/saloon/floor_normal.jpg',
+    '/textures/saloon/floor_rough.jpg',
+  ])
+  base.wrapS = base.wrapT = THREE.RepeatWrapping
+  normal.wrapS = normal.wrapT = THREE.RepeatWrapping
+  rough.wrapS = rough.wrapT = THREE.RepeatWrapping
+  base.repeat.set(6, 6)
+  normal.repeat.set(6, 6)
+  rough.repeat.set(6, 6)
+  return (
+    <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
+      <planeGeometry args={[50, 50]} />
+      <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} roughness={1} />
+    </mesh>
+  )
+}
+
+function WallsTextured() {
+  const [base, normal, rough] = useTexture([
+    '/textures/saloon/wall_base.jpg',
+    '/textures/saloon/wall_normal.jpg',
+    '/textures/saloon/wall_rough.jpg',
+  ])
+  base.wrapS = base.wrapT = THREE.RepeatWrapping
+  normal.wrapS = normal.wrapT = THREE.RepeatWrapping
+  rough.wrapS = rough.wrapT = THREE.RepeatWrapping
+  base.repeat.set(5, 1)
+  normal.repeat.set(5, 1)
+  rough.repeat.set(5, 1)
+  return (
+    <>
+      <mesh position={[0, 2.5, -20]} receiveShadow castShadow>
+        <boxGeometry args={[50, 5, 0.2]} />
+        <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
+      </mesh>
+      <mesh position={[0, 2.5, 20]} receiveShadow castShadow>
+        <boxGeometry args={[50, 5, 0.2]} />
+        <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
+      </mesh>
+      <mesh position={[-20, 2.5, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
+        <boxGeometry args={[50, 5, 0.2]} />
+        <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
+      </mesh>
+      <mesh position={[20, 2.5, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
+        <boxGeometry args={[50, 5, 0.2]} />
+        <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
+      </mesh>
+    </>
   )
 }
 
@@ -262,10 +355,7 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       />
 
       {/* Floor */}
-      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-        <planeGeometry args={[50, 50]} />
-        <meshStandardMaterial color="#181820" roughness={0.95} />
-      </mesh>
+      <FloorTextured />
       <Grid
         position={[0, 0.005, 0]}
         args={[50, 50]}
@@ -278,22 +368,7 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       />
 
       {/* Simple room walls */}
-      <mesh position={[0, 2.5, -20]} receiveShadow castShadow>
-        <boxGeometry args={[50, 5, 0.2]} />
-        <meshStandardMaterial color="#111118" roughness={0.9} />
-      </mesh>
-      <mesh position={[0, 2.5, 20]} receiveShadow castShadow>
-        <boxGeometry args={[50, 5, 0.2]} />
-        <meshStandardMaterial color="#111118" roughness={0.9} />
-      </mesh>
-      <mesh position={[-20, 2.5, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
-        <boxGeometry args={[50, 5, 0.2]} />
-        <meshStandardMaterial color="#111118" roughness={0.9} />
-      </mesh>
-      <mesh position={[20, 2.5, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
-        <boxGeometry args={[50, 5, 0.2]} />
-        <meshStandardMaterial color="#111118" roughness={0.9} />
-      </mesh>
+      <WallsTextured />
 
       {/* Props */}
       <PokerTable position={[-6, 0, -2]} />
