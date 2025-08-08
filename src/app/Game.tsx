@@ -178,9 +178,9 @@ function Pianist({ position = [0, 0, 0] as [number, number, number] }) {
 function PlayerModel() {
   let fbx: THREE.Group | null = null
   try {
-    // Cowboy FBX si disponible
+    // Cowboy FBX si disponible (chemin prioritaire fourni)
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const loaded = useFBX('/models/characters/Cowboy.fbx') as unknown as THREE.Group
+    const loaded = useFBX('/models/characters/cowboy/a_cowboy_character_wi_0226190933_texture.fbx') as unknown as THREE.Group
     fbx = loaded
   } catch {
     fbx = null
