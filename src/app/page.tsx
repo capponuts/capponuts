@@ -18,15 +18,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
-      <CyberText />
-      <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-50">
-        <button
-          onClick={() => setShowGame(true)}
-          className="px-6 py-3 rounded-lg border border-cyan-400 text-cyan-200 bg-black/40 backdrop-blur-sm hover:bg-black/60 transition"
-        >
-          Jouer
-        </button>
-      </div>
+      <CyberText onPlay={() => setShowGame(true)} />
     </main>
   )
 }

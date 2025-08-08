@@ -77,7 +77,7 @@ function createArcadeBeep() {
   }
 }
 
-export default function CyberText() {
+export default function CyberText({ onPlay }: { onPlay?: () => void }) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isMuted, setIsMuted] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
@@ -335,6 +335,20 @@ export default function CyberText() {
                   }
                 </button>
               </div>
+            </div>
+
+            {/* Bouton Jouer sous le volume (même thème cyber) */}
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={() => {
+                  enableSound()
+                  if (onPlay) onPlay()
+                }}
+                className="relative px-6 py-3 rounded-lg border border-cyan-400/70 text-cyan-200 bg-black/30 backdrop-blur-sm hover:bg-black/50 transition shadow-[0_0_15px_rgba(34,211,238,0.25)]"
+              >
+                <span className="relative z-10 tracking-widest">JOUER</span>
+                <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/10 via-purple-400/10 to-pink-500/10 blur-md"></span>
+              </button>
             </div>
           </div>
         </div>
