@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useGLTF, useAnimations } from '@react-three/drei'
+import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useGLTF, useAnimations, Center } from '@react-three/drei'
 import * as THREE from 'three'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
@@ -65,6 +65,20 @@ function Npc({ position, message = '...' }: NpcProps) {
   )
 }
 
+function NpcHuman({ position, message = '...' }: NpcProps) {
+  const { scene } = useGLTF('/models/characters/cool_man_rigged_free.glb') as unknown as { scene: THREE.Group }
+  return (
+    <group position={position}>
+      <Center>
+        <primitive object={scene.clone()} scale={[0.8, 0.8, 0.8]} />
+      </Center>
+      <Text position={[0, 1.6, 0]} fontSize={0.22} color="#ffd1f3" anchorX="center" anchorY="middle">
+        {message}
+      </Text>
+    </group>
+  )
+}
+
 function PokerTable({ position = [0, 0, 0] as [number, number, number] }) {
   const { scene } = useGLTF('/models/props/sm_pokertable.glb') as unknown as { scene: THREE.Group }
   return (
@@ -106,7 +120,6 @@ function Bar({ position = [0, 0, 0] as [number, number, number] }) {
 
 function Piano({ position = [0, 0, 0] as [number, number, number] }) {
   const { scene } = useGLTF('/models/props/Piano.glb') as unknown as { scene: THREE.Group }
-  const ref = useRef<THREE.Group>(null)
   useEffect(() => {
     scene.traverse((obj) => {
       if ((obj as THREE.Mesh).isMesh) {
@@ -118,7 +131,9 @@ function Piano({ position = [0, 0, 0] as [number, number, number] }) {
   }, [scene])
   return (
     <group position={position}>
-      <primitive object={scene} ref={ref} scale={[0.9, 0.9, 0.9]} />
+      <Center disableY>
+        <primitive object={scene} scale={[1.4, 1.4, 1.4]} />
+      </Center>
       <Text position={[0, 1.6, 0]} fontSize={0.22} color="#e3f2fd" anchorX="center" anchorY="middle">Piano</Text>
     </group>
   )
@@ -345,9 +360,9 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       <Pianist position={[7, 0, 5.6]} />
 
       {/* NPCs */}
-      <Npc position={[-6, 0, 4.5]} message={'Tu connais la martingale ?'} />
-      <Npc position={[-5.2, 0, 5.1]} message={"J'ai un bon pressentiment..."} />
-      <Npc position={[5.5, 0, 1.8]} message={'La maison gagne toujours.'} />
+      <NpcHuman position={[-6, 0, 4.5]} message={'Tu connais la martingale ?'} />
+      <NpcHuman position={[-5.2, 0, 5.1]} message={"J'ai un bon pressentiment..."} />
+      <NpcHuman position={[5.5, 0, 1.8]} message={'La maison gagne toujours.'} />
 
       {/* Player */}
       <ThirdPersonCharacter onPositionChange={onPlayerMove} fallbackKeysRef={fallbackKeysRef} />
