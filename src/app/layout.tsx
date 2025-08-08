@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "CAPPONUTS - Une expérience 3D spatiale immersive avec des lettres flottantes, des étoiles et des éclairs dans l'espace. Style inspiré de The Mask avec des effets de fumée verte.",
   keywords: "CAPPONUTS, 3D, Three.js, espace, étoiles, éclairs, The Mask, expérience immersive",
   authors: [{ name: "CAPPONUTS Team" }],
-  viewport: "width=device-width, initial-scale=1",
+  metadataBase: new URL("https://www.capponuts.fr"),
   robots: "index, follow",
   openGraph: {
     title: "CAPPONUTS - 3D Space Experience",
@@ -28,6 +28,11 @@ export const metadata: Metadata = {
     description: "Une expérience 3D spatiale immersive avec des lettres flottantes",
     images: ["/og-image.jpg"],
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
