@@ -26,6 +26,15 @@ type Interactable = {
   label: string
 }
 
+type FallbackKeys = {
+  forward: boolean
+  backward: boolean
+  left: boolean
+  right: boolean
+  run: boolean
+  interact: boolean
+}
+
 function Npc({ position, message = '...' }: NpcProps) {
   const groupRef = useRef<THREE.Group>(null)
   useFrame((state) => {
@@ -157,7 +166,7 @@ function Pianist({ position = [0, 0, 0] as [number, number, number] }) {
   )
 }
 
-function ThirdPersonCharacter({ onPositionChange }: { onPositionChange?: (pos: THREE.Vector3) => void }) {
+function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositionChange?: (pos: THREE.Vector3) => void; fallbackKeysRef: React.MutableRefObject<FallbackKeys> }) {
   const playerRef = useRef<THREE.Group>(null)
   const velocityRef = useRef(new THREE.Vector3())
   const directionRef = useRef(new THREE.Vector3())
@@ -167,13 +176,19 @@ function ThirdPersonCharacter({ onPositionChange }: { onPositionChange?: (pos: T
   const { camera } = useThree()
 
   useFrame((state, delta) => {
-    const { forward, backward, left, right, run } = getKeys() as unknown as {
+    const provider = getKeys() as unknown as {
       forward: boolean
       backward: boolean
       left: boolean
       right: boolean
       run: boolean
     }
+    const fallback = fallbackKeysRef.current
+    const forward = provider.forward || fallback.forward
+    const backward = provider.backward || fallback.backward
+    const left = provider.left || fallback.left
+    const right = provider.right || fallback.right
+    const run = provider.run || fallback.run
 
     const speed = run ? 6 : 3
 
@@ -232,11 +247,12 @@ function ThirdPersonCharacter({ onPositionChange }: { onPositionChange?: (pos: T
   )
 }
 
-function Scene({ onPlayerMove }: { onPlayerMove?: (pos: THREE.Vector3) => void }) {
+function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.Vector3) => void; fallbackKeysRef: React.MutableRefObject<FallbackKeys> }) {
   return (
     <>
       {/* Lights */}
-      <ambientLight intensity={0.35} />
+      <ambientLight intensity={0.5} />
+      <hemisphereLight args={[0xb3e5fc, 0x141418, 0.7]} />
       <directionalLight
         position={[5, 10, 5]}
         intensity={1.2}
@@ -248,18 +264,36 @@ function Scene({ onPlayerMove }: { onPlayerMove?: (pos: THREE.Vector3) => void }
       {/* Floor */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[50, 50]} />
-        <meshStandardMaterial color="#0b0b0f" roughness={1} />
+        <meshStandardMaterial color="#181820" roughness={0.95} />
       </mesh>
       <Grid
         position={[0, 0.005, 0]}
         args={[50, 50]}
-        cellColor="#232338"
-        sectionColor="#2f2f55"
+        cellColor="#2a2a44"
+        sectionColor="#3a3a66"
         cellSize={0.5}
         sectionSize={5}
         fadeDistance={25}
         fadeStrength={2}
       />
+
+      {/* Simple room walls */}
+      <mesh position={[0, 2.5, -20]} receiveShadow castShadow>
+        <boxGeometry args={[50, 5, 0.2]} />
+        <meshStandardMaterial color="#111118" roughness={0.9} />
+      </mesh>
+      <mesh position={[0, 2.5, 20]} receiveShadow castShadow>
+        <boxGeometry args={[50, 5, 0.2]} />
+        <meshStandardMaterial color="#111118" roughness={0.9} />
+      </mesh>
+      <mesh position={[-20, 2.5, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
+        <boxGeometry args={[50, 5, 0.2]} />
+        <meshStandardMaterial color="#111118" roughness={0.9} />
+      </mesh>
+      <mesh position={[20, 2.5, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
+        <boxGeometry args={[50, 5, 0.2]} />
+        <meshStandardMaterial color="#111118" roughness={0.9} />
+      </mesh>
 
       {/* Props */}
       <PokerTable position={[-6, 0, -2]} />
@@ -274,7 +308,7 @@ function Scene({ onPlayerMove }: { onPlayerMove?: (pos: THREE.Vector3) => void }
       <Npc position={[7.5, 0, 2.2]} message={'La maison gagne toujours.'} />
 
       {/* Player */}
-      <ThirdPersonCharacter onPositionChange={onPlayerMove} />
+      <ThirdPersonCharacter onPositionChange={onPlayerMove} fallbackKeysRef={fallbackKeysRef} />
     </>
   )
 }
@@ -316,15 +350,18 @@ function InteractionHandler({
   nearest,
   onOpenUI,
   uiOpen,
+  fallbackKeysRef,
 }: {
   nearest: Interactable | null
   onOpenUI: (type: InteractableType) => void
   uiOpen: boolean
+  fallbackKeysRef: React.MutableRefObject<FallbackKeys>
 }) {
   const [, getKeys] = useKeyboardControls()
   useFrame(() => {
     const { interact } = getKeys() as unknown as { interact: boolean }
-    if (interact && nearest && !uiOpen) {
+    const fallbackInteract = fallbackKeysRef.current.interact
+    if ((interact || fallbackInteract) && nearest && !uiOpen) {
       onOpenUI(nearest.type)
     }
   })
@@ -558,8 +595,11 @@ export default function CasinoGame() {
   )
 
   const playerPositionRef = useRef<THREE.Vector3 | null>(null)
+  const fallbackKeysRef = useRef<FallbackKeys>({ forward: false, backward: false, left: false, right: false, run: false, interact: false })
   const [nearest, setNearest] = useState<Interactable | null>(null)
   const [uiMode, setUiMode] = useState<InteractableType | null>(null)
+  const [soundOn, setSoundOn] = useState(false)
+  const [muted, setMuted] = useState(false)
 
   const interactables = useMemo<Interactable[]>(
     () => [
@@ -571,13 +611,42 @@ export default function CasinoGame() {
     []
   )
 
+  // Fallback clavier ZQSD/Flèches/WASD
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      const k = e.key.toLowerCase()
+      if (k === 'z' || k === 'w' || e.key === 'ArrowUp') fallbackKeysRef.current.forward = true
+      if (k === 's' || e.key === 'ArrowDown') fallbackKeysRef.current.backward = true
+      if (k === 'q' || k === 'a' || e.key === 'ArrowLeft') fallbackKeysRef.current.left = true
+      if (k === 'd' || e.key === 'ArrowRight') fallbackKeysRef.current.right = true
+      if (e.key === 'Shift') fallbackKeysRef.current.run = true
+      if (k === 'e') fallbackKeysRef.current.interact = true
+      if (k === 'm') setMuted((m) => !m)
+    }
+    const up = (e: KeyboardEvent) => {
+      const k = e.key.toLowerCase()
+      if (k === 'z' || k === 'w' || e.key === 'ArrowUp') fallbackKeysRef.current.forward = false
+      if (k === 's' || e.key === 'ArrowDown') fallbackKeysRef.current.backward = false
+      if (k === 'q' || k === 'a' || e.key === 'ArrowLeft') fallbackKeysRef.current.left = false
+      if (k === 'd' || e.key === 'ArrowRight') fallbackKeysRef.current.right = false
+      if (e.key === 'Shift') fallbackKeysRef.current.run = false
+      if (k === 'e') fallbackKeysRef.current.interact = false
+    }
+    window.addEventListener('keydown', down)
+    window.addEventListener('keyup', up)
+    return () => {
+      window.removeEventListener('keydown', down)
+      window.removeEventListener('keyup', up)
+    }
+  }, [])
+
   return (
     <div style={{ width: '100%', height: '100vh', background: 'black' }}>
       <KeyboardControls map={keyMap}>
         <Canvas shadows camera={{ position: [0, 3, 8], fov: 60 }}>
           <color attach="background" args={[0x060608]} />
           <fog attach="fog" args={[0x060608, 15, 45]} />
-          <Scene onPlayerMove={(pos) => { playerPositionRef.current = pos }} />
+          <Scene onPlayerMove={(pos) => { playerPositionRef.current = pos }} fallbackKeysRef={fallbackKeysRef} />
           <ProximitySensor
             playerPositionRef={playerPositionRef}
             interactables={interactables}
@@ -587,6 +656,7 @@ export default function CasinoGame() {
             nearest={nearest}
             uiOpen={uiMode !== null}
             onOpenUI={(type) => setUiMode(type)}
+            fallbackKeysRef={fallbackKeysRef}
           />
         </Canvas>
       </KeyboardControls>
@@ -602,6 +672,28 @@ export default function CasinoGame() {
           {nearest.label}
         </div>
       )}
+
+      {/* Audio ambiance saloon */}
+      <audio id="saloon-audio" src="/saloon_ambiance.mp3" loop autoPlay={false} muted={muted} style={{ display: 'none' }} />
+      <div style={{ position: 'fixed', bottom: 16, right: 16, zIndex: 6, display: 'flex', gap: 8 }}>
+        {!soundOn ? (
+          <button
+            onClick={() => {
+              const el = document.getElementById('saloon-audio') as HTMLAudioElement | null
+              if (el) {
+                el.play().then(() => setSoundOn(true)).catch(() => setSoundOn(false))
+              }
+            }}
+            style={{ background: '#0b0b12', color: '#b3e5fc', border: '1px solid #234', borderRadius: 8, padding: '8px 12px' }}
+          >Activer le son</button>
+        ) : (
+          <button
+            onClick={() => setMuted((m) => !m)}
+            style={{ background: '#0b0b12', color: '#b3e5fc', border: '1px solid #234', borderRadius: 8, padding: '8px 12px' }}
+            title="M pour mute"
+          >{muted ? 'Son coupé' : 'Son actif'}</button>
+        )}
+      </div>
 
       {/* UI Jeux */}
       {uiMode === 'blackjack' && <BlackjackGame onClose={() => setUiMode(null)} />}
