@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useGLTF, useAnimations, Center } from '@react-three/drei'
+import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
@@ -35,6 +35,29 @@ type FallbackKeys = {
   interact: boolean
 }
 
+function Character({ color = '#c0c0ff' }: { color?: string }) {
+  return (
+    <group>
+      <mesh castShadow position={[0, 0.6, 0]}>
+        <cylinderGeometry args={[0.35, 0.35, 1.2, 16]} />
+        <meshStandardMaterial color={color} roughness={0.6} metalness={0.1} />
+      </mesh>
+      <mesh castShadow position={[0, 1.35, 0]}>
+        <sphereGeometry args={[0.28, 16, 16]} />
+        <meshStandardMaterial color={'#ffe0bd'} />
+      </mesh>
+      <mesh castShadow position={[0, 1.7, 0]} rotation={[Math.PI, 0, 0]}>
+        <coneGeometry args={[0.32, 0.3, 12]} />
+        <meshStandardMaterial color={'#000'} />
+      </mesh>
+      <mesh castShadow position={[0, 1.56, 0]}>
+        <cylinderGeometry args={[0.36, 0.36, 0.06, 16]} />
+        <meshStandardMaterial color={'#111'} />
+      </mesh>
+    </group>
+  )
+}
+
 function Npc({ position, message = '...' }: NpcProps) {
   const groupRef = useRef<THREE.Group>(null)
   useFrame((state) => {
@@ -46,35 +69,8 @@ function Npc({ position, message = '...' }: NpcProps) {
   })
   return (
     <group ref={groupRef} position={position}>
-      <mesh castShadow position={[0, 0.6, 0]}> 
-        <capsuleGeometry args={[0.35, 0.6, 8, 16]} />
-        <meshStandardMaterial color="#c0c0ff" />
-      </mesh>
-      <Text
-        position={[0, 1.6, 0]}
-        fontSize={0.25}
-        color="#ffd1f3"
-        anchorX="center"
-        anchorY="middle"
-        outlineWidth={0.01}
-        outlineColor="#000"
-      >
-        {message}
-      </Text>
-    </group>
-  )
-}
-
-function NpcHuman({ position, message = '...' }: NpcProps) {
-  const { scene } = useGLTF('/models/characters/cool_man_rigged_free.glb') as unknown as { scene: THREE.Group }
-  return (
-    <group position={position}>
-      <Center>
-        <primitive object={scene.clone()} scale={[0.8, 0.8, 0.8]} />
-      </Center>
-      <Text position={[0, 1.6, 0]} fontSize={0.22} color="#ffd1f3" anchorX="center" anchorY="middle">
-        {message}
-      </Text>
+      <Character color="#aab7ff" />
+      <Text position={[0, 1.9, 0]} fontSize={0.22} color="#ffd1f3" anchorX="center" anchorY="middle" outlineWidth={0.01} outlineColor="#000">{message}</Text>
     </group>
   )
 }
@@ -118,23 +114,32 @@ function Bar({ position = [0, 0, 0] as [number, number, number] }) {
 
 // useGLTF déjà importé en tête
 
-function Piano({ position = [0, 0, 0] as [number, number, number] }) {
-  const { scene } = useGLTF('/models/props/Piano.glb') as unknown as { scene: THREE.Group }
-  useEffect(() => {
-    scene.traverse((obj) => {
-      if ((obj as THREE.Mesh).isMesh) {
-        const mesh = obj as THREE.Mesh
-        mesh.castShadow = true
-        mesh.receiveShadow = true
-      }
-    })
-  }, [scene])
+function SimplePiano({ position = [0, 0, 0] as [number, number, number] }) {
   return (
     <group position={position}>
-      <Center disableY>
-        <primitive object={scene} scale={[1.4, 1.4, 1.4]} />
-      </Center>
-      <Text position={[0, 1.6, 0]} fontSize={0.22} color="#e3f2fd" anchorX="center" anchorY="middle">Piano</Text>
+      {/* Corps */}
+      <mesh castShadow position={[0, 0.65, 0]}>
+        <boxGeometry args={[1.6, 0.6, 0.8]} />
+        <meshStandardMaterial color="#2b2b2b" />
+      </mesh>
+      {/* Plateau au-dessus */}
+      <mesh castShadow position={[0, 1.0, 0]}>
+        <boxGeometry args={[1.7, 0.08, 0.85]} />
+        <meshStandardMaterial color="#111" />
+      </mesh>
+      {/* Pieds */}
+      {[[-0.65, 0.3, -0.3], [0.65, 0.3, -0.3], [-0.65, 0.3, 0.3], [0.65, 0.3, 0.3]].map((p, i) => (
+        <mesh key={i} castShadow position={p as [number, number, number]}>
+          <cylinderGeometry args={[0.05, 0.05, 0.6, 12]} />
+          <meshStandardMaterial color="#3a2a1a" />
+        </mesh>
+      ))}
+      {/* Clavier */}
+      <mesh castShadow position={[0, 0.95, 0.45]}>
+        <boxGeometry args={[1.4, 0.06, 0.2]} />
+        <meshStandardMaterial color="#f5f5f5" />
+      </mesh>
+      <Text position={[0, 1.4, 0]} fontSize={0.22} color="#e3f2fd" anchorX="center" anchorY="middle">Piano</Text>
     </group>
   )
 }
@@ -147,42 +152,8 @@ function Pianist({ position = [0, 0, 0] as [number, number, number] }) {
   )
 }
 
-function PlayerModel() {
-  // Modèle GLB prioritaire (cowboy remplacé par cool_man)
-  const glb = useGLTF('/models/characters/cool_man_rigged_free.glb') as unknown as { scene: THREE.Group; animations?: THREE.AnimationClip[] }
-  useEffect(() => {
-    const root: THREE.Object3D | null = glb?.scene ?? null
-    root?.traverse((obj: THREE.Object3D) => {
-      if ((obj as THREE.Mesh).isMesh) {
-        const mesh = obj as THREE.Mesh
-        mesh.castShadow = true
-        mesh.receiveShadow = true
-      }
-    })
-  }, [glb])
-  const groupRef = useRef<THREE.Object3D | null>(null)
-  const anims = glb.animations ?? []
-  const rootObject = glb.scene
-  const { actions, names } = useAnimations(anims, groupRef)
-  useEffect(() => {
-    const first = names?.[0]
-    if (first && actions && actions[first]) {
-      actions[first]!.reset().fadeIn(0.3).play()
-      return () => {
-        actions[first]!.fadeOut(0.2)
-      }
-    }
-    return undefined
-  }, [actions, names])
-  // Fallback idle if no animations
-  const hasAnimations = (names?.length ?? 0) > 0
-  useFrame((state) => {
-    if (!hasAnimations && groupRef.current) {
-      const t = state.clock.getElapsedTime()
-      groupRef.current.rotation.y = Math.sin(t * 0.25) * 0.1
-    }
-  })
-  return <primitive ref={groupRef as unknown as React.RefObject<THREE.Object3D>} object={rootObject} scale={[1, 1, 1]} />
+function PlayerAvatar() {
+  return <Character color="#88e" />
 }
 
 function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositionChange?: (pos: THREE.Vector3) => void; fallbackKeysRef: React.MutableRefObject<FallbackKeys> }) {
@@ -209,7 +180,7 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
     const right = provider.right || fallback.right
     const run = provider.run || fallback.run
 
-    const speed = run ? 5 : 2.6
+    const speed = run ? 4 : 2.2
 
     // Compute intended direction relative to camera on XZ plane
     directionRef.current.set(0, 0, 0)
@@ -232,9 +203,9 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
     if (playerRef.current) {
       playerRef.current.position.addScaledVector(velocityRef.current, delta)
 
-      // Boundaries in a smaller room
-      playerRef.current.position.x = THREE.MathUtils.clamp(playerRef.current.position.x, -10, 10)
-      playerRef.current.position.z = THREE.MathUtils.clamp(playerRef.current.position.z, -10, 10)
+      // Boundaries (salle réduite)
+      playerRef.current.position.x = THREE.MathUtils.clamp(playerRef.current.position.x, -7, 7)
+      playerRef.current.position.z = THREE.MathUtils.clamp(playerRef.current.position.z, -7, 7)
 
       // Face movement direction if moving
       if (velocityRef.current.lengthSq() > 0.0001) {
@@ -245,8 +216,8 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
       }
 
       // Third-person camera follow
-      const behindOffset = 3.5
-      const height = 2.0
+      const behindOffset = 3.0
+      const height = 1.8
       const forwardDir = new THREE.Vector3(0, 0, 1).applyAxisAngle(upVector, playerRef.current.rotation.y)
       const desiredCamPos = playerRef.current.position
         .clone()
@@ -262,8 +233,8 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
   })
 
   return (
-    <group ref={playerRef} position={[0, 0.6, 6]}>
-      <PlayerModel />
+    <group ref={playerRef} position={[0, 0.6, 4]}>
+      <PlayerAvatar />
     </group>
   )
 }
@@ -277,12 +248,12 @@ function FloorTextured() {
   base.wrapS = base.wrapT = THREE.RepeatWrapping
   normal.wrapS = normal.wrapT = THREE.RepeatWrapping
   rough.wrapS = rough.wrapT = THREE.RepeatWrapping
-  base.repeat.set(4, 4)
-  normal.repeat.set(4, 4)
-  rough.repeat.set(4, 4)
+  base.repeat.set(3, 3)
+  normal.repeat.set(3, 3)
+  rough.repeat.set(3, 3)
   return (
     <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-      <planeGeometry args={[24, 24]} />
+      <planeGeometry args={[16, 16]} />
       <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} roughness={1} />
     </mesh>
   )
@@ -297,25 +268,25 @@ function WallsTextured() {
   base.wrapS = base.wrapT = THREE.RepeatWrapping
   normal.wrapS = normal.wrapT = THREE.RepeatWrapping
   rough.wrapS = rough.wrapT = THREE.RepeatWrapping
-  base.repeat.set(3, 1)
-  normal.repeat.set(3, 1)
-  rough.repeat.set(3, 1)
+  base.repeat.set(2, 1)
+  normal.repeat.set(2, 1)
+  rough.repeat.set(2, 1)
   return (
     <>
-      <mesh position={[0, 2.2, -12]} receiveShadow castShadow>
-        <boxGeometry args={[24, 4.4, 0.2]} />
+      <mesh position={[0, 2.0, -8]} receiveShadow castShadow>
+        <boxGeometry args={[16, 4.0, 0.2]} />
         <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
       </mesh>
-      <mesh position={[0, 2.2, 12]} receiveShadow castShadow>
-        <boxGeometry args={[24, 4.4, 0.2]} />
+      <mesh position={[0, 2.0, 8]} receiveShadow castShadow>
+        <boxGeometry args={[16, 4.0, 0.2]} />
         <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
       </mesh>
-      <mesh position={[-12, 2.2, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
-        <boxGeometry args={[24, 4.4, 0.2]} />
+      <mesh position={[-8, 2.0, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
+        <boxGeometry args={[16, 4.0, 0.2]} />
         <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
       </mesh>
-      <mesh position={[12, 2.2, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
-        <boxGeometry args={[24, 4.4, 0.2]} />
+      <mesh position={[8, 2.0, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
+        <boxGeometry args={[16, 4.0, 0.2]} />
         <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
       </mesh>
     </>
@@ -340,12 +311,12 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       <FloorTextured />
       <Grid
         position={[0, 0.005, 0]}
-        args={[24, 24]}
+        args={[16, 16]}
         cellColor="#2a2a44"
         sectionColor="#3a3a66"
         cellSize={0.5}
-        sectionSize={4}
-        fadeDistance={14}
+        sectionSize={3}
+        fadeDistance={10}
         fadeStrength={2}
       />
 
@@ -353,16 +324,16 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       <WallsTextured />
 
       {/* Props */}
-      <PokerTable position={[-4, 0, -1.5]} />
-      <BlackjackTable position={[4, 0, -1.5]} />
-      <Bar position={[0, 0, -8]} />
-      <Piano position={[7, 0, 5]} />
-      <Pianist position={[7, 0, 5.6]} />
+      <PokerTable position={[-3, 0, -1.2]} />
+      <BlackjackTable position={[3, 0, -1.2]} />
+      <Bar position={[0, 0, -6]} />
+      <SimplePiano position={[5.5, 0, 4]} />
+      <Pianist position={[5.2, 0, 4.6]} />
 
       {/* NPCs */}
-      <NpcHuman position={[-6, 0, 4.5]} message={'Tu connais la martingale ?'} />
-      <NpcHuman position={[-5.2, 0, 5.1]} message={"J'ai un bon pressentiment..."} />
-      <NpcHuman position={[5.5, 0, 1.8]} message={'La maison gagne toujours.'} />
+      <Npc position={[-5, 0, 3.8]} message={'Tu connais la martingale ?'} />
+      <Npc position={[-4.2, 0, 4.3]} message={"J'ai un bon pressentiment..."} />
+      <Npc position={[4.5, 0, 1.4]} message={'La maison gagne toujours.'} />
 
       {/* Player */}
       <ThirdPersonCharacter onPositionChange={onPlayerMove} fallbackKeysRef={fallbackKeysRef} />
