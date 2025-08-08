@@ -357,7 +357,9 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
                   enableSound()
                   setShowProjects(true)
                 }}
-                className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-cyan-400/60 text-cyan-100 bg-black/40 backdrop-blur-sm hover:bg-black/55 transition-all duration-200 shadow-[0_0_14px_rgba(34,211,238,0.2)]"
+                className="relative inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-cyan-400/60 text-cyan-100 bg-black/40 backdrop-blur-sm hover:bg-black/55 transition-all duration-200 shadow-[0_0_14px_rgba(34,211,238,0.2)] focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
+                aria-haspopup="dialog"
+                aria-controls="projects-dialog"
               >
                 <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/10 via-purple-400/10 to-pink-500/10 blur"></span>
                 <FolderOpen size={18} className="relative z-10 text-cyan-300" />
@@ -385,7 +387,7 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
         <AnimatePresence>
           {showProjects && (
             <motion.div
-              className="fixed inset-0 z-50 flex items-center justify-center"
+              className="fixed inset-0 z-50 grid place-items-center p-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -394,14 +396,16 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
               <motion.div
                 role="dialog"
                 aria-modal="true"
+                aria-labelledby="projects-title"
+                id="projects-dialog"
                 initial={{ y: -16, opacity: 0, scale: 0.98 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}
                 exit={{ y: -12, opacity: 0, scale: 0.98 }}
                 transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-                className="relative w-[86vw] max-w-sm rounded-xl border border-cyan-500/25 bg-[#0b0b12]/90 p-3 shadow-[0_0_24px_rgba(34,211,238,0.2)]"
+                className="relative w-full max-w-md rounded-xl border border-cyan-500/25 bg-[#0b0b12]/90 p-4 shadow-[0_0_24px_rgba(34,211,238,0.25)] pointer-events-auto"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-cyan-200 tracking-widest font-mono text-sm">PROJECTS</h3>
+                  <h3 id="projects-title" className="text-cyan-200 tracking-widest font-mono text-sm">PROJECTS</h3>
                   <button onClick={() => setShowProjects(false)} className="text-cyan-300/80 hover:text-pink-300 transition" aria-label="Close projects">
                     <X size={16} />
                   </button>
@@ -412,7 +416,7 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
                       setShowProjects(false)
                       if (onSelectProject) onSelectProject('saloon')
                     }}
-                    className="w-full text-left px-3 py-2.5 rounded-lg border border-purple-400/25 bg-black/30 hover:bg-black/45 text-purple-100 transition flex items-center justify-between"
+                    className="w-full text-left px-3 py-3 rounded-lg border border-purple-400/30 bg-black/40 hover:bg-black/55 text-purple-100 transition flex items-center justify-between"
                   >
                     <span className="font-mono tracking-widest text-sm">Saloon</span>
                     <span className="text-[10px] text-purple-300/80">3D</span>
