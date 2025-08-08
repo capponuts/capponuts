@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { Volume2, VolumeX, FolderOpen, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -86,6 +87,11 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
   const [soundEnabled, setSoundEnabled] = useState(false)
   const playerRef = useRef<YouTubePlayer | null>(null)
   const [showProjects, setShowProjects] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -384,48 +390,51 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
         </div>
 
         {/* Popup Projects */}
-        <AnimatePresence>
-          {showProjects && (
-            <motion.div
-              className="fixed inset-0 z-50 grid place-items-center p-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowProjects(false)} />
+        {mounted && createPortal(
+          <AnimatePresence>
+            {showProjects && (
               <motion.div
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="projects-title"
-                id="projects-dialog"
-                initial={{ y: -16, opacity: 0, scale: 0.98 }}
-                animate={{ y: 0, opacity: 1, scale: 1 }}
-                exit={{ y: -12, opacity: 0, scale: 0.98 }}
-                transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-                className="relative w-full max-w-md rounded-xl border border-cyan-500/25 bg-[#0b0b12]/90 p-4 shadow-[0_0_24px_rgba(34,211,238,0.25)] pointer-events-auto"
+                className="fixed inset-0 z-[9999] grid place-items-center p-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
               >
-                <div className="flex items-center justify-between mb-2">
-                  <h3 id="projects-title" className="text-cyan-200 tracking-widest font-mono text-sm">PROJECTS</h3>
-                  <button onClick={() => setShowProjects(false)} className="text-cyan-300/80 hover:text-pink-300 transition" aria-label="Close projects">
-                    <X size={16} />
-                  </button>
-                </div>
-                <div className="space-y-2">
-                  <button
-                    onClick={() => {
-                      setShowProjects(false)
-                      if (onSelectProject) onSelectProject('saloon')
-                    }}
-                    className="w-full text-left px-3 py-3 rounded-lg border border-purple-400/30 bg-black/40 hover:bg-black/55 text-purple-100 transition flex items-center justify-between"
-                  >
-                    <span className="font-mono tracking-widest text-sm">Saloon</span>
-                    <span className="text-[10px] text-purple-300/80">3D</span>
-                  </button>
-                </div>
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowProjects(false)} />
+                <motion.div
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="projects-title"
+                  id="projects-dialog"
+                  initial={{ y: -16, opacity: 0, scale: 0.98 }}
+                  animate={{ y: 0, opacity: 1, scale: 1 }}
+                  exit={{ y: -12, opacity: 0, scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+                  className="relative w-full max-w-md rounded-xl border border-cyan-500/25 bg-[#0b0b12]/90 p-4 shadow-[0_0_24px_rgba(34,211,238,0.25)] pointer-events-auto"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 id="projects-title" className="text-cyan-200 tracking-widest font-mono text-sm">PROJECTS</h3>
+                    <button onClick={() => setShowProjects(false)} className="text-cyan-300/80 hover:text-pink-300 transition" aria-label="Close projects">
+                      <X size={16} />
+                    </button>
+                  </div>
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => {
+                        setShowProjects(false)
+                        if (onSelectProject) onSelectProject('saloon')
+                      }}
+                      className="w-full text-left px-3 py-3 rounded-lg border border-purple-400/30 bg-black/40 hover:bg-black/55 text-purple-100 transition flex items-center justify-between"
+                    >
+                      <span className="font-mono tracking-widest text-sm">Saloon</span>
+                      <span className="text-[10px] text-purple-300/80">3D</span>
+                    </button>
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            )}
+          </AnimatePresence>,
+          document.body
+        )}
       </div>
     </div>
   )
