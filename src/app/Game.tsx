@@ -200,6 +200,14 @@ function PlayerModel() {
     }
     return undefined
   }, [actions, names])
+  // Fallback idle if no animations
+  const hasAnimations = (names?.length ?? 0) > 0
+  useFrame((state) => {
+    if (!hasAnimations && groupRef.current) {
+      const t = state.clock.getElapsedTime()
+      groupRef.current.rotation.y = Math.sin(t * 0.25) * 0.1
+    }
+  })
   return <primitive ref={groupRef as unknown as React.RefObject<THREE.Object3D>} object={fbx} scale={[0.01, 0.01, 0.01]} />
 }
 
@@ -227,7 +235,7 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
     const right = provider.right || fallback.right
     const run = provider.run || fallback.run
 
-    const speed = run ? 6 : 3.2
+    const speed = run ? 5 : 2.6
 
     // Compute intended direction relative to camera on XZ plane
     directionRef.current.set(0, 0, 0)
@@ -250,9 +258,9 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
     if (playerRef.current) {
       playerRef.current.position.addScaledVector(velocityRef.current, delta)
 
-      // Boundaries in a square room
-      playerRef.current.position.x = THREE.MathUtils.clamp(playerRef.current.position.x, -18, 18)
-      playerRef.current.position.z = THREE.MathUtils.clamp(playerRef.current.position.z, -18, 18)
+      // Boundaries in a smaller room
+      playerRef.current.position.x = THREE.MathUtils.clamp(playerRef.current.position.x, -10, 10)
+      playerRef.current.position.z = THREE.MathUtils.clamp(playerRef.current.position.z, -10, 10)
 
       // Face movement direction if moving
       if (velocityRef.current.lengthSq() > 0.0001) {
@@ -263,8 +271,8 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
       }
 
       // Third-person camera follow
-      const behindOffset = 4
-      const height = 2.2
+      const behindOffset = 3.5
+      const height = 2.0
       const forwardDir = new THREE.Vector3(0, 0, 1).applyAxisAngle(upVector, playerRef.current.rotation.y)
       const desiredCamPos = playerRef.current.position
         .clone()
@@ -295,12 +303,12 @@ function FloorTextured() {
   base.wrapS = base.wrapT = THREE.RepeatWrapping
   normal.wrapS = normal.wrapT = THREE.RepeatWrapping
   rough.wrapS = rough.wrapT = THREE.RepeatWrapping
-  base.repeat.set(6, 6)
-  normal.repeat.set(6, 6)
-  rough.repeat.set(6, 6)
+  base.repeat.set(4, 4)
+  normal.repeat.set(4, 4)
+  rough.repeat.set(4, 4)
   return (
     <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-      <planeGeometry args={[50, 50]} />
+      <planeGeometry args={[24, 24]} />
       <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} roughness={1} />
     </mesh>
   )
@@ -315,25 +323,25 @@ function WallsTextured() {
   base.wrapS = base.wrapT = THREE.RepeatWrapping
   normal.wrapS = normal.wrapT = THREE.RepeatWrapping
   rough.wrapS = rough.wrapT = THREE.RepeatWrapping
-  base.repeat.set(5, 1)
-  normal.repeat.set(5, 1)
-  rough.repeat.set(5, 1)
+  base.repeat.set(3, 1)
+  normal.repeat.set(3, 1)
+  rough.repeat.set(3, 1)
   return (
     <>
-      <mesh position={[0, 2.5, -20]} receiveShadow castShadow>
-        <boxGeometry args={[50, 5, 0.2]} />
+      <mesh position={[0, 2.2, -12]} receiveShadow castShadow>
+        <boxGeometry args={[24, 4.4, 0.2]} />
         <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
       </mesh>
-      <mesh position={[0, 2.5, 20]} receiveShadow castShadow>
-        <boxGeometry args={[50, 5, 0.2]} />
+      <mesh position={[0, 2.2, 12]} receiveShadow castShadow>
+        <boxGeometry args={[24, 4.4, 0.2]} />
         <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
       </mesh>
-      <mesh position={[-20, 2.5, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
-        <boxGeometry args={[50, 5, 0.2]} />
+      <mesh position={[-12, 2.2, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
+        <boxGeometry args={[24, 4.4, 0.2]} />
         <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
       </mesh>
-      <mesh position={[20, 2.5, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
-        <boxGeometry args={[50, 5, 0.2]} />
+      <mesh position={[12, 2.2, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
+        <boxGeometry args={[24, 4.4, 0.2]} />
         <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
       </mesh>
     </>
@@ -358,12 +366,12 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       <FloorTextured />
       <Grid
         position={[0, 0.005, 0]}
-        args={[50, 50]}
+        args={[24, 24]}
         cellColor="#2a2a44"
         sectionColor="#3a3a66"
         cellSize={0.5}
-        sectionSize={5}
-        fadeDistance={25}
+        sectionSize={4}
+        fadeDistance={14}
         fadeStrength={2}
       />
 
@@ -371,16 +379,16 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       <WallsTextured />
 
       {/* Props */}
-      <PokerTable position={[-6, 0, -2]} />
-      <BlackjackTable position={[6, 0, -2]} />
-      <Bar position={[0, 0, -12]} />
-      <Piano position={[12, 0, 8]} />
-      <Pianist position={[12, 0, 8.8]} />
+      <PokerTable position={[-4, 0, -1.5]} />
+      <BlackjackTable position={[4, 0, -1.5]} />
+      <Bar position={[0, 0, -8]} />
+      <Piano position={[7, 0, 5]} />
+      <Pianist position={[7, 0, 5.6]} />
 
       {/* NPCs */}
-      <Npc position={[-8, 0, 6]} message={'Tu connais la martingale ?'} />
-      <Npc position={[-7.2, 0, 6.6]} message={"J'ai un bon pressentiment..."} />
-      <Npc position={[7.5, 0, 2.2]} message={'La maison gagne toujours.'} />
+      <Npc position={[-6, 0, 4.5]} message={'Tu connais la martingale ?'} />
+      <Npc position={[-5.2, 0, 5.1]} message={"J'ai un bon pressentiment..."} />
+      <Npc position={[5.5, 0, 1.8]} message={'La maison gagne toujours.'} />
 
       {/* Player */}
       <ThirdPersonCharacter onPositionChange={onPlayerMove} fallbackKeysRef={fallbackKeysRef} />
@@ -675,6 +683,8 @@ export default function CasinoGame() {
   const [uiMode, setUiMode] = useState<InteractableType | null>(null)
   const [soundOn, setSoundOn] = useState(false)
   const [muted, setMuted] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [showHelp, setShowHelp] = useState(false)
 
   const interactables = useMemo<Interactable[]>(
     () => [
@@ -696,6 +706,7 @@ export default function CasinoGame() {
       if (k === 'd' || e.key === 'ArrowRight') fallbackKeysRef.current.right = true
       if (e.key === 'Shift') fallbackKeysRef.current.run = true
       if (k === 'e') fallbackKeysRef.current.interact = true
+      if (k === 'h' || e.key === 'Escape') setShowHelp((v) => !v)
       if (k === 'm') setMuted((m) => !m)
     }
     const up = (e: KeyboardEvent) => {
@@ -712,6 +723,17 @@ export default function CasinoGame() {
     return () => {
       window.removeEventListener('keydown', down)
       window.removeEventListener('keyup', up)
+    }
+  }, [])
+
+  // Lancer audio au démarrage du jeu (volume réduit) sans forcer le mute global du site
+  useEffect(() => {
+    const el = document.getElementById('saloon-audio') as HTMLAudioElement | null
+    if (el) {
+      audioRef.current = el
+      el.volume = 0.25
+      // Essayer de jouer automatiquement; certains navigateurs exigent une interaction utilisateur
+      el.play().then(() => setSoundOn(true)).catch(() => setSoundOn(false))
     }
   }, [])
 
@@ -738,7 +760,7 @@ export default function CasinoGame() {
 
       {/* HUD */}
       <div style={{ position: 'fixed', top: 12, left: 12, color: '#b3e5fc', fontFamily: 'monospace', fontSize: 14, zIndex: 5 }}>
-        <div><strong>Contrôles</strong>: Z/Q/S/D ou Flèches — Shift pour courir — E pour interagir</div>
+        <div><strong>Contrôles</strong>: Z/Q/S/D ou Flèches — Shift pour courir — E pour interagir — H/Echap: Aide</div>
       </div>
 
       {/* Prompt d'interaction */}
@@ -756,6 +778,7 @@ export default function CasinoGame() {
             onClick={() => {
               const el = document.getElementById('saloon-audio') as HTMLAudioElement | null
               if (el) {
+                el.volume = 0.25
                 el.play().then(() => setSoundOn(true)).catch(() => setSoundOn(false))
               }
             }}
@@ -802,6 +825,23 @@ export default function CasinoGame() {
               <button onClick={() => setUiMode(null)}>Fermer</button>
             </div>
             <p style={{ marginTop: 12 }}>Le pianiste commence un air jazzy. (boucle audio légère à venir)</p>
+          </div>
+        </div>
+      )}
+
+      {/* Menu d'aide */}
+      {showHelp && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.6)' }}>
+          <div style={{ width: 520, maxWidth: '92vw', background: '#0b0b12', color: '#d0e7ff', border: '1px solid #234', borderRadius: 12, padding: 16 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3 style={{ margin: 0 }}>Aide & Features</h3>
+              <button onClick={() => setShowHelp(false)}>Fermer (H/Echap)</button>
+            </div>
+            <div style={{ marginTop: 8, fontFamily: 'monospace', fontSize: 14, lineHeight: 1.7 }}>
+              <div><strong>Contrôles</strong>: Z/Q/S/D ou Flèches, Shift: courir, E: interagir, M: mute, H/Echap: aide</div>
+              <div><strong>Features</strong>: tables Poker/Blackjack, bar, pianiste, PNJ, audio d&apos;ambiance</div>
+              <div><strong>À venir</strong>: Poker Texas Hold&apos;em, collisions physiques, animations avancées du Cowboy</div>
+            </div>
           </div>
         </div>
       )}
