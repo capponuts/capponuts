@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useFBX, useGLTF, useAnimations } from '@react-three/drei'
+import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useGLTF, useAnimations } from '@react-three/drei'
 import * as THREE from 'three'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
@@ -66,39 +66,17 @@ function Npc({ position, message = '...' }: NpcProps) {
 }
 
 function PokerTable({ position = [0, 0, 0] as [number, number, number] }) {
-  const wood = useTexture('/textures/saloon/wall_base.jpg')
-  wood.wrapS = wood.wrapT = THREE.RepeatWrapping
-  wood.repeat.set(1, 1)
+  const { scene } = useGLTF('/models/props/sm_pokertable.glb') as unknown as { scene: THREE.Group }
   return (
     <group position={position}>
-      <mesh receiveShadow castShadow position={[0, 0.8, 0]}>
-        <cylinderGeometry args={[1.6, 1.6, 0.1, 32]} />
-        <meshStandardMaterial color="#1b5e20" roughness={0.7} />
-      </mesh>
-      <mesh receiveShadow position={[0, 0.3, 0]}>
-        <cylinderGeometry args={[0.2, 0.25, 0.6, 16]} />
-        <meshStandardMaterial map={wood} roughness={0.9} />
-      </mesh>
-      {[...Array(6)].map((_, i) => {
-        const angle = (i / 6) * Math.PI * 2
-        const x = Math.cos(angle) * 2
-        const z = Math.sin(angle) * 2
-        return (
-          <mesh key={i} position={[x, 0.45, z]} castShadow>
-            <cylinderGeometry args={[0.18, 0.2, 0.9, 12]} />
-            <meshStandardMaterial map={wood} roughness={0.9} />
-          </mesh>
-        )
-      })}
+      <primitive object={scene} scale={[1, 1, 1]} />
       <Text position={[0, 1.1, 0]} fontSize={0.25} color="#fff" anchorX="center" anchorY="middle">Poker</Text>
     </group>
   )
 }
 
 function BlackjackTable({ position = [0, 0, 0] as [number, number, number] }) {
-  const wood = useTexture('/textures/saloon/wall_base.jpg')
-  wood.wrapS = wood.wrapT = THREE.RepeatWrapping
-  wood.repeat.set(1.5, 0.6)
+  // Conserve la table générique pour blackjack pour l'instant
   return (
     <group position={position}>
       <mesh receiveShadow castShadow position={[0, 0.8, 0]} rotation={[0, 0, 0]}>
@@ -107,39 +85,18 @@ function BlackjackTable({ position = [0, 0, 0] as [number, number, number] }) {
       </mesh>
       <mesh receiveShadow position={[0, 0.35, 0]}>
         <boxGeometry args={[0.4, 0.6, 0.4]} />
-        <meshStandardMaterial map={wood} roughness={0.9} />
+        <meshStandardMaterial color="#5d4037" />
       </mesh>
-      {[...Array(4)].map((_, i) => {
-        const x = -1.2 + i * 0.8
-        const z = 1.1
-        return (
-          <mesh key={i} position={[x, 0.5, z]} castShadow>
-            <cylinderGeometry args={[0.18, 0.2, 0.9, 12]} />
-            <meshStandardMaterial map={wood} roughness={0.9} />
-          </mesh>
-        )
-      })}
       <Text position={[0, 1.15, 0]} fontSize={0.25} color="#fff" anchorX="center" anchorY="middle">Blackjack</Text>
     </group>
   )
 }
 
 function Bar({ position = [0, 0, 0] as [number, number, number] }) {
-  const wood = useTexture('/textures/saloon/wall_base.jpg')
-  wood.wrapS = wood.wrapT = THREE.RepeatWrapping
-  wood.repeat.set(2.5, 0.8)
+  const { scene } = useGLTF('/models/props/bar_kit.glb') as unknown as { scene: THREE.Group }
   return (
     <group position={position}>
-      <mesh position={[0, 0.9, 0]} castShadow receiveShadow>
-        <boxGeometry args={[4.5, 1.0, 1.2]} />
-        <meshStandardMaterial map={wood} roughness={0.95} />
-      </mesh>
-      {[...Array(4)].map((_, i) => (
-        <mesh key={i} position={[-1.6 + i * 1.1, 0.45, 1]} castShadow>
-          <cylinderGeometry args={[0.18, 0.2, 0.9, 12]} />
-          <meshStandardMaterial map={wood} roughness={0.95} />
-        </mesh>
-      ))}
+      <primitive object={scene} scale={[1, 1, 1]} />
       <Text position={[0, 1.6, 0]} fontSize={0.25} color="#ffecb3" anchorX="center" anchorY="middle">Bar</Text>
     </group>
   )
@@ -176,11 +133,10 @@ function Pianist({ position = [0, 0, 0] as [number, number, number] }) {
 }
 
 function PlayerModel() {
-  // Nouveau modèle GLB prioritaire
+  // Modèle GLB prioritaire (cowboy remplacé par cool_man)
   const glb = useGLTF('/models/characters/cool_man_rigged_free.glb') as unknown as { scene: THREE.Group; animations?: THREE.AnimationClip[] }
-  const fbx = useFBX('/models/characters/cowboy/a_cowboy_character_wi_0226190933_texture.fbx') as unknown as THREE.Group & { animations?: THREE.AnimationClip[] }
   useEffect(() => {
-    const root: THREE.Object3D | null = (glb && glb.scene) ? glb.scene : (fbx as unknown as THREE.Object3D | null)
+    const root: THREE.Object3D | null = glb?.scene ?? null
     root?.traverse((obj: THREE.Object3D) => {
       if ((obj as THREE.Mesh).isMesh) {
         const mesh = obj as THREE.Mesh
@@ -188,10 +144,10 @@ function PlayerModel() {
         mesh.receiveShadow = true
       }
     })
-  }, [glb, fbx])
+  }, [glb])
   const groupRef = useRef<THREE.Object3D | null>(null)
-  const anims = (glb.animations && glb.animations.length ? glb.animations : (fbx.animations ?? []))
-  const rootObject = (glb.scene ?? (fbx as unknown as THREE.Object3D))
+  const anims = glb.animations ?? []
+  const rootObject = glb.scene
   const { actions, names } = useAnimations(anims, groupRef)
   useEffect(() => {
     const first = names?.[0]
@@ -729,14 +685,12 @@ export default function CasinoGame() {
     }
   }, [])
 
-  // Lancer audio au démarrage du jeu (volume réduit) sans forcer le mute global du site
+  // Préparer l'élément audio mais ne pas lancer automatiquement (politiques autoplay)
   useEffect(() => {
     const el = document.getElementById('saloon-audio') as HTMLAudioElement | null
     if (el) {
       audioRef.current = el
       el.volume = 0.25
-      // Essayer de jouer automatiquement; certains navigateurs exigent une interaction utilisateur
-      el.play().then(() => setSoundOn(true)).catch(() => setSoundOn(false))
     }
   }, [])
 

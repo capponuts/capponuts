@@ -1,1 +1,15 @@
-{\n  "name": "CAPPONUTS",\n  "short_name": "Capponuts",\n  "start_url": "/",\n  "display": "standalone",\n  "background_color": "#000000",\n  "theme_color": "#000000",\n  "icons": [\n    {\n      "src": "/favicon.ico",\n      "sizes": "64x64 32x32 24x24 16x16",\n      "type": "image/x-icon"\n    }\n  ]\n}\n
+{
+  "name": "CAPPONUTS",
+  "short_name": "Capponuts",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}
