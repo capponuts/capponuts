@@ -18,7 +18,9 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
-      <CyberText onPlay={() => setShowGame(true)} />
+      <CyberText onSelectProject={(id) => {
+        if (id === 'saloon') setShowGame(true)
+      }} />
     </main>
   )
 }

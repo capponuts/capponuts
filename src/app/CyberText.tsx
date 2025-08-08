@@ -77,13 +77,14 @@ function createArcadeBeep() {
   }
 }
 
-export default function CyberText({ onPlay }: { onPlay?: () => void }) {
+export default function CyberText({ onSelectProject }: { onSelectProject?: (projectId: string) => void }) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isMuted, setIsMuted] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [soundEnabled, setSoundEnabled] = useState(false)
   const playerRef = useRef<YouTubePlayer | null>(null)
+  const [showProjects, setShowProjects] = useState(false)
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -337,17 +338,17 @@ export default function CyberText({ onPlay }: { onPlay?: () => void }) {
               </div>
             </div>
 
-            {/* Bouton Jouer sous le volume (même thème cyber) */}
+            {/* Bouton Projects sous le volume (thème cyber) */}
             <div className="flex justify-center mt-6">
               <button
                 onClick={() => {
                   enableSound()
-                  if (onPlay) onPlay()
+                  setShowProjects(true)
                 }}
-                className="relative px-6 py-3 rounded-lg border border-cyan-400/70 text-cyan-200 bg-black/30 backdrop-blur-sm hover:bg-black/50 transition shadow-[0_0_15px_rgba(34,211,238,0.25)]"
+                className="group relative px-7 py-3 rounded-xl border border-cyan-400/60 text-cyan-100 bg-black/40 backdrop-blur-md hover:bg-black/60 transition-all duration-200 shadow-[0_0_20px_rgba(34,211,238,0.25)] hover:shadow-[0_0_28px_rgba(192,132,252,0.25)]"
               >
-                <span className="relative z-10 tracking-widest">JOUER</span>
-                <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/10 via-purple-400/10 to-pink-500/10 blur-md"></span>
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/10 via-purple-400/10 to-pink-500/10 blur-md"></span>
+                <span className="relative z-10 tracking-[0.25em] font-mono">PROJECTS</span>
               </button>
             </div>
           </div>
@@ -366,6 +367,30 @@ export default function CyberText({ onPlay }: { onPlay?: () => void }) {
             </p>
           </div>
         </div>
+
+        {/* Popup Projects */}
+        {showProjects && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60">
+            <div className="relative w-[92vw] max-w-md rounded-2xl border border-cyan-500/30 bg-[#0b0b12]/90 backdrop-blur-xl p-4 shadow-[0_0_35px_rgba(34,211,238,0.25)]">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-cyan-200 tracking-widest font-mono">PROJECTS</h3>
+                <button onClick={() => setShowProjects(false)} className="text-cyan-300/80 hover:text-pink-300 transition">Close</button>
+              </div>
+              <div className="space-y-2">
+                <button
+                  onClick={() => {
+                    setShowProjects(false)
+                    if (onSelectProject) onSelectProject('saloon')
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-xl border border-purple-400/30 bg-black/30 hover:bg-black/50 text-purple-100 transition flex items-center justify-between"
+                >
+                  <span className="font-mono tracking-widest">Saloon</span>
+                  <span className="text-xs text-purple-300/80">3D</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

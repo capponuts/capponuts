@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useFBX } from '@react-three/drei'
+import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useFBX, useAnimations } from '@react-three/drei'
 import * as THREE from 'three'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
@@ -176,31 +176,31 @@ function Pianist({ position = [0, 0, 0] as [number, number, number] }) {
 }
 
 function PlayerModel() {
-  let fbx: THREE.Group | null = null
-  try {
-    // Cowboy FBX si disponible (chemin prioritaire fourni)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const loaded = useFBX('/models/characters/cowboy/a_cowboy_character_wi_0226190933_texture.fbx') as unknown as THREE.Group
-    fbx = loaded
-  } catch {
-    fbx = null
+  const fbx = useFBX('/models/characters/cowboy/a_cowboy_character_wi_0226190933_texture.fbx') as unknown as THREE.Group & {
+    animations?: THREE.AnimationClip[]
   }
-  if (!fbx) {
-    return (
-      <mesh castShadow>
-        <capsuleGeometry args={[0.4, 0.8, 8, 16]} />
-        <meshStandardMaterial color="#90caf9" />
-      </mesh>
-    )
-  }
-  fbx.traverse((obj) => {
-    if ((obj as THREE.Mesh).isMesh) {
-      const mesh = obj as THREE.Mesh
-      mesh.castShadow = true
-      mesh.receiveShadow = true
+  useEffect(() => {
+    fbx.traverse((obj) => {
+      if ((obj as THREE.Mesh).isMesh) {
+        const mesh = obj as THREE.Mesh
+        mesh.castShadow = true
+        mesh.receiveShadow = true
+      }
+    })
+  }, [fbx])
+  const groupRef = useRef<THREE.Object3D | null>(null)
+  const { actions, names } = useAnimations(fbx.animations ?? [], groupRef)
+  useEffect(() => {
+    const first = names?.[0]
+    if (first && actions && actions[first]) {
+      actions[first]!.reset().fadeIn(0.3).play()
+      return () => {
+        actions[first]!.fadeOut(0.2)
+      }
     }
-  })
-  return <primitive object={fbx} scale={[0.01, 0.01, 0.01]} />
+    return undefined
+  }, [actions, names])
+  return <primitive ref={groupRef as unknown as React.RefObject<THREE.Object3D>} object={fbx} scale={[0.01, 0.01, 0.01]} />
 }
 
 function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositionChange?: (pos: THREE.Vector3) => void; fallbackKeysRef: React.MutableRefObject<FallbackKeys> }) {
