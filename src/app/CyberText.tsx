@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { createPortal } from 'react-dom'
-import { Volume2, VolumeX, FolderOpen, X } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { Volume2, VolumeX, FolderOpen } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 // Types pour l'API YouTube
 interface YouTubePlayerVars {
@@ -87,11 +86,7 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
   const [soundEnabled, setSoundEnabled] = useState(false)
   const playerRef = useRef<YouTubePlayer | null>(null)
   const [showProjects, setShowProjects] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  //
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {

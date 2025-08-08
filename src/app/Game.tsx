@@ -2,6 +2,8 @@
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useGLTF } from '@react-three/drei'
+import { EffectComposer, Bloom, Vignette, ToneMapping } from '@react-three/postprocessing'
+import { ToneMappingMode } from 'postprocessing'
 import * as THREE from 'three'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
@@ -294,19 +296,125 @@ function WallsTextured() {
   )
 }
 
+function Chair({ position = [0, 0, 0] as [number, number, number] }) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 0.45, 0]} castShadow>
+        <boxGeometry args={[0.5, 0.1, 0.5]} />
+        <meshStandardMaterial color="#5d4037" />
+      </mesh>
+      <mesh position={[0, 0.8, -0.18]} castShadow>
+        <boxGeometry args={[0.5, 0.7, 0.08]} />
+        <meshStandardMaterial color="#4e342e" />
+      </mesh>
+      {[[-0.2, 0.25, -0.2], [0.2, 0.25, -0.2], [-0.2, 0.25, 0.2], [0.2, 0.25, 0.2]].map((p, i) => (
+        <mesh key={i} position={p as [number, number, number]} castShadow>
+          <boxGeometry args={[0.08, 0.5, 0.08]} />
+          <meshStandardMaterial color="#4e342e" />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
+function ShelfUnit({ position = [0, 0, 0] as [number, number, number] }) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 1.1, 0]} castShadow>
+        <boxGeometry args={[3.2, 2.2, 0.35]} />
+        <meshStandardMaterial color="#3d2e22" />
+      </mesh>
+      {[0.7, 1.2, 1.7].map((h, i) => (
+        <mesh key={i} position={[0, h, 0]} castShadow>
+          <boxGeometry args={[3.0, 0.06, 0.38]} />
+          <meshStandardMaterial color="#6d4c41" />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
+function WantedPoster({ position = [0, 0, 0] as [number, number, number], text = 'WANTED' }) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 1.4, 0]} rotation={[0, 0, 0]}>
+        <planeGeometry args={[0.9, 1.2]} />
+        <meshStandardMaterial color="#e5d7b5" />
+      </mesh>
+      <Text position={[0, 1.6, 0.01]} fontSize={0.18} color="#2b2118" anchorX="center" anchorY="middle">
+        {text}
+      </Text>
+      <Text position={[0, 1.3, 0.01]} fontSize={0.12} color="#2b2118" anchorX="center" anchorY="middle">
+        REWARD
+      </Text>
+    </group>
+  )
+}
+
+function DustParticles({ count = 600 }: { count?: number }) {
+  const pointsRef = useRef<THREE.Points>(null)
+  const positions = useMemo(() => {
+    const arr = new Float32Array(count * 3)
+    for (let i = 0; i < count; i++) {
+      arr[i * 3 + 0] = (Math.random() - 0.5) * 14
+      arr[i * 3 + 1] = Math.random() * 3 + 0.2
+      arr[i * 3 + 2] = (Math.random() - 0.5) * 14
+    }
+    return arr
+  }, [count])
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime()
+    if (!pointsRef.current) return
+    const a = pointsRef.current.geometry.attributes.position as THREE.BufferAttribute
+    for (let i = 0; i < count; i++) {
+      const base = i * 3 + 1
+      a.array[base] += Math.sin(t * 0.3 + i) * 0.0008
+    }
+    a.needsUpdate = true
+  })
+  return (
+    <points ref={pointsRef} position={[0, 0, 0]}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+      </bufferGeometry>
+      <pointsMaterial size={0.06} sizeAttenuation color="#ffd6a1" opacity={0.35} transparent depthWrite={false} />
+    </points>
+  )
+}
+
+function HangingLamp({ position = [0, 0, 0] as [number, number, number] }) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 0, 0]}>
+        <sphereGeometry args={[0.08, 12, 12]} />
+        <meshStandardMaterial emissive="#ffcc66" emissiveIntensity={2} color="#33230f" />
+      </mesh>
+      <pointLight position={[0, -0.05, 0]} color={0xffc266} intensity={1.6} distance={6} decay={2} castShadow />
+    </group>
+  )
+}
+
+function SceneEffects() {
+  return (
+    <EffectComposer>
+      <Bloom luminanceThreshold={0.35} luminanceSmoothing={0.9} intensity={0.35} mipmapBlur />
+      <Vignette eskil={false} offset={0.35} darkness={0.6} />
+      <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
+    </EffectComposer>
+  )
+}
+
 function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.Vector3) => void; fallbackKeysRef: React.MutableRefObject<FallbackKeys> }) {
   return (
     <>
       {/* Lights */}
-      <ambientLight intensity={0.5} />
-      <hemisphereLight args={[0xb3e5fc, 0x141418, 0.7]} />
-      <directionalLight
-        position={[5, 10, 5]}
-        intensity={1.2}
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-      />
+      <ambientLight intensity={0.35} />
+      <hemisphereLight args={[0xffe0bd, 0x141418, 0.35]} />
+      <directionalLight position={[5, 10, 5]} intensity={0.8} castShadow shadow-mapSize-width={2048} shadow-mapSize-height={2048} />
+      {/* Lamps chaudes suspendues */}
+      <HangingLamp position={[-3.5, 3.2, -1.4]} />
+      <HangingLamp position={[3.5, 3.2, -1.4]} />
+      <HangingLamp position={[0, 3.2, -5.5]} />
 
       {/* Floor */}
       <FloorTextured />
@@ -324,10 +432,21 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       {/* Simple room walls */}
       <WallsTextured />
 
+      {/* Ambiance */}
+      <DustParticles count={700} />
+      <SceneEffects />
+
       {/* Props */}
       <PokerTable position={[-3.5, 0, -1.4]} />
+      <Chair position={[-4.3, 0, -1.6]} />
+      <Chair position={[-2.7, 0, -1.6]} />
       <BlackjackTable position={[3.5, 0, -1.4]} />
+      <Chair position={[2.7, 0, -1.6]} />
+      <Chair position={[4.3, 0, -1.6]} />
       <Bar position={[0, 0, -6]} />
+      <ShelfUnit position={[0, 0, -7.6]} />
+      <WantedPoster position={[-6.8, 0, 0.2]} text={'WANTED'} />
+      <WantedPoster position={[6.8, 0, -0.2]} text={'REWARD'} />
       <Piano position={[5.2, 0, 3.6]} />
       <Pianist position={[4.7, 0, 4.1]} />
 
