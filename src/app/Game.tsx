@@ -10,13 +10,7 @@ type NpcProps = {
   message?: string
 }
 
-function lerpAngleShortest(current: number, target: number, t: number): number {
-  const twoPi = Math.PI * 2
-  let delta = (target - current) % twoPi
-  if (delta > Math.PI) delta -= twoPi
-  if (delta < -Math.PI) delta += twoPi
-  return current + delta * t
-}
+// réservé pour des orientations douces si nécessaire plus tard
 
 type InteractableType = 'poker' | 'blackjack' | 'bar' | 'piano'
 type Interactable = {
@@ -114,32 +108,21 @@ function Bar({ position = [0, 0, 0] as [number, number, number] }) {
 
 // useGLTF déjà importé en tête
 
-function SimplePiano({ position = [0, 0, 0] as [number, number, number] }) {
+function Piano({ position = [0, 0, 0] as [number, number, number] }) {
+  const { scene } = useGLTF('/models/props/Piano.glb') as unknown as { scene: THREE.Group }
+  useEffect(() => {
+    scene.traverse((obj) => {
+      if ((obj as THREE.Mesh).isMesh) {
+        const mesh = obj as THREE.Mesh
+        mesh.castShadow = true
+        mesh.receiveShadow = true
+      }
+    })
+  }, [scene])
   return (
     <group position={position}>
-      {/* Corps */}
-      <mesh castShadow position={[0, 0.65, 0]}>
-        <boxGeometry args={[1.6, 0.6, 0.8]} />
-        <meshStandardMaterial color="#2b2b2b" />
-      </mesh>
-      {/* Plateau au-dessus */}
-      <mesh castShadow position={[0, 1.0, 0]}>
-        <boxGeometry args={[1.7, 0.08, 0.85]} />
-        <meshStandardMaterial color="#111" />
-      </mesh>
-      {/* Pieds */}
-      {[[-0.65, 0.3, -0.3], [0.65, 0.3, -0.3], [-0.65, 0.3, 0.3], [0.65, 0.3, 0.3]].map((p, i) => (
-        <mesh key={i} castShadow position={p as [number, number, number]}>
-          <cylinderGeometry args={[0.05, 0.05, 0.6, 12]} />
-          <meshStandardMaterial color="#3a2a1a" />
-        </mesh>
-      ))}
-      {/* Clavier */}
-      <mesh castShadow position={[0, 0.95, 0.45]}>
-        <boxGeometry args={[1.4, 0.06, 0.2]} />
-        <meshStandardMaterial color="#f5f5f5" />
-      </mesh>
-      <Text position={[0, 1.4, 0]} fontSize={0.22} color="#e3f2fd" anchorX="center" anchorY="middle">Piano</Text>
+      <primitive object={scene} scale={[1.2, 1.2, 1.2]} />
+      <Text position={[0, 1.5, 0]} fontSize={0.22} color="#e3f2fd" anchorX="center" anchorY="middle">Piano</Text>
     </group>
   )
 }
@@ -152,8 +135,18 @@ function Pianist({ position = [0, 0, 0] as [number, number, number] }) {
   )
 }
 
-function PlayerAvatar() {
-  return <Character color="#88e" />
+function PlayerModel() {
+  const { scene } = useGLTF('/models/characters/cool_man_rigged_free.glb') as unknown as { scene: THREE.Group }
+  useEffect(() => {
+    scene.traverse((obj) => {
+      if ((obj as THREE.Mesh).isMesh) {
+        const mesh = obj as THREE.Mesh
+        mesh.castShadow = true
+        mesh.receiveShadow = true
+      }
+    })
+  }, [scene])
+  return <primitive object={scene} scale={[1, 1, 1]} />
 }
 
 function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositionChange?: (pos: THREE.Vector3) => void; fallbackKeysRef: React.MutableRefObject<FallbackKeys> }) {
@@ -207,13 +200,7 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
       playerRef.current.position.x = THREE.MathUtils.clamp(playerRef.current.position.x, -7, 7)
       playerRef.current.position.z = THREE.MathUtils.clamp(playerRef.current.position.z, -7, 7)
 
-      // Face movement direction if moving
-      if (velocityRef.current.lengthSq() > 0.0001) {
-        const desiredRotation = Math.atan2(velocityRef.current.x, velocityRef.current.z)
-        const currentY = playerRef.current.rotation.y
-        const newY = lerpAngleShortest(currentY, desiredRotation, 0.2)
-        playerRef.current.rotation.set(0, newY, 0)
-      }
+      // Orientation fixe (pas de retourné à l'appui de S)
 
       // Third-person camera follow
       const behindOffset = 3.0
@@ -234,7 +221,7 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
 
   return (
     <group ref={playerRef} position={[0, 0.6, 4]}>
-      <PlayerAvatar />
+      <PlayerModel />
     </group>
   )
 }
@@ -327,7 +314,7 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       <PokerTable position={[-3, 0, -1.2]} />
       <BlackjackTable position={[3, 0, -1.2]} />
       <Bar position={[0, 0, -6]} />
-      <SimplePiano position={[5.5, 0, 4]} />
+      <Piano position={[5.5, 0, 4]} />
       <Pianist position={[5.2, 0, 4.6]} />
 
       {/* NPCs */}
