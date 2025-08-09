@@ -320,6 +320,7 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
 
 function FloorGLB() {
   const { scene } = useGLTF('/textures/saloon/floor.glb') as unknown as { scene: THREE.Group }
+  const groupRef = useRef<THREE.Group>(null)
   useEffect(() => {
     scene.traverse((obj) => {
       if ((obj as THREE.Mesh).isMesh) {
@@ -328,16 +329,29 @@ function FloorGLB() {
         mesh.receiveShadow = true
       }
     })
+    // Adapter l'échelle pour couvrir ~16x16 en XZ
+    const box = new THREE.Box3().setFromObject(scene)
+    const size = new THREE.Vector3()
+    box.getSize(size)
+    const target = new THREE.Vector2(16, 16)
+    const scaleX = size.x > 0 ? target.x / size.x : 1
+    const scaleY = size.y > 0 ? target.y / size.y : scaleX
+    scene.scale.set(scaleX, scaleY, 1)
+    // Poser le sol à y ~ 0
+    const after = new THREE.Box3().setFromObject(scene)
+    const minY = after.min.y
+    scene.position.y -= (minY + 0.002)
   }, [scene])
   return (
-    <group position={[0, 0, 0]}>
-      <primitive object={scene} scale={[1, 1, 1]} />
+    <group ref={groupRef} position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <primitive object={scene} />
     </group>
   )
 }
 
-function WallsGLB() {
+function WallsRoomGLB() {
   const { scene } = useGLTF('/textures/saloon/wall.glb') as unknown as { scene: THREE.Group }
+  const scaleRef = useRef(1)
   useEffect(() => {
     scene.traverse((obj) => {
       if ((obj as THREE.Mesh).isMesh) {
@@ -346,10 +360,25 @@ function WallsGLB() {
         mesh.receiveShadow = true
       }
     })
+    // Calculer l'échelle pour que la largeur du mur couvre 16 unités
+    const box = new THREE.Box3().setFromObject(scene)
+    const size = new THREE.Vector3()
+    box.getSize(size)
+    const scaleX = size.x > 0 ? 16 / size.x : 1
+    scaleRef.current = scaleX
+    scene.scale.set(scaleX, scaleX, scaleX)
   }, [scene])
+  const makeWall = (pos: [number, number, number], rotY: number) => (
+    <group position={pos} rotation={[0, rotY, 0]}>
+      <primitive object={scene.clone(true)} />
+    </group>
+  )
   return (
     <group>
-      <primitive object={scene} />
+      {makeWall([0, 2.0, -8], 0)}
+      {makeWall([0, 2.0, 8], Math.PI)}
+      {makeWall([-8, 2.0, 0], Math.PI / 2)}
+      {makeWall([8, 2.0, 0], -Math.PI / 2)}
     </group>
   )
 }
@@ -447,7 +476,7 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
 
       {/* Simple room walls */}
       <Suspense fallback={null}>
-        <WallsGLB />
+        <WallsRoomGLB />
       </Suspense>
 
       {/* Ambiance */}
@@ -461,8 +490,8 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       <Chair position={[2.7, 0, -2.4]} />
       <Chair position={[4.3, 0, -2.4]} />
       <Bar position={[0, 0, -6]} />
-      {/* Pancarte SALOON au-dessus du bar */}
-      <SaloonSignboard position={[0, 2.5, -5.4]} scale={[1.4, 1.4, 1.4]} />
+      {/* Pancarte SALOON au-dessus du bar, collée au mur arrière */}
+      <SaloonSignboard position={[0, 2.6, -7.85]} scale={[1.2, 1.2, 1.2]} />
       <ShelfUnit position={[0, 0, -7.6]} />
       <Piano position={[5.2, 0, 3.6]} />
 
