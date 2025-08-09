@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { KeyboardControls, Text, Grid, useKeyboardControls, useGLTF } from '@react-three/drei'
+import { KeyboardControls, Text, Grid, useKeyboardControls, useGLTF, useTexture } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette, ToneMapping } from '@react-three/postprocessing'
 import { ToneMappingMode } from 'postprocessing'
 import * as THREE from 'three'
@@ -13,6 +13,7 @@ const ROOM_HALF = ROOM_SIZE / 2
 const WALL_THICKNESS = 0.3
 const WALL_HEIGHT = 4
 const FLOOR_OVERFILL = 0.4 // pour éviter les jours en bord de sol
+const WALL_INSET = 0.05 // léger retrait vers l'intérieur pour éviter tout dépassement visuel
 
 // NPCs supprimés
 
@@ -326,52 +327,26 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
   )
 }
 
-function FloorGLB() {
-  const { scene } = useGLTF('/textures/saloon/floor.glb') as unknown as { scene: THREE.Group }
-  const preparedRef = useRef(false)
-  useEffect(() => {
-    if (preparedRef.current) return
-    preparedRef.current = true
-    scene.traverse((obj) => {
-      if ((obj as THREE.Mesh).isMesh) {
-        const mesh = obj as THREE.Mesh
-        mesh.castShadow = true
-        mesh.receiveShadow = true
-      }
-    })
-    // Essayer deux orientations et choisir celle qui rend Y la plus fine
-    const measureWithRotation = (rx: number) => {
-      const prev = scene.rotation.x
-      scene.rotation.x = rx
-      const b = new THREE.Box3().setFromObject(scene)
-      const s = new THREE.Vector3()
-      b.getSize(s)
-      scene.rotation.x = prev
-      return { box: b, size: s }
-    }
-    const a = measureWithRotation(0)
-    const b = measureWithRotation(-Math.PI / 2)
-    const useB = b.size.y < a.size.y
-    scene.rotation.x = useB ? -Math.PI / 2 : 0
-
-    // Recalculer bbox après orientation retenue
-    const box = new THREE.Box3().setFromObject(scene)
-    const size = new THREE.Vector3()
-    box.getSize(size)
-    // Mise à l'échelle non uniforme pour couvrir la salle et rendre l'épaisseur très faible
-    const targetX = ROOM_SIZE + FLOOR_OVERFILL
-    const targetZ = ROOM_SIZE + FLOOR_OVERFILL
-    const targetThickness = 0.02
-    const scaleX = size.x > 0 ? targetX / size.x : 1
-    const scaleZ = size.z > 0 ? targetZ / size.z : 1
-    const scaleY = size.y > 0 ? targetThickness / size.y : 1
-    scene.scale.set(scaleX, scaleY, scaleZ)
-    // Poser le sol à y ~ 0
-    const after = new THREE.Box3().setFromObject(scene)
-    const minY = after.min.y
-    scene.position.y -= (minY + 0.001)
-  }, [scene])
-  return <primitive object={scene} />
+function FloorTexturedRect() {
+  const [base, normal, rough] = useTexture([
+    '/textures/saloon/floor_base.jpg',
+    '/textures/saloon/floor_normal.jpg',
+    '/textures/saloon/floor_rough.jpg',
+  ])
+  base.wrapS = base.wrapT = THREE.RepeatWrapping
+  normal.wrapS = normal.wrapT = THREE.RepeatWrapping
+  rough.wrapS = rough.wrapT = THREE.RepeatWrapping
+  // Faire répéter le motif pour éviter l'étirement
+  const repeat = Math.max(1, Math.round(ROOM_SIZE / 4))
+  base.repeat.set(repeat, repeat)
+  normal.repeat.set(repeat, repeat)
+  rough.repeat.set(repeat, repeat)
+  return (
+    <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
+      <planeGeometry args={[ROOM_SIZE + FLOOR_OVERFILL, ROOM_SIZE + FLOOR_OVERFILL]} />
+      <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} roughness={1} />
+    </mesh>
+  )
 }
 
 function WallsRoomGLB() {
@@ -411,13 +386,13 @@ function WallsRoomGLB() {
   return (
     <group>
       {/* Avant (mur au fond négatif Z) */}
-      {makeWall([0, params.bottomOffsetY, -ROOM_HALF + params.halfDepth], 0)}
+      {makeWall([0, params.bottomOffsetY, -ROOM_HALF + params.halfDepth + WALL_INSET], 0)}
       {/* Arrière (mur Z positif) */}
-      {makeWall([0, params.bottomOffsetY, ROOM_HALF - params.halfDepth], Math.PI)}
+      {makeWall([0, params.bottomOffsetY, ROOM_HALF - params.halfDepth - WALL_INSET], Math.PI)}
       {/* Gauche (mur X négatif) */}
-      {makeWall([-ROOM_HALF + params.halfDepth, params.bottomOffsetY, 0], Math.PI / 2)}
+      {makeWall([-ROOM_HALF + params.halfDepth + WALL_INSET, params.bottomOffsetY, 0], Math.PI / 2)}
       {/* Droite (mur X positif) */}
-      {makeWall([ROOM_HALF - params.halfDepth, params.bottomOffsetY, 0], -Math.PI / 2)}
+      {makeWall([ROOM_HALF - params.halfDepth - WALL_INSET, params.bottomOffsetY, 0], -Math.PI / 2)}
     </group>
   )
 }
@@ -500,9 +475,7 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
 
       {/* Floor */}
       <Suspense fallback={null}>
-        <group position={[0, 0, 0]}>
-          <FloorGLB />
-        </group>
+        <FloorTexturedRect />
       </Suspense>
        <Grid
          position={[0, 0.005, 0]}
