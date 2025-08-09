@@ -1,16 +1,13 @@
 'use client'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useGLTF } from '@react-three/drei'
+import { KeyboardControls, Text, Grid, useKeyboardControls, useGLTF } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette, ToneMapping } from '@react-three/postprocessing'
 import { ToneMappingMode } from 'postprocessing'
 import * as THREE from 'three'
 import { useEffect, useMemo, useRef, useState, Suspense } from 'react'
 
-type NpcProps = {
-  position: [number, number, number]
-  message?: string
-}
+// NPCs supprimés
 
 function lerpAngleShortest(current: number, target: number, t: number): number {
   const twoPi = Math.PI * 2
@@ -60,28 +57,13 @@ function Character({ color = '#c0c0ff' }: { color?: string }) {
   )
 }
 
-function Npc({ position, message = '...' }: NpcProps) {
-  const groupRef = useRef<THREE.Group>(null)
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime()
-    if (groupRef.current) {
-      groupRef.current.position.y = position[1] + Math.sin(t * 2) * 0.05
-      groupRef.current.rotation.y = Math.sin(t * 0.5) * 0.2
-    }
-  })
-  return (
-    <group ref={groupRef} position={position}>
-      <Character color="#aab7ff" />
-      <Text position={[0, 1.9, 0]} fontSize={0.22} color="#ffd1f3" anchorX="center" anchorY="middle" outlineWidth={0.01} outlineColor="#000">{message}</Text>
-    </group>
-  )
-}
+// Npc supprimé
 
 function PokerTable({ position = [0, 0, 0] as [number, number, number] }) {
   const { scene } = useGLTF('/models/props/sm_pokertable.glb') as unknown as { scene: THREE.Group }
   return (
     <group position={position}>
-      <primitive object={scene} scale={[1.6, 1.6, 1.6]} />
+      <primitive object={scene} scale={[1.3, 1.3, 1.3]} />
       <Text position={[0, 1.6, 0]} fontSize={0.28} color="#fff" anchorX="center" anchorY="middle">Poker</Text>
     </group>
   )
@@ -92,7 +74,7 @@ function BlackjackTable({ position = [0, 0, 0] as [number, number, number] }) {
   return (
     <group position={position}>
       <mesh receiveShadow castShadow position={[0, 0.8, 0]} rotation={[0, 0, 0]}>
-        <boxGeometry args={[3, 0.12, 1.6]} />
+        <boxGeometry args={[2.6, 0.12, 1.2]} />
         <meshStandardMaterial color="#2e7d32" roughness={0.7} />
       </mesh>
       <mesh receiveShadow position={[0, 0.35, 0]}>
@@ -116,6 +98,24 @@ function Bar({ position = [0, 0, 0] as [number, number, number] }) {
 
 // useGLTF déjà importé en tête
 
+function SaloonSignboard({ position = [0, 0, 0] as [number, number, number], scale = [1, 1, 1] as [number, number, number] }) {
+  const { scene } = useGLTF('/models/props/saloon_signboard.glb') as unknown as { scene: THREE.Group }
+  useEffect(() => {
+    scene.traverse((obj) => {
+      if ((obj as THREE.Mesh).isMesh) {
+        const mesh = obj as THREE.Mesh
+        mesh.castShadow = true
+        mesh.receiveShadow = true
+      }
+    })
+  }, [scene])
+  return (
+    <group position={position}>
+      <primitive object={scene} scale={scale} />
+    </group>
+  )
+}
+
 function Piano({ position = [0, 0, 0] as [number, number, number] }) {
   const { scene } = useGLTF('/models/props/piano.glb') as unknown as { scene: THREE.Group }
   useEffect(() => {
@@ -135,13 +135,7 @@ function Piano({ position = [0, 0, 0] as [number, number, number] }) {
   )
 }
 
-function Pianist({ position = [0, 0, 0] as [number, number, number] }) {
-  return (
-    <group position={position}>
-      <Npc position={[0, 0, 0]} message={'♫ Jazz'} />
-    </group>
-  )
-}
+// Pianist supprimé
 
 function PlayerModel({ movingRef }: { movingRef: React.MutableRefObject<boolean> }) {
   const { scene } = useGLTF('/models/characters/male.glb') as unknown as { scene: THREE.Group }
@@ -324,57 +318,39 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
   )
 }
 
-function FloorTextured() {
-  const [base, normal, rough] = useTexture([
-    '/textures/saloon/floor_base.jpg',
-    '/textures/saloon/floor_normal.jpg',
-    '/textures/saloon/floor_rough.jpg',
-  ])
-  base.wrapS = base.wrapT = THREE.RepeatWrapping
-  normal.wrapS = normal.wrapT = THREE.RepeatWrapping
-  rough.wrapS = rough.wrapT = THREE.RepeatWrapping
-  base.repeat.set(3, 3)
-  normal.repeat.set(3, 3)
-  rough.repeat.set(3, 3)
+function FloorGLB() {
+  const { scene } = useGLTF('/textures/saloon/floor.glb') as unknown as { scene: THREE.Group }
+  useEffect(() => {
+    scene.traverse((obj) => {
+      if ((obj as THREE.Mesh).isMesh) {
+        const mesh = obj as THREE.Mesh
+        mesh.castShadow = true
+        mesh.receiveShadow = true
+      }
+    })
+  }, [scene])
   return (
-    <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-      <planeGeometry args={[16, 16]} />
-      <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} roughness={1} />
-    </mesh>
+    <group position={[0, 0, 0]}>
+      <primitive object={scene} scale={[1, 1, 1]} />
+    </group>
   )
 }
 
-function WallsTextured() {
-  const [base, normal, rough] = useTexture([
-    '/textures/saloon/wall_base.jpg',
-    '/textures/saloon/wall_normal.jpg',
-    '/textures/saloon/wall_rough.jpg',
-  ])
-  base.wrapS = base.wrapT = THREE.RepeatWrapping
-  normal.wrapS = normal.wrapT = THREE.RepeatWrapping
-  rough.wrapS = rough.wrapT = THREE.RepeatWrapping
-  base.repeat.set(2, 1)
-  normal.repeat.set(2, 1)
-  rough.repeat.set(2, 1)
+function WallsGLB() {
+  const { scene } = useGLTF('/textures/saloon/wall.glb') as unknown as { scene: THREE.Group }
+  useEffect(() => {
+    scene.traverse((obj) => {
+      if ((obj as THREE.Mesh).isMesh) {
+        const mesh = obj as THREE.Mesh
+        mesh.castShadow = true
+        mesh.receiveShadow = true
+      }
+    })
+  }, [scene])
   return (
-    <>
-      <mesh position={[0, 2.0, -8]} receiveShadow castShadow>
-        <boxGeometry args={[16, 4.0, 0.2]} />
-        <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
-      </mesh>
-      <mesh position={[0, 2.0, 8]} receiveShadow castShadow>
-        <boxGeometry args={[16, 4.0, 0.2]} />
-        <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
-      </mesh>
-      <mesh position={[-8, 2.0, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
-        <boxGeometry args={[16, 4.0, 0.2]} />
-        <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
-      </mesh>
-      <mesh position={[8, 2.0, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
-        <boxGeometry args={[16, 4.0, 0.2]} />
-        <meshStandardMaterial map={base} normalMap={normal} roughnessMap={rough} />
-      </mesh>
-    </>
+    <group>
+      <primitive object={scene} />
+    </group>
   )
 }
 
@@ -416,22 +392,7 @@ function ShelfUnit({ position = [0, 0, 0] as [number, number, number] }) {
   )
 }
 
-function WantedPoster({ position = [0, 0, 0] as [number, number, number], text = 'WANTED' }) {
-  return (
-    <group position={position}>
-      <mesh position={[0, 1.4, 0]} rotation={[0, 0, 0]}>
-        <planeGeometry args={[0.9, 1.2]} />
-        <meshStandardMaterial color="#e5d7b5" />
-      </mesh>
-      <Text position={[0, 1.6, 0.01]} fontSize={0.18} color="#2b2118" anchorX="center" anchorY="middle">
-        {text}
-      </Text>
-      <Text position={[0, 1.3, 0.01]} fontSize={0.12} color="#2b2118" anchorX="center" anchorY="middle">
-        REWARD
-      </Text>
-    </group>
-  )
-}
+// WantedPoster supprimé
 
 // DustParticles supprimé (non utilisé)
 
@@ -470,7 +431,9 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       <HangingLamp position={[0, 3.2, -5.5]} />
 
       {/* Floor */}
-      <FloorTextured />
+      <Suspense fallback={null}>
+        <FloorGLB />
+      </Suspense>
       <Grid
         position={[0, 0.005, 0]}
         args={[16, 16]}
@@ -483,29 +446,27 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       />
 
       {/* Simple room walls */}
-      <WallsTextured />
+      <Suspense fallback={null}>
+        <WallsGLB />
+      </Suspense>
 
       {/* Ambiance */}
       <SceneEffects />
 
       {/* Props */}
       <PokerTable position={[-3.5, 0, -1.4]} />
-      <Chair position={[-4.3, 0, -1.6]} />
-      <Chair position={[-2.7, 0, -1.6]} />
+      <Chair position={[-4.3, 0, -2.4]} />
+      <Chair position={[-2.7, 0, -2.4]} />
       <BlackjackTable position={[3.5, 0, -1.4]} />
-      <Chair position={[2.7, 0, -1.6]} />
-      <Chair position={[4.3, 0, -1.6]} />
+      <Chair position={[2.7, 0, -2.4]} />
+      <Chair position={[4.3, 0, -2.4]} />
       <Bar position={[0, 0, -6]} />
+      {/* Pancarte SALOON au-dessus du bar */}
+      <SaloonSignboard position={[0, 2.5, -5.4]} scale={[1.4, 1.4, 1.4]} />
       <ShelfUnit position={[0, 0, -7.6]} />
-      <WantedPoster position={[-6.8, 0, 0.2]} text={'WANTED'} />
-      <WantedPoster position={[6.8, 0, -0.2]} text={'REWARD'} />
       <Piano position={[5.2, 0, 3.6]} />
-      <Pianist position={[4.7, 0, 4.1]} />
 
-      {/* NPCs */}
-      <Npc position={[-5, 0, 3.8]} message={'Tu connais la martingale ?'} />
-      <Npc position={[-4.2, 0, 4.3]} message={"J'ai un bon pressentiment..."} />
-      <Npc position={[4.5, 0, 1.4]} message={'La maison gagne toujours.'} />
+      {/* NPCs supprimés */}
 
       {/* Player */}
       <ThirdPersonCharacter onPositionChange={onPlayerMove} fallbackKeysRef={fallbackKeysRef} />
@@ -805,10 +766,10 @@ export default function CasinoGame() {
 
   const interactables = useMemo<Interactable[]>(
     () => [
-      { type: 'poker', position: [-6, 0, -2], radius: 2.2, label: 'Jouer au Poker (E)' },
-      { type: 'blackjack', position: [6, 0, -2], radius: 2.2, label: 'Jouer au Blackjack (E)' },
-      { type: 'bar', position: [0, 0, -12], radius: 2.8, label: 'Prendre un verre (E)' },
-      { type: 'piano', position: [12, 0, 8], radius: 2.5, label: 'Écouter le pianiste (E)' },
+      { type: 'poker', position: [-3.5, 0, -1.4], radius: 2.0, label: 'Jouer au Poker (E)' },
+      { type: 'blackjack', position: [3.5, 0, -1.4], radius: 2.0, label: 'Jouer au Blackjack (E)' },
+      { type: 'bar', position: [0, 0, -6], radius: 2.4, label: 'Prendre un verre (E)' },
+      { type: 'piano', position: [5.2, 0, 3.6], radius: 2.2, label: 'Piano (E)' },
     ],
     []
   )
@@ -954,7 +915,7 @@ export default function CasinoGame() {
             </div>
             <div style={{ marginTop: 8, fontFamily: 'monospace', fontSize: 14, lineHeight: 1.7 }}>
               <div><strong>Contrôles</strong>: Z/Q/S/D ou Flèches, Shift: courir, E: interagir, M: mute, H/Echap: aide</div>
-              <div><strong>Features</strong>: tables Poker/Blackjack, bar, pianiste, PNJ, audio d&apos;ambiance</div>
+              <div><strong>Features</strong>: tables Poker/Blackjack, bar, piano, audio d&apos;ambiance</div>
               <div><strong>À venir</strong>: Poker Texas Hold&apos;em, collisions physiques, animations avancées du Cowboy</div>
             </div>
           </div>
