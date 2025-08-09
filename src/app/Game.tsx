@@ -320,8 +320,10 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
 
 function FloorGLB() {
   const { scene } = useGLTF('/textures/saloon/floor.glb') as unknown as { scene: THREE.Group }
-  const groupRef = useRef<THREE.Group>(null)
+  const preparedRef = useRef(false)
   useEffect(() => {
+    if (preparedRef.current) return
+    preparedRef.current = true
     scene.traverse((obj) => {
       if ((obj as THREE.Mesh).isMesh) {
         const mesh = obj as THREE.Mesh
@@ -329,29 +331,40 @@ function FloorGLB() {
         mesh.receiveShadow = true
       }
     })
-    // Adapter l'échelle pour couvrir ~16x16 en XZ
-    const box = new THREE.Box3().setFromObject(scene)
-    const size = new THREE.Vector3()
+    // Déterminer l'axe "fin" (épaisseur) et orienter pour que cet axe soit Y (vertical)
+    let box = new THREE.Box3().setFromObject(scene)
+    let size = new THREE.Vector3()
     box.getSize(size)
-    const target = new THREE.Vector2(16, 16)
-    const scaleX = size.x > 0 ? target.x / size.x : 1
-    const scaleY = size.y > 0 ? target.y / size.y : scaleX
-    scene.scale.set(scaleX, scaleY, 1)
+    const dims = [size.x, size.y, size.z]
+    const minIdx = dims.indexOf(Math.min(...dims))
+    if (minIdx === 2) {
+      // Z est l'épaisseur -> faire tourner autour de X pour que Z -> Y
+      scene.rotation.x = -Math.PI / 2
+    } else if (minIdx === 0) {
+      // X est l'épaisseur -> faire tourner autour de Z pour que X -> Y
+      scene.rotation.z = Math.PI / 2
+    }
+    // Recalculer la bbox après orientation
+    box = new THREE.Box3().setFromObject(scene)
+    size = new THREE.Vector3()
+    box.getSize(size)
+    // Adapter l'échelle pour couvrir ~16x16 (XZ)
+    const targetX = 16
+    const targetZ = 16
+    const scaleX = size.x > 0 ? targetX / size.x : 1
+    const scaleZ = size.z > 0 ? targetZ / size.z : 1
+    scene.scale.set(scaleX, 1, scaleZ)
     // Poser le sol à y ~ 0
     const after = new THREE.Box3().setFromObject(scene)
     const minY = after.min.y
     scene.position.y -= (minY + 0.002)
   }, [scene])
-  return (
-    <group ref={groupRef} position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <primitive object={scene} />
-    </group>
-  )
+  return <primitive object={scene} />
 }
 
 function WallsRoomGLB() {
   const { scene } = useGLTF('/textures/saloon/wall.glb') as unknown as { scene: THREE.Group }
-  const scaleRef = useRef(1)
+  const [params, setParams] = useState<null | { s: number; halfDepth: number; bottomOffsetY: number }>(null)
   useEffect(() => {
     scene.traverse((obj) => {
       if ((obj as THREE.Mesh).isMesh) {
@@ -360,25 +373,34 @@ function WallsRoomGLB() {
         mesh.receiveShadow = true
       }
     })
-    // Calculer l'échelle pour que la largeur du mur couvre 16 unités
     const box = new THREE.Box3().setFromObject(scene)
     const size = new THREE.Vector3()
     box.getSize(size)
-    const scaleX = size.x > 0 ? 16 / size.x : 1
-    scaleRef.current = scaleX
-    scene.scale.set(scaleX, scaleX, scaleX)
+    const s = size.x > 0 ? 16 / size.x : 1
+    const halfDepth = (size.z * s) / 2
+    const bottomOffsetY = -box.min.y * s
+    setParams({ s, halfDepth, bottomOffsetY })
   }, [scene])
-  const makeWall = (pos: [number, number, number], rotY: number) => (
-    <group position={pos} rotation={[0, rotY, 0]}>
-      <primitive object={scene.clone(true)} />
-    </group>
-  )
+  if (!params) return null
+  const makeWall = (pos: [number, number, number], rotY: number) => {
+    const clone = scene.clone(true)
+    clone.scale.set(params.s, params.s, params.s)
+    return (
+      <group position={pos} rotation={[0, rotY, 0]}>
+        <primitive object={clone} />
+      </group>
+    )
+  }
   return (
     <group>
-      {makeWall([0, 2.0, -8], 0)}
-      {makeWall([0, 2.0, 8], Math.PI)}
-      {makeWall([-8, 2.0, 0], Math.PI / 2)}
-      {makeWall([8, 2.0, 0], -Math.PI / 2)}
+      {/* Avant (mur au fond négatif Z) */}
+      {makeWall([0, params.bottomOffsetY, -8 + params.halfDepth], 0)}
+      {/* Arrière (mur Z positif) */}
+      {makeWall([0, params.bottomOffsetY, 8 - params.halfDepth], Math.PI)}
+      {/* Gauche (mur X négatif) */}
+      {makeWall([-8 + params.halfDepth, params.bottomOffsetY, 0], Math.PI / 2)}
+      {/* Droite (mur X positif) */}
+      {makeWall([8 - params.halfDepth, params.bottomOffsetY, 0], -Math.PI / 2)}
     </group>
   )
 }
@@ -461,7 +483,9 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
 
       {/* Floor */}
       <Suspense fallback={null}>
-        <FloorGLB />
+        <group position={[0, 0, 0]}>
+          <FloorGLB />
+        </group>
       </Suspense>
       <Grid
         position={[0, 0.005, 0]}
