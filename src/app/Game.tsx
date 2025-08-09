@@ -12,8 +12,8 @@ const ROOM_SIZE = 16
 const ROOM_HALF = ROOM_SIZE / 2
 const WALL_THICKNESS = 0.3
 const WALL_HEIGHT = 4
-const FLOOR_OVERFILL = 0.4 // pour éviter les jours en bord de sol
-const WALL_INSET = 0.05 // léger retrait vers l'intérieur pour éviter tout dépassement visuel
+const FLOOR_OVERFILL = WALL_THICKNESS * 2 + 0.2 // recouvrement du sol sous les plinthes
+const WALL_OVERLAP = 0.02 // léger chevauchement aux coins pour "emboîter"
 
 // NPCs supprimés
 
@@ -386,13 +386,13 @@ function WallsRoomGLB() {
   return (
     <group>
       {/* Avant (mur au fond négatif Z) */}
-      {makeWall([0, params.bottomOffsetY, -ROOM_HALF + params.halfDepth + WALL_INSET], 0)}
+      {makeWall([0, params.bottomOffsetY, -ROOM_HALF + params.halfDepth - WALL_OVERLAP], 0)}
       {/* Arrière (mur Z positif) */}
-      {makeWall([0, params.bottomOffsetY, ROOM_HALF - params.halfDepth - WALL_INSET], Math.PI)}
+      {makeWall([0, params.bottomOffsetY, ROOM_HALF - params.halfDepth + WALL_OVERLAP], Math.PI)}
       {/* Gauche (mur X négatif) */}
-      {makeWall([-ROOM_HALF + params.halfDepth + WALL_INSET, params.bottomOffsetY, 0], Math.PI / 2)}
+      {makeWall([-ROOM_HALF + params.halfDepth - WALL_OVERLAP, params.bottomOffsetY, 0], Math.PI / 2)}
       {/* Droite (mur X positif) */}
-      {makeWall([ROOM_HALF - params.halfDepth - WALL_INSET, params.bottomOffsetY, 0], -Math.PI / 2)}
+      {makeWall([ROOM_HALF - params.halfDepth + WALL_OVERLAP, params.bottomOffsetY, 0], -Math.PI / 2)}
     </group>
   )
 }
