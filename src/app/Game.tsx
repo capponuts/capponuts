@@ -117,7 +117,7 @@ function Bar({ position = [0, 0, 0] as [number, number, number] }) {
 // useGLTF déjà importé en tête
 
 function Piano({ position = [0, 0, 0] as [number, number, number] }) {
-  const { scene } = useGLTF('/models/props/Piano.glb') as unknown as { scene: THREE.Group }
+  const { scene } = useGLTF('/models/props/piano.glb') as unknown as { scene: THREE.Group }
   useEffect(() => {
     scene.traverse((obj) => {
       if ((obj as THREE.Mesh).isMesh) {
@@ -144,7 +144,7 @@ function Pianist({ position = [0, 0, 0] as [number, number, number] }) {
 }
 
 function PlayerModel() {
-  const { scene } = useGLTF('/models/characters/cool_man_rigged_free.glb') as unknown as { scene: THREE.Group }
+  const { scene } = useGLTF('/models/props/male.glb') as unknown as { scene: THREE.Group }
   useEffect(() => {
     scene.traverse((obj) => {
       if ((obj as THREE.Mesh).isMesh) {
@@ -433,7 +433,6 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       <WallsTextured />
 
       {/* Ambiance */}
-      <DustParticles count={700} />
       <SceneEffects />
 
       {/* Props */}
