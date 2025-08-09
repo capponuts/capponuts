@@ -331,40 +331,44 @@ function FloorGLB() {
         mesh.receiveShadow = true
       }
     })
-    // Déterminer l'axe "fin" (épaisseur) et orienter pour que cet axe soit Y (vertical)
-    let box = new THREE.Box3().setFromObject(scene)
-    let size = new THREE.Vector3()
-    box.getSize(size)
-    const dims = [size.x, size.y, size.z]
-    const minIdx = dims.indexOf(Math.min(...dims))
-    if (minIdx === 2) {
-      // Z est l'épaisseur -> faire tourner autour de X pour que Z -> Y
-      scene.rotation.x = -Math.PI / 2
-    } else if (minIdx === 0) {
-      // X est l'épaisseur -> faire tourner autour de Z pour que X -> Y
-      scene.rotation.z = Math.PI / 2
+    // Essayer deux orientations et choisir celle qui rend Y la plus fine
+    const measureWithRotation = (rx: number) => {
+      const prev = scene.rotation.x
+      scene.rotation.x = rx
+      const b = new THREE.Box3().setFromObject(scene)
+      const s = new THREE.Vector3()
+      b.getSize(s)
+      scene.rotation.x = prev
+      return { box: b, size: s }
     }
-    // Recalculer la bbox après orientation
-    box = new THREE.Box3().setFromObject(scene)
-    size = new THREE.Vector3()
+    const a = measureWithRotation(0)
+    const b = measureWithRotation(-Math.PI / 2)
+    const useB = b.size.y < a.size.y
+    scene.rotation.x = useB ? -Math.PI / 2 : 0
+
+    // Recalculer bbox après orientation retenue
+    const box = new THREE.Box3().setFromObject(scene)
+    const size = new THREE.Vector3()
     box.getSize(size)
-    // Adapter l'échelle pour couvrir ~16x16 (XZ)
+    // Mise à l'échelle non uniforme pour couvrir 16x16 et rendre l'épaisseur très faible
     const targetX = 16
     const targetZ = 16
+    const targetThickness = 0.02
     const scaleX = size.x > 0 ? targetX / size.x : 1
     const scaleZ = size.z > 0 ? targetZ / size.z : 1
-    scene.scale.set(scaleX, 1, scaleZ)
+    const scaleY = size.y > 0 ? targetThickness / size.y : 1
+    scene.scale.set(scaleX, scaleY, scaleZ)
     // Poser le sol à y ~ 0
     const after = new THREE.Box3().setFromObject(scene)
     const minY = after.min.y
-    scene.position.y -= (minY + 0.002)
+    scene.position.y -= (minY + 0.001)
   }, [scene])
   return <primitive object={scene} />
 }
 
 function WallsRoomGLB() {
   const { scene } = useGLTF('/textures/saloon/wall.glb') as unknown as { scene: THREE.Group }
-  const [params, setParams] = useState<null | { s: number; halfDepth: number; bottomOffsetY: number }>(null)
+  const [params, setParams] = useState<null | { sx: number; sy: number; sz: number; halfDepth: number; bottomOffsetY: number }>(null)
   useEffect(() => {
     scene.traverse((obj) => {
       if ((obj as THREE.Mesh).isMesh) {
@@ -376,15 +380,20 @@ function WallsRoomGLB() {
     const box = new THREE.Box3().setFromObject(scene)
     const size = new THREE.Vector3()
     box.getSize(size)
-    const s = size.x > 0 ? 16 / size.x : 1
-    const halfDepth = (size.z * s) / 2
-    const bottomOffsetY = -box.min.y * s
-    setParams({ s, halfDepth, bottomOffsetY })
+    const targetWidth = 16
+    const targetHeight = 4
+    const targetDepth = 0.2
+    const sx = size.x > 0 ? targetWidth / size.x : 1
+    const sy = size.y > 0 ? targetHeight / size.y : 1
+    const sz = size.z > 0 ? targetDepth / size.z : 1
+    const halfDepth = (size.z * sz) / 2
+    const bottomOffsetY = -box.min.y * sy
+    setParams({ sx, sy, sz, halfDepth, bottomOffsetY })
   }, [scene])
   if (!params) return null
   const makeWall = (pos: [number, number, number], rotY: number) => {
     const clone = scene.clone(true)
-    clone.scale.set(params.s, params.s, params.s)
+    clone.scale.set(params.sx, params.sy, params.sz)
     return (
       <group position={pos} rotation={[0, rotY, 0]}>
         <primitive object={clone} />
