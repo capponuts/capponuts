@@ -143,18 +143,90 @@ function Pianist({ position = [0, 0, 0] as [number, number, number] }) {
   )
 }
 
-function PlayerModel() {
+function PlayerModel({ movingRef }: { movingRef: React.MutableRefObject<boolean> }) {
   const { scene } = useGLTF('/models/characters/male.glb') as unknown as { scene: THREE.Group }
+  const containerRef = useRef<THREE.Group>(null)
+  const tRef = useRef(0)
+
   useEffect(() => {
+    const isStdOrPhys = (
+      m: THREE.Material
+    ): m is THREE.MeshStandardMaterial | THREE.MeshPhysicalMaterial =>
+      (m as THREE.MeshStandardMaterial).isMeshStandardMaterial === true ||
+      (m as THREE.MeshPhysicalMaterial).isMeshPhysicalMaterial === true
+
     scene.traverse((obj) => {
       if ((obj as THREE.Mesh).isMesh) {
-        const mesh = obj as THREE.Mesh
+        const mesh = obj as THREE.Mesh & { material: THREE.Material | THREE.Material[] }
         mesh.castShadow = true
         mesh.receiveShadow = true
+        const applyProps = (mat: THREE.Material) => {
+          if (isStdOrPhys(mat)) {
+            mat.metalness = 0.1
+            mat.roughness = 0.8
+          }
+        }
+        if (Array.isArray(mesh.material)) {
+          mesh.material.forEach(applyProps)
+        } else if (mesh.material) {
+          applyProps(mesh.material)
+        }
       }
     })
+
+    if (!containerRef.current) return
+    containerRef.current.add(scene)
+
+    const box = new THREE.Box3().setFromObject(scene)
+    const size = new THREE.Vector3()
+    box.getSize(size)
+
+    const targetHeight = 1.65
+    const scale = size.y > 0 ? targetHeight / size.y : 1
+    scene.scale.setScalar(scale)
+
+    const boxAfter = new THREE.Box3().setFromObject(scene)
+    const minY = boxAfter.min.y
+    scene.position.y -= minY + 0.01
+
+    const shirt = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.28, 0.32, 0.55, 16, 1, false),
+      new THREE.MeshStandardMaterial({ color: '#6a4a3c', roughness: 0.9, metalness: 0.05 })
+    )
+    shirt.castShadow = true
+    shirt.receiveShadow = true
+    const chestY = boxAfter.min.y + (boxAfter.max.y - boxAfter.min.y) * 0.62
+    shirt.position.set(0, chestY, 0)
+
+    const pants = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.26, 0.26, 0.6, 14, 1, false),
+      new THREE.MeshStandardMaterial({ color: '#2b2b2b', roughness: 0.95, metalness: 0.02 })
+    )
+    pants.castShadow = true
+    pants.receiveShadow = true
+    const hipsY = boxAfter.min.y + 0.3
+    pants.position.set(0, hipsY, 0)
+
+    containerRef.current.add(shirt)
+    containerRef.current.add(pants)
   }, [scene])
-  return <primitive object={scene} scale={[1, 1, 1]} />
+
+  useFrame((state, delta) => {
+    if (!containerRef.current) return
+    const moving = movingRef.current
+    if (moving) {
+      tRef.current += delta * 8
+      const y = Math.sin(tRef.current) * 0.03
+      const tilt = Math.sin(tRef.current) * 0.06
+      containerRef.current.position.y = y
+      containerRef.current.rotation.x = tilt
+    } else {
+      containerRef.current.position.y = THREE.MathUtils.damp(containerRef.current.position.y, 0, 6, delta)
+      containerRef.current.rotation.x = THREE.MathUtils.damp(containerRef.current.rotation.x, 0, 6, delta)
+    }
+  })
+
+  return <group ref={containerRef} />
 }
 
 function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositionChange?: (pos: THREE.Vector3) => void; fallbackKeysRef: React.MutableRefObject<FallbackKeys> }) {
@@ -235,10 +307,18 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
     }
   })
 
+  const movingRef = useRef(false)
+
+  useFrame(() => {
+    const moving = velocityRef.current.lengthSq() > 0.0001
+    const onlyBackward = false
+    movingRef.current = moving && !onlyBackward
+  })
+
   return (
-    <group ref={playerRef} position={[0, 0.6, 3.5]}>
+    <group ref={playerRef} position={[0, 0.0, 3.5]}>
       <Suspense fallback={<Character color="#c0c0ff" />}> 
-        <PlayerModel />
+        <PlayerModel movingRef={movingRef} />
       </Suspense>
     </group>
   )
@@ -353,36 +433,7 @@ function WantedPoster({ position = [0, 0, 0] as [number, number, number], text =
   )
 }
 
-function DustParticles({ count = 600 }: { count?: number }) {
-  const pointsRef = useRef<THREE.Points>(null)
-  const positions = useMemo(() => {
-    const arr = new Float32Array(count * 3)
-    for (let i = 0; i < count; i++) {
-      arr[i * 3 + 0] = (Math.random() - 0.5) * 14
-      arr[i * 3 + 1] = Math.random() * 3 + 0.2
-      arr[i * 3 + 2] = (Math.random() - 0.5) * 14
-    }
-    return arr
-  }, [count])
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime()
-    if (!pointsRef.current) return
-    const a = pointsRef.current.geometry.attributes.position as THREE.BufferAttribute
-    for (let i = 0; i < count; i++) {
-      const base = i * 3 + 1
-      a.array[base] += Math.sin(t * 0.3 + i) * 0.0008
-    }
-    a.needsUpdate = true
-  })
-  return (
-    <points ref={pointsRef} position={[0, 0, 0]}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial size={0.06} sizeAttenuation color="#ffd6a1" opacity={0.35} transparent depthWrite={false} />
-    </points>
-  )
-}
+// DustParticles supprimé (non utilisé)
 
 function HangingLamp({ position = [0, 0, 0] as [number, number, number] }) {
   return (
