@@ -7,6 +7,13 @@ import { ToneMappingMode } from 'postprocessing'
 import * as THREE from 'three'
 import { useEffect, useMemo, useRef, useState, Suspense } from 'react'
 
+// Dimensions cohérentes de la salle
+const ROOM_SIZE = 16
+const ROOM_HALF = ROOM_SIZE / 2
+const WALL_THICKNESS = 0.3
+const WALL_HEIGHT = 4
+const FLOOR_OVERFILL = 0.4 // pour éviter les jours en bord de sol
+
 // NPCs supprimés
 
 function lerpAngleShortest(current: number, target: number, t: number): number {
@@ -271,8 +278,9 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
       playerRef.current.position.addScaledVector(velocityRef.current, delta)
 
       // Boundaries (salle réduite)
-      playerRef.current.position.x = THREE.MathUtils.clamp(playerRef.current.position.x, -7, 7)
-      playerRef.current.position.z = THREE.MathUtils.clamp(playerRef.current.position.z, -7, 7)
+      const inset = 0.5
+      playerRef.current.position.x = THREE.MathUtils.clamp(playerRef.current.position.x, -ROOM_HALF + inset, ROOM_HALF - inset)
+      playerRef.current.position.z = THREE.MathUtils.clamp(playerRef.current.position.z, -ROOM_HALF + inset, ROOM_HALF - inset)
 
       // Orientation: on tourne seulement si on n'est pas uniquement en marche arrière
       const moving = velocityRef.current.lengthSq() > 0.0001
@@ -350,9 +358,9 @@ function FloorGLB() {
     const box = new THREE.Box3().setFromObject(scene)
     const size = new THREE.Vector3()
     box.getSize(size)
-    // Mise à l'échelle non uniforme pour couvrir 16x16 et rendre l'épaisseur très faible
-    const targetX = 16
-    const targetZ = 16
+    // Mise à l'échelle non uniforme pour couvrir la salle et rendre l'épaisseur très faible
+    const targetX = ROOM_SIZE + FLOOR_OVERFILL
+    const targetZ = ROOM_SIZE + FLOOR_OVERFILL
     const targetThickness = 0.02
     const scaleX = size.x > 0 ? targetX / size.x : 1
     const scaleZ = size.z > 0 ? targetZ / size.z : 1
@@ -380,9 +388,9 @@ function WallsRoomGLB() {
     const box = new THREE.Box3().setFromObject(scene)
     const size = new THREE.Vector3()
     box.getSize(size)
-    const targetWidth = 16
-    const targetHeight = 4
-    const targetDepth = 0.2
+    const targetWidth = ROOM_SIZE
+    const targetHeight = WALL_HEIGHT
+    const targetDepth = WALL_THICKNESS
     const sx = size.x > 0 ? targetWidth / size.x : 1
     const sy = size.y > 0 ? targetHeight / size.y : 1
     const sz = size.z > 0 ? targetDepth / size.z : 1
@@ -403,13 +411,13 @@ function WallsRoomGLB() {
   return (
     <group>
       {/* Avant (mur au fond négatif Z) */}
-      {makeWall([0, params.bottomOffsetY, -8 + params.halfDepth], 0)}
+      {makeWall([0, params.bottomOffsetY, -ROOM_HALF + params.halfDepth], 0)}
       {/* Arrière (mur Z positif) */}
-      {makeWall([0, params.bottomOffsetY, 8 - params.halfDepth], Math.PI)}
+      {makeWall([0, params.bottomOffsetY, ROOM_HALF - params.halfDepth], Math.PI)}
       {/* Gauche (mur X négatif) */}
-      {makeWall([-8 + params.halfDepth, params.bottomOffsetY, 0], Math.PI / 2)}
+      {makeWall([-ROOM_HALF + params.halfDepth, params.bottomOffsetY, 0], Math.PI / 2)}
       {/* Droite (mur X positif) */}
-      {makeWall([8 - params.halfDepth, params.bottomOffsetY, 0], -Math.PI / 2)}
+      {makeWall([ROOM_HALF - params.halfDepth, params.bottomOffsetY, 0], -Math.PI / 2)}
     </group>
   )
 }
@@ -496,9 +504,9 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
           <FloorGLB />
         </group>
       </Suspense>
-      <Grid
-        position={[0, 0.005, 0]}
-        args={[16, 16]}
+       <Grid
+         position={[0, 0.005, 0]}
+         args={[ROOM_SIZE, ROOM_SIZE]}
         cellColor="#2a2a44"
         sectionColor="#3a3a66"
         cellSize={0.5}
@@ -522,9 +530,9 @@ function Scene({ onPlayerMove, fallbackKeysRef }: { onPlayerMove?: (pos: THREE.V
       <BlackjackTable position={[3.5, 0, -1.4]} />
       <Chair position={[2.7, 0, -2.4]} />
       <Chair position={[4.3, 0, -2.4]} />
-      <Bar position={[0, 0, -6]} />
+      <Bar position={[0, 0, -ROOM_HALF + 2]} />
       {/* Pancarte SALOON au-dessus du bar, collée au mur arrière */}
-      <SaloonSignboard position={[0, 2.6, -7.85]} scale={[1.2, 1.2, 1.2]} />
+      <SaloonSignboard position={[0, 2.6, -ROOM_HALF + 0.15]} scale={[1.2, 1.2, 1.2]} />
       <ShelfUnit position={[0, 0, -7.6]} />
       <Piano position={[5.2, 0, 3.6]} />
 
