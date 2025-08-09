@@ -5,7 +5,7 @@ import { KeyboardControls, Text, Grid, useKeyboardControls, useTexture, useGLTF 
 import { EffectComposer, Bloom, Vignette, ToneMapping } from '@react-three/postprocessing'
 import { ToneMappingMode } from 'postprocessing'
 import * as THREE from 'three'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, Suspense } from 'react'
 
 type NpcProps = {
   position: [number, number, number]
@@ -144,7 +144,7 @@ function Pianist({ position = [0, 0, 0] as [number, number, number] }) {
 }
 
 function PlayerModel() {
-  const { scene } = useGLTF('/models/props/male.glb') as unknown as { scene: THREE.Group }
+  const { scene } = useGLTF('/models/characters/male.glb') as unknown as { scene: THREE.Group }
   useEffect(() => {
     scene.traverse((obj) => {
       if ((obj as THREE.Mesh).isMesh) {
@@ -237,7 +237,9 @@ function ThirdPersonCharacter({ onPositionChange, fallbackKeysRef }: { onPositio
 
   return (
     <group ref={playerRef} position={[0, 0.6, 3.5]}>
-      <PlayerModel />
+      <Suspense fallback={<Character color="#c0c0ff" />}> 
+        <PlayerModel />
+      </Suspense>
     </group>
   )
 }
