@@ -1,12 +1,11 @@
 import { getLolSummaryByRiotId } from '@/services/riot'
 import { getTwitchUser } from '@/services/twitch'
-import { getYouTubeChannelByHandleOrId } from '@/services/youtube'
 import { getWowCharacter } from '@/services/blizzard'
+import DashboardClient from './DashboardClient'
 
 export default async function DashboardPage() {
   const lol = await getLolSummaryByRiotId('Capponuts#1993', 'euw1')
   const twitch = await getTwitchUser('capponuts')
-  const yt = await getYouTubeChannelByHandleOrId('@capponuts')
   const wow = await getWowCharacter('ysondre', 'dracaufist', 'eu')
 
   return (
@@ -53,18 +52,10 @@ export default async function DashboardPage() {
           )}
         </section>
 
-        <section className="border border-cyan-700/30 rounded p-4">
-          <h2 className="text-xl mb-2">YouTube</h2>
-          {yt ? (
-            <div>
-              <div>Views: {yt.statistics?.viewCount ?? 'n/a'}</div>
-              <div>Subs: {yt.statistics?.subscriberCount ?? 'n/a'}</div>
-              <div>Vidéos: {yt.statistics?.videoCount ?? 'n/a'}</div>
-            </div>
-          ) : (
-            <div>Clé YouTube absente ou API indisponible</div>
-          )}
-        </section>
+        {/* Section YouTube retirée */}
+      </div>
+      <div className="mt-6">
+        <DashboardClient />
       </div>
     </main>
   )

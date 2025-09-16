@@ -11,7 +11,10 @@ async function getAccessToken(): Promise<string | null> {
   const body = new URLSearchParams({ grant_type: 'client_credentials' })
   const res = await fetch(getBlizzardTokenUrl(), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`,
+    },
     body,
     cache: 'no-store',
   })
