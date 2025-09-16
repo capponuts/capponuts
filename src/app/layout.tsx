@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "CAPPONUTS - 3D Space Experience",
@@ -60,9 +61,9 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <nav style={{ position: 'fixed', top: 8, right: 8, zIndex: 50, display: 'flex', gap: 8 }}>
-          <a href="/" style={{ padding: '6px 10px', border: '1px solid #234', borderRadius: 8, color: '#b3e5fc', background: '#0b0b12' }}>Accueil</a>
-          <a href="/dashboard" style={{ padding: '6px 10px', border: '1px solid #234', borderRadius: 8, color: '#b3e5fc', background: '#0b0b12' }}>Dashboard</a>
-          <a href="/integrations" style={{ padding: '6px 10px', border: '1px solid #234', borderRadius: 8, color: '#b3e5fc', background: '#0b0b12' }}>Intégrations</a>
+          <Link href="/" style={{ padding: '6px 10px', border: '1px solid #234', borderRadius: 8, color: '#b3e5fc', background: '#0b0b12' }}>Accueil</Link>
+          <Link href="/dashboard" style={{ padding: '6px 10px', border: '1px solid #234', borderRadius: 8, color: '#b3e5fc', background: '#0b0b12' }}>Dashboard</Link>
+          <Link href="/integrations" style={{ padding: '6px 10px', border: '1px solid #234', borderRadius: 8, color: '#b3e5fc', background: '#0b0b12' }}>Intégrations</Link>
         </nav>
         {children}
       </body>

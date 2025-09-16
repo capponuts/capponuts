@@ -33,7 +33,7 @@ export default async function IntegrationsPage() {
         <Status ok={hasTwitch} label="Twitch Client/App Token" detail={twitch ? `Chaîne: ${twitch.display_name}` : undefined} />
         <Status ok={hasYouTube} label="YouTube API Key" detail={yt ? `Channel OK` : undefined} />
       </div>
-      <p className="mt-4 opacity-80 text-sm">Les statuts ci-dessus sont évalués côté serveur au moment de l'affichage.</p>
+      <p className="mt-4 opacity-80 text-sm">Les statuts ci-dessus sont évalués côté serveur au moment de l&apos;affichage.</p>
     </main>
   )
 }
