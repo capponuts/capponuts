@@ -1,8 +1,8 @@
 'use client'
 import { motion } from 'framer-motion'
-import { Sword, Twitch, Gamepad2, Shield } from 'lucide-react'
+import { Sword, Twitch, Gamepad2, Shield, type LucideIcon } from 'lucide-react'
 
-export function StatCard({ title, value, icon: Icon, accent }: { title: string; value: string; icon: any; accent: string }) {
+export function StatCard({ title, value, icon: Icon, accent }: { title: string; value: string; icon: LucideIcon; accent: string }) {
   return (
     <motion.div whileHover={{ y: -4 }} className="rounded-xl border border-cyan-700/30 p-4 bg-black/40">
       <div className="flex items-center gap-3">
