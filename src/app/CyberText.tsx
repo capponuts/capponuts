@@ -78,7 +78,7 @@ function createArcadeBeep() {
   }
 }
 
-export default function CyberText({ onSelectProject }: { onSelectProject?: (projectId: string) => void }) {
+export default function CyberText() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isMuted, setIsMuted] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
@@ -374,7 +374,7 @@ export default function CyberText({ onSelectProject }: { onSelectProject?: (proj
                 <h3 id="projects-title" style={{ margin: 0, letterSpacing: 2 }}>PROJECTS</h3>
                 <button onClick={() => setShowProjects(false)} aria-label="Close projects">✕</button>
               </div>
-              <button onClick={() => { setShowProjects(false); onSelectProject?.('saloon') }} style={{ width: '100%', textAlign: 'left', padding: '10px 12px', borderRadius: 10, border: '1px solid rgba(168,85,247,0.3)', background: 'rgba(0,0,0,0.4)', color: '#eadcff' }}>Saloon <span style={{ float: 'right', opacity: 0.8, fontSize: 10 }}>3D</span></button>
+              <div style={{ width: '100%', textAlign: 'left', padding: '10px 12px', borderRadius: 10, border: '1px solid rgba(168,85,247,0.15)', background: 'rgba(0,0,0,0.4)', color: '#eadcff' }}>Aucun projet disponible pour le moment.</div>
             </div>
           </div>
         )}
