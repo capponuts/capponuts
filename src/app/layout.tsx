@@ -59,6 +59,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://i.ytimg.com" />
       </head>
       <body className="antialiased">
+        <nav style={{ position: 'fixed', top: 8, right: 8, zIndex: 50, display: 'flex', gap: 8 }}>
+          <a href="/" style={{ padding: '6px 10px', border: '1px solid #234', borderRadius: 8, color: '#b3e5fc', background: '#0b0b12' }}>Accueil</a>
+          <a href="/dashboard" style={{ padding: '6px 10px', border: '1px solid #234', borderRadius: 8, color: '#b3e5fc', background: '#0b0b12' }}>Dashboard</a>
+          <a href="/integrations" style={{ padding: '6px 10px', border: '1px solid #234', borderRadius: 8, color: '#b3e5fc', background: '#0b0b12' }}>Intégrations</a>
+        </nav>
         {children}
       </body>
     </html>
