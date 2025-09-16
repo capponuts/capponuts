@@ -64,4 +64,51 @@ export async function getLolSummaryByRiotId(riotId: string, platform: 'euw1' | '
   }
 }
 
+// ===== TFT endpoints =====
+type TftSummoner = { id: string; accountId: string; puuid: string; name: string; summonerLevel: number }
+type TftLeagueEntry = { queueType: string; tier: string; rank: string; leaguePoints: number; wins: number; losses: number }
+
+export async function getTftSummonerByPuuid(puuid: string, platform: 'euw1' | 'eun1' | 'na1' | 'kr' = 'euw1'): Promise<TftSummoner | null> {
+  const key = getRiotKey()
+  if (!key) return null
+  const url = `https://${platform}.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/${encodeURIComponent(puuid)}`
+  const res = await fetch(url, { headers: getRiotHeaders(), cache: 'no-store' })
+  if (!res.ok) return null
+  return (await res.json()) as TftSummoner
+}
+
+export async function getTftRankedBySummonerId(summonerId: string, platform: 'euw1' | 'eun1' | 'na1' | 'kr' = 'euw1'): Promise<TftLeagueEntry[] | null> {
+  const key = getRiotKey()
+  if (!key) return null
+  const url = `https://${platform}.api.riotgames.com/tft/league/v1/entries/by-summoner/${encodeURIComponent(summonerId)}`
+  const res = await fetch(url, { headers: getRiotHeaders(), cache: 'no-store' })
+  if (!res.ok) return null
+  return (await res.json()) as TftLeagueEntry[]
+}
+
+export type TftSummary = {
+  gameName: string
+  tagLine: string
+  ranked?: { tier: string; rank: string; lp: number; wins: number; losses: number; winrate: number }
+}
+
+export async function getTftSummaryByRiotId(riotId: string, platform: 'euw1' | 'eun1' | 'na1' | 'kr' = 'euw1'): Promise<TftSummary | null> {
+  const [name, tag] = riotId.split('#')
+  if (!name || !tag) return null
+  const account = await getAccountByRiotId(name, tag)
+  if (!account) return null
+  const summoner = await getTftSummonerByPuuid(account.puuid, platform)
+  if (!summoner) return { gameName: account.gameName, tagLine: account.tagLine }
+  const entries = await getTftRankedBySummonerId(summoner.id, platform)
+  const ranked = entries?.find((e) => e.queueType === 'RANKED_TFT')
+  const winrate = ranked ? Math.round((ranked.wins / Math.max(1, ranked.wins + ranked.losses)) * 100) : 0
+  return {
+    gameName: account.gameName,
+    tagLine: account.tagLine,
+    ranked: ranked
+      ? { tier: ranked.tier, rank: ranked.rank, lp: ranked.leaguePoints, wins: ranked.wins, losses: ranked.losses, winrate }
+      : undefined,
+  }
+}
+
 

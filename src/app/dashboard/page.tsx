@@ -1,4 +1,4 @@
-import { getLolSummaryByRiotId } from '@/services/riot'
+import { getLolSummaryByRiotId, getTftSummaryByRiotId } from '@/services/riot'
 import { getTwitchUser } from '@/services/twitch'
 import { getWowCharacter } from '@/services/blizzard'
 import DashboardClient from './DashboardClient'
@@ -11,8 +11,9 @@ export default async function DashboardPage() {
   const hasBlizzard = Boolean(process.env.BLIZZARD_CLIENT_ID && process.env.BLIZZARD_CLIENT_SECRET)
   const hasTwitch = Boolean(process.env.TWITCH_CLIENT_ID && process.env.TWITCH_APP_TOKEN)
 
-  const [lol, twitch, wow] = await Promise.all([
+  const [lol, tft, twitch, wow] = await Promise.all([
     getLolSummaryByRiotId('Capponuts#1993', 'euw1').catch(() => null),
+    getTftSummaryByRiotId('Capponuts#1993', 'euw1').catch(() => null),
     getTwitchUser('capponuts').catch(() => null),
     getWowCharacter('ysondre', 'dracaufist', 'eu').catch(() => null),
   ])
@@ -27,11 +28,11 @@ export default async function DashboardPage() {
         <section className="grid gap-4 md:grid-cols-2">
           <div className="rounded-xl border border-cyan-700/30 p-4 bg-black/40">
             <h2 className="text-xl mb-2">LoL / TFT</h2>
-            {lol ? (
+            {tft ? (
               <div className="space-y-1">
-                <div className="opacity-80">{lol.gameName}#{lol.tagLine}</div>
-                {lol.soloDuo ? (
-                  <div className="text-cyan-200">Solo/Duo: {lol.soloDuo.tier} {lol.soloDuo.rank} • {lol.soloDuo.lp} LP • WR {lol.soloDuo.winrate}%</div>
+                <div className="opacity-80">{tft.gameName}#{tft.tagLine}</div>
+                {tft.ranked ? (
+                  <div className="text-cyan-200">TFT: {tft.ranked.tier} {tft.ranked.rank} • {tft.ranked.lp} LP • WR {tft.ranked.winrate}%</div>
                 ) : (
                   <div className="opacity-70">Aucun classement détecté (ou clé API manquante)</div>
                 )}

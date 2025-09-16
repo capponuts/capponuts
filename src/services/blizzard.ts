@@ -27,8 +27,8 @@ export async function getWowCharacter(realmSlug: string, name: string, region: '
   const token = await getAccessToken()
   if (!token) return null
   const ns = `profile-${region}`
-  const url = `https://${region}.api.blizzard.com/profile/wow/character/${encodeURIComponent(realmSlug)}/${encodeURIComponent(name.toLowerCase())}?namespace=${ns}&locale=fr_FR&access_token=${token}`
-  const res = await fetch(url, { cache: 'no-store' })
+  const url = `https://${region}.api.blizzard.com/profile/wow/character/${encodeURIComponent(realmSlug)}/${encodeURIComponent(name.toLowerCase())}?namespace=${ns}&locale=fr_FR`
+  const res = await fetch(url, { cache: 'no-store', headers: { Authorization: `Bearer ${token}` } })
   if (!res.ok) return null
   return (await res.json()) as WowCharacter
 }
