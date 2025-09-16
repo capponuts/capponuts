@@ -2,6 +2,9 @@ import { getLolSummaryByRiotId } from '@/services/riot'
 import { getTwitchUser } from '@/services/twitch'
 import { getWowCharacter } from '@/services/blizzard'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export default async function IntegrationsPage() {
   const hasRiot = Boolean(process.env.RIOT_API_KEY)
   const hasBlizzard = Boolean(process.env.BLIZZARD_CLIENT_ID && process.env.BLIZZARD_CLIENT_SECRET)

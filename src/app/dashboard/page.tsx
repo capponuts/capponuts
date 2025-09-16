@@ -3,10 +3,19 @@ import { getTwitchUser } from '@/services/twitch'
 import { getWowCharacter } from '@/services/blizzard'
 import DashboardClient from './DashboardClient'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export default async function DashboardPage() {
-  const lol = await getLolSummaryByRiotId('Capponuts#1993', 'euw1')
-  const twitch = await getTwitchUser('capponuts')
-  const wow = await getWowCharacter('ysondre', 'dracaufist', 'eu')
+  const hasRiot = Boolean(process.env.RIOT_API_KEY)
+  const hasBlizzard = Boolean(process.env.BLIZZARD_CLIENT_ID && process.env.BLIZZARD_CLIENT_SECRET)
+  const hasTwitch = Boolean(process.env.TWITCH_CLIENT_ID && process.env.TWITCH_APP_TOKEN)
+
+  const [lol, twitch, wow] = await Promise.all([
+    getLolSummaryByRiotId('Capponuts#1993', 'euw1').catch(() => null),
+    getTwitchUser('capponuts').catch(() => null),
+    getWowCharacter('ysondre', 'dracaufist', 'eu').catch(() => null),
+  ])
 
   return (
     <main className="min-h-screen p-6 text-cyan-100 bg-black">
@@ -28,7 +37,7 @@ export default async function DashboardPage() {
                 )}
               </div>
             ) : (
-              <div className="opacity-70">Clé Riot absente ou API indisponible</div>
+              <div className="opacity-70">{!hasRiot ? 'Clé Riot absente' : 'API Riot indisponible'}</div>
             )}
           </div>
 
@@ -40,7 +49,7 @@ export default async function DashboardPage() {
                 <div className="opacity-80">Niveau: {wow.level ?? 'n/a'}</div>
               </div>
             ) : (
-              <div className="opacity-70">Clés Blizzard absentes ou API indisponible</div>
+              <div className="opacity-70">{!hasBlizzard ? 'Clés Blizzard absentes' : 'API Blizzard indisponible ou token expiré'}</div>
             )}
           </div>
 
@@ -52,7 +61,7 @@ export default async function DashboardPage() {
                 <div className="opacity-80">Views: {twitch.view_count ?? 'n/a'}</div>
               </div>
             ) : (
-              <div className="opacity-70">Clés Twitch absentes ou API indisponible</div>
+              <div className="opacity-70">{!hasTwitch ? 'Clés Twitch absentes' : 'API Twitch indisponible ou token expiré'}</div>
             )}
           </div>
         </section>
