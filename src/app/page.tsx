@@ -213,7 +213,15 @@ function TftPanel({ stats, loading, error }: { stats: ApiTft | null; loading: bo
       {loading ? (
         <div className="glass card" style={{ textAlign: "center" }}>Chargement des stats TFT…</div>
       ) : error ? (
-        <div className="glass card" style={{ color: "#ff8080" }}>{error}</div>
+        <div className="glass card" style={{ color: "#ff8080" }}>
+          {error}
+          <div style={{ marginTop: 12 }}>
+            <a href="https://dak.gg/en/cards/9f8b499a-9152-40a9-aebe-c84c0a3bd35a" target="_blank" rel="noreferrer" className="label">Voir ma carte dak.gg</a>
+          </div>
+          <div style={{ marginTop: 12 }}>
+            <img src="https://dak.gg/en/cards/9f8b499a-9152-40a9-aebe-c84c0a3bd35a" alt="TFT Card" style={{ width: "100%", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)" }} />
+          </div>
+        </div>
       ) : stats ? (
         <div className="stats">
           <div className="glass card">
@@ -237,10 +245,26 @@ function TftPanel({ stats, loading, error }: { stats: ApiTft | null; loading: bo
             </div>
             {stats.winRate != null && <ProgressBar percent={Math.round(stats.winRate * 100)} />}
             <StatRow label="Best augment" value={stats.bestAugment ?? "—"} />
+            {(stats.games == null && stats.winRate == null && stats.top4Rate == null) && (
+              <div style={{ marginTop: 12 }}>
+                <a href="https://dak.gg/en/cards/9f8b499a-9152-40a9-aebe-c84c0a3bd35a" target="_blank" rel="noreferrer" className="label">Voir ma carte dak.gg</a>
+                <div style={{ marginTop: 12 }}>
+                  <img src="https://dak.gg/en/cards/9f8b499a-9152-40a9-aebe-c84c0a3bd35a" alt="TFT Card" style={{ width: "100%", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)" }} />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ) : (
-        <div className="glass card">Stats indisponibles pour le moment.</div>
+        <div className="glass card">
+          Stats indisponibles pour le moment.
+          <div style={{ marginTop: 12 }}>
+            <a href="https://dak.gg/en/cards/9f8b499a-9152-40a9-aebe-c84c0a3bd35a" target="_blank" rel="noreferrer" className="label">Voir ma carte dak.gg</a>
+          </div>
+          <div style={{ marginTop: 12 }}>
+            <img src="https://dak.gg/en/cards/9f8b499a-9152-40a9-aebe-c84c0a3bd35a" alt="TFT Card" style={{ width: "100%", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)" }} />
+          </div>
+        </div>
       )}
     </div>
   );
