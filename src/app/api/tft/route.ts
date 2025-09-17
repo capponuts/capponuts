@@ -73,6 +73,7 @@ export async function GET(request: Request) {
 
   const gameName = (searchParams.get("gameName") || envGameName || "Capponuts") as string;
   const tagLine = (searchParams.get("tagLine") || envTagLine || "1993") as string;
+  const overridePuuid = (searchParams.get("puuid") || undefined) as string | undefined;
   const regionParam = ((searchParams.get("region") || envRegion || "euw") as string).toLowerCase() as RiotRegion;
 
   if (!process.env.RIOT_API_KEY) {
@@ -87,19 +88,21 @@ export async function GET(request: Request) {
 
   try {
     // 1) Try Riot Account by Riot ID to obtain PUUID
-    let puuid: string | null = null;
+    let puuid: string | null = overridePuuid ?? null;
     let accountStatus: number | null = null;
     let accountErrorBody: string | null = null;
-    const accountRes = await fetch(
-      `https://${regional}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
-      { headers, next: { revalidate: 120 } }
-    );
-    if (accountRes.ok) {
-      const account = (await accountRes.json()) as RiotAccount;
-      puuid = account.puuid;
-    } else {
-      accountStatus = accountRes.status;
-      accountErrorBody = await accountRes.text();
+    if (!puuid) {
+      const accountRes = await fetch(
+        `https://${regional}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
+        { headers, next: { revalidate: 120 } }
+      );
+      if (accountRes.ok) {
+        const account = (await accountRes.json()) as RiotAccount;
+        puuid = account.puuid;
+      } else {
+        accountStatus = accountRes.status;
+        accountErrorBody = await accountRes.text();
+      }
     }
 
     // Fallback: if Riot Account lookup failed, try summoner by name (platform)
@@ -191,6 +194,7 @@ export async function GET(request: Request) {
           debug: {
             regional,
             platform,
+            puuidSource: overridePuuid ? "query" : "lookup",
             riotIdAttempt: { status: accountStatus, body: accountErrorBody },
             byNameAttempt: { status: byNameStatus, body: byNameErrorBody },
             byPuuidAttempt: { status: byPuuidStatus, body: byPuuidErrorBody, data: byPuuidData },
