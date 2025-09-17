@@ -184,6 +184,28 @@ export async function GET(request: Request) {
       }
     }
 
+    // EU multi-platform probe: try other EU platforms if still no summonerId
+    if (!summonerId && puuid) {
+      const euPlatforms: string[] = [platform, "eun1", "tr1", "ru"]; // keep preferred first
+      for (const plat of euPlatforms) {
+        if (summonerId) break;
+        const res = await fetch(
+          `https://${plat}.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/${encodeURIComponent(puuid)}`,
+          { headers, next: { revalidate: 120 } }
+        );
+        if (res.ok) {
+          type SummProbe = RiotSummoner & { summonerId?: unknown } & Record<string, unknown>;
+          const s = (await res.json()) as SummProbe;
+          const idFromId = typeof s.id === "string" ? s.id : null;
+          const idFromAlt = typeof s.summonerId === "string" ? (s.summonerId as string) : null;
+          const maybe = idFromId || idFromAlt;
+          if (typeof maybe === "string" && maybe.length > 0) {
+            summonerId = maybe;
+          }
+        }
+      }
+    }
+
     // Ensure we have a valid summonerId
     if (!summonerId) {
       return NextResponse.json(
@@ -219,8 +241,10 @@ export async function GET(request: Request) {
     const entries: LeagueEntry[] = Array.isArray(entriesJson) ? (entriesJson as LeagueEntry[]) : [];
     const solo: LeagueEntry | null = entries.length > 0 ? (entries.find((e: LeagueEntry) => e.queueType === "RANKED_TFT") || entries[0]) : null;
 
-    // 4) Get last N matches to estimate top4 rate (optional, best-effort)
+    // 4) Get last N matches to estimate top4 rate and match-based fallback winrate (optional, best-effort)
     let top4Rate: number | null = null;
+    let matchGames: number | null = null;
+    let matchWinRate: number | null = null;
     if (puuid) {
       try {
         const idsRes = await fetch(
@@ -231,6 +255,7 @@ export async function GET(request: Request) {
           const ids: string[] = await idsRes.json();
           let top4 = 0;
           let total = 0;
+          let winsCnt = 0;
           for (const id of ids) {
             const mRes = await fetch(`https://${regional}.api.riotgames.com/tft/match/v1/matches/${id}`, { headers, next: { revalidate: 60 } });
             if (!mRes.ok) continue;
@@ -239,9 +264,14 @@ export async function GET(request: Request) {
             if (me && typeof me.placement === "number") {
               total += 1;
               if (me.placement <= 4) top4 += 1;
+              if (me.placement === 1) winsCnt += 1;
             }
           }
           if (total > 0) top4Rate = top4 / total;
+          if (total > 0) {
+            matchGames = total;
+            matchWinRate = winsCnt / total;
+          }
         }
       } catch {
         // ignore top4 failures
@@ -250,8 +280,8 @@ export async function GET(request: Request) {
 
     const wins = solo?.wins ?? null;
     const losses = solo?.losses ?? null;
-    const games = typeof wins === "number" && typeof losses === "number" ? wins + losses : null;
-    const winRate = typeof wins === "number" && typeof games === "number" && games > 0 ? wins / games : null;
+    const games = typeof wins === "number" && typeof losses === "number" ? wins + losses : matchGames;
+    const winRate = typeof wins === "number" && typeof games === "number" && games > 0 ? wins / games : matchWinRate;
 
     const payload = {
       gameName,
