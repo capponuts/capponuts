@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 
-type GameKey = "tft" | "lol" | "wow" | "twitch";
+type GameKey = "tft" | "wow" | "twitch";
 
 type ApiTft = {
   rank: string | null;
@@ -93,8 +93,6 @@ export default function Home() {
     switch (selected) {
       case "tft":
         return "Teamfight Tactics";
-      case "lol":
-        return "League of Legends";
       case "wow":
         return "World of Warcraft";
       case "twitch":
@@ -117,10 +115,9 @@ export default function Home() {
       {/* Tabs retirés; on garde les tuiles designées comme sélecteurs */}
 
       <section className="grid">
-        <GameTile label="Teamfight Tactics" icon="/next.svg" active={selected === "tft"} onClick={() => setSelected("tft")} />
-        <GameTile label="League of Legends" icon="/globe.svg" active={selected === "lol"} onClick={() => setSelected("lol")} />
-        <GameTile label="World of Warcraft" icon="/file.svg" active={selected === "wow"} onClick={() => setSelected("wow")} />
-        <GameTile label="Twitch" icon="/window.svg" active={selected === "twitch"} onClick={() => setSelected("twitch")} />
+        <GameTile label="Teamfight Tactics" icon="/icons/tft.jpg" active={selected === "tft"} onClick={() => setSelected("tft")} />
+        <GameTile label="World of Warcraft" icon="/icons/wow.png" active={selected === "wow"} onClick={() => setSelected("wow")} />
+        <GameTile label="Twitch" icon="/icons/twitch.png" active={selected === "twitch"} onClick={() => setSelected("twitch")} />
       </section>
 
       <main className="glass panel">
