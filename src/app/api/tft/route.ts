@@ -114,9 +114,10 @@ export async function GET(request: Request) {
       if (!byName.ok) {
         byNameStatus = byName.status;
         byNameErrorBody = await byName.text();
+      } else {
+        const summ = (await byName.json()) as RiotSummoner;
+        summonerId = summ.id;
       }
-      const summ = (await byName.json()) as RiotSummoner;
-      summonerId = summ.id;
     }
 
     // 2) If we have PUUID (from Riot Account), get Summoner to obtain encryptedSummonerId
@@ -145,6 +146,7 @@ export async function GET(request: Request) {
             platform,
             riotIdAttempt: { status: accountStatus, body: accountErrorBody },
             byNameAttempt: { status: byNameStatus, body: byNameErrorBody },
+            resolved: { puuid, summonerId },
           },
         },
         { status: 400 }
