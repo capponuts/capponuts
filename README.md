@@ -1,54 +1,36 @@
-# Capponuts - Hub Gamer (MVP)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Application Next.js (App Router) pour agréger tes stats joueur (TFT/LoL, WoW) et streaming (Twitch). Stack actuelle: Next 15, Tailwind v4, Drizzle + Neon Postgres.
+## Getting Started
 
-## État d’avancement
-- Accueil → redirige vers `/dashboard` (UI sombre modernisée, animations Framer/Lucide).
-- Pages:
-  - `/dashboard`: cartes LoL/TFT (TFT via Riot), WoW (Blizzard), Twitch.
-  - `/integrations`: vérifie la présence des clés et connectivité (côté serveur, no cache).
-  - `/profile/[id]`, `/leaderboard` (squelettes).
-- Intégrations:
-  - Riot: compte TFT via endpoints officiels (ranked TFT). Fichier `public/riot.txt` en place.
-  - Blizzard: auth Client Credentials corrigée (Basic + header Bearer).
-  - Twitch: user public via App Access Token.
-- Infra:
-  - Drizzle + Neon initialisés (schéma minimal, pas d’ingestion persistée encore).
-  - Tailwind v4 configuré, PostCSS corrigé.
+First, run the development server:
 
-## Variables d’environnement (local/Vercel)
-```
-DATABASE_URL=postgresql://…  # Neon
-RIOT_API_KEY=…
-BLIZZARD_CLIENT_ID=…
-BLIZZARD_CLIENT_SECRET=…
-TWITCH_CLIENT_ID=…
-TWITCH_APP_TOKEN=…  # App Access Token OAuth Client Credentials
-```
-
-- Riot ownership: `https://capponuts.fr/riot.txt` (contenu: UUID fourni par Riot).
-
-## Routes utiles
-- `/` → redirection vers `/dashboard`
-- `/dashboard` → stats en live (TFT via Riot, WoW, Twitch)
-- `/integrations` → statut des clés et tests rapides
-- `/api/health` → ping DB (Neon)
-
-## Comment lancer
 ```bash
-npm install
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## Limites actuelles
-- Pas de cache/cron: appels directs aux APIs (dépendants des rate limits et tokens courts).
-- Données WoW/Twitch affichées si token valide au moment de l’appel.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Prochaines étapes proposées
-- Brancher valeurs “live” détaillées dans les cartes (MMR/rang, niveau/ilvl, followers/views).
-- Cache léger côté serveur (60–120s) pour lisser les rate limits.
-- Timeline jeux/streams (persistance Neon via Drizzle).
-- Graphique d’évolution (winrate/semaine) et badges de rang.
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
----
-Made with Next.js, Tailwind, Framer Motion, Lucide.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
