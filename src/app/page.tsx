@@ -19,6 +19,18 @@ type ApiTwitch = {
   stream?: { live: boolean; title?: string; viewers?: number; gameName?: string | null; thumbnailUrl?: string };
 };
 
+type ApiWow = {
+  name?: string;
+  realm?: string;
+  faction?: string;
+  race?: string;
+  characterClass?: string;
+  activeSpec?: string | null;
+  level?: number;
+  averageItemLevel?: number | null;
+  thumbnail?: string | null;
+};
+
 export default function Home() {
   const [selected, setSelected] = useState<GameKey>("tft");
   const [tft, setTft] = useState<ApiTft | null>(null);
@@ -27,6 +39,9 @@ export default function Home() {
   const [twitch, setTwitch] = useState<ApiTwitch | null>(null);
   const [loadingTwitch, setLoadingTwitch] = useState(false);
   const [errorTwitch, setErrorTwitch] = useState<string | null>(null);
+  const [wow, setWow] = useState<ApiWow | null>(null);
+  const [loadingWow, setLoadingWow] = useState(false);
+  const [errorWow, setErrorWow] = useState<string | null>(null);
 
   useEffect(() => {
     if (selected !== "tft") return;
@@ -62,6 +77,33 @@ export default function Home() {
       .finally(() => {
         if (cancelled) return;
         setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selected]);
+
+  useEffect(() => {
+    if (selected !== "wow") return;
+    let cancelled = false;
+    setLoadingWow(true);
+    setErrorWow(null);
+    fetch(`/api/wow?name=${encodeURIComponent("Dracaufist")}&realm=${encodeURIComponent("ysondre")}`)
+      .then(async (r) => {
+        if (!r.ok) throw new Error(await r.text());
+        return r.json();
+      })
+      .then((data: ApiWow) => {
+        if (cancelled) return;
+        setWow(data);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setErrorWow("Impossible de récupérer les infos WoW maintenant.");
+      })
+      .finally(() => {
+        if (cancelled) return;
+        setLoadingWow(false);
       });
     return () => {
       cancelled = true;
@@ -132,6 +174,8 @@ export default function Home() {
           <TftPanel stats={tft} loading={loading} error={error} />
         ) : selected === "twitch" ? (
           <TwitchPanel data={twitch} loading={loadingTwitch} error={errorTwitch} />
+        ) : selected === "wow" ? (
+          <WowPanel data={wow} loading={loadingWow} error={errorWow} />
         ) : (
           <PlaceholderPanel game={title} />
         )}
@@ -244,6 +288,29 @@ function TwitchPanel({ data, loading, error }: { data: ApiTwitch | null; loading
         ) : (
           <StatRow label="Live" value={"Non"} />
         )}
+      </div>
+    </div>
+  );
+}
+
+function WowPanel({ data, loading, error }: { data: ApiWow | null; loading: boolean; error: string | null }) {
+  if (loading) return <div className="glass card" style={{ textAlign: "center" }}>Chargement WoW…</div>;
+  if (error) return <div className="glass card" style={{ color: "#ff8080" }}>{error}</div>;
+  if (!data) return <div className="glass card">WoW non disponible.</div>;
+  return (
+    <div className="stats">
+      <div className="glass card" style={{ display: "flex", gap: 16, alignItems: "center" }}>
+        {data.thumbnail && <Image src={data.thumbnail} alt="avatar" width={56} height={56} style={{ borderRadius: 8 }} />}
+        <div>
+          <div className="neon-text" style={{ fontSize: 22 }}>{data.name} · {data.level}</div>
+          <div className="label">{data.realm} · {data.faction}</div>
+        </div>
+      </div>
+      <div className="glass card">
+        <h3>Perso</h3>
+        <StatRow label="Classe" value={data.characterClass || "—"} />
+        <StatRow label="Spécialisation" value={data.activeSpec || "—"} />
+        <StatRow label="iLvl" value={data.averageItemLevel != null ? String(data.averageItemLevel) : "—"} />
       </div>
     </div>
   );

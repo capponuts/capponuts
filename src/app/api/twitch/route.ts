@@ -29,7 +29,7 @@ const TWITCH_API = "https://api.twitch.tv/helix";
 
 function getTwitchHeaders() {
   const clientId = process.env.TWITCH_CLIENT_ID;
-  const token = process.env.TWITCH_APP_TOKEN;
+  const token = process.env.TWITCH_APP_TOKEN || process.env.TWITCH_ACCESS_TOKEN;
   if (!clientId || !token) return null;
   return {
     "Client-Id": clientId,

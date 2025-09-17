@@ -218,40 +218,25 @@ export async function GET(request: Request) {
       }
     }
 
-    // Ensure we have a valid summonerId
-    if (!summonerId) {
-      return NextResponse.json(
-        {
-          error: "Unable to resolve summoner",
-          details: "Impossible de résoudre le compte via Riot ID ou nom d'invocateur.",
-          hint: "Vérifie l'orthographe (Capponuts#1993) et la région (EUW).",
-          debug: {
-            regional,
-            platform,
-            puuidSource: overridePuuid ? "query" : "lookup",
-            riotIdAttempt: { status: accountStatus, body: accountErrorBody },
-            byNameAttempt: { status: byNameStatus, body: byNameErrorBody },
-            byPuuidAttempt: { status: byPuuidStatus, body: byPuuidErrorBody, data: byPuuidData },
-            lolByPuuidAttempt: { status: lolByPuuidStatus, body: lolByPuuidErrorBody, data: lolByPuuidData },
-            resolved: { puuid, summonerId },
-          },
-        },
-        { status: 400 }
-      );
-    }
+    // If still no summonerId, continue with match-based fallback (200)
+    const noSummonerId = !summonerId;
 
     // 3) Get League entries for rank/LP/wins/losses
-    const leagueRes = await fetch(
-      `https://${platform}.api.riotgames.com/tft/league/v1/entries/by-summoner/${encodeURIComponent(summonerId)}`,
-      { headers, next: { revalidate: 120 } }
-    );
-    if (!leagueRes.ok) {
-      const text = await leagueRes.text();
-      return NextResponse.json({ error: "Failed to fetch league entries", details: text }, { status: leagueRes.status });
+    let solo: LeagueEntry | null = null;
+    if (!noSummonerId) {
+      const summId: string = summonerId as string;
+      const leagueRes = await fetch(
+        `https://${platform}.api.riotgames.com/tft/league/v1/entries/by-summoner/${encodeURIComponent(summId)}`,
+        { headers, next: { revalidate: 120 } }
+      );
+      if (!leagueRes.ok) {
+        const text = await leagueRes.text();
+        return NextResponse.json({ error: "Failed to fetch league entries", details: text }, { status: leagueRes.status });
+      }
+      const entriesJson = (await leagueRes.json()) as unknown;
+      const entries: LeagueEntry[] = Array.isArray(entriesJson) ? (entriesJson as LeagueEntry[]) : [];
+      solo = entries.length > 0 ? (entries.find((e: LeagueEntry) => e.queueType === "RANKED_TFT") || entries[0]) : null;
     }
-    const entriesJson = (await leagueRes.json()) as unknown;
-    const entries: LeagueEntry[] = Array.isArray(entriesJson) ? (entriesJson as LeagueEntry[]) : [];
-    const solo: LeagueEntry | null = entries.length > 0 ? (entries.find((e: LeagueEntry) => e.queueType === "RANKED_TFT") || entries[0]) : null;
 
     // 4) Get last N matches to estimate top4 rate and match-based fallback winrate (optional, best-effort)
     let top4Rate: number | null = null;
@@ -307,6 +292,19 @@ export async function GET(request: Request) {
       winRate,
       top4Rate,
       bestAugment: null as string | null,
+      hint: noSummonerId ? "Profil TFT non résolu côté API. Stats basées sur les derniers matchs." : null,
+      debug: noSummonerId
+        ? {
+            regional,
+            platform,
+            puuidSource: overridePuuid ? "query" : "lookup",
+            riotIdAttempt: { status: accountStatus, body: accountErrorBody },
+            byNameAttempt: { status: byNameStatus, body: byNameErrorBody },
+            byPuuidAttempt: { status: byPuuidStatus, body: byPuuidErrorBody, data: byPuuidData },
+            lolByPuuidAttempt: { status: lolByPuuidStatus, body: lolByPuuidErrorBody, data: lolByPuuidData },
+            resolved: { puuid, summonerId },
+          }
+        : undefined,
     };
 
     const res = NextResponse.json(payload, { status: 200 });
