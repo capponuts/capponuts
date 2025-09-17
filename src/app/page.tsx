@@ -42,23 +42,30 @@ export default function Home() {
   }, [selected]);
 
   return (
-    <div style={{ padding: 24 }}>
-      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+    <div className="container">
+      <header className="header">
         <div>
-          <h1 className="neon-text" style={{ fontSize: 32, margin: 0 }}>Capponuts</h1>
-          <p style={{ opacity: 0.8, marginTop: 6 }}>Joueur passionné · Univers néon gaming · Dashboard stats</p>
+          <h1 className="neon-text title">Capponuts</h1>
+          <p className="subtitle">Joueur passionné · Univers néon gaming · Dashboard stats</p>
         </div>
         <button className="btn-neon pulse-ring" onClick={() => setSelected("tft")}>Voir mes stats</button>
       </header>
 
-      <section className="grid" style={{ marginBottom: 24 }}>
+      <nav className="tabs" aria-label="Sélection du jeu">
+        <Tab label="TFT" active={selected === "tft"} onClick={() => setSelected("tft")} />
+        <Tab label="LoL" active={selected === "lol"} onClick={() => setSelected("lol")} />
+        <Tab label="WoW" active={selected === "wow"} onClick={() => setSelected("wow")} />
+        <Tab label="Twitch" active={selected === "twitch"} onClick={() => setSelected("twitch")} />
+      </nav>
+
+      <section className="grid">
         <GameTile label="Teamfight Tactics" icon="/next.svg" active={selected === "tft"} onClick={() => setSelected("tft")} />
         <GameTile label="League of Legends" icon="/globe.svg" active={selected === "lol"} onClick={() => setSelected("lol")} />
         <GameTile label="World of Warcraft" icon="/file.svg" active={selected === "wow"} onClick={() => setSelected("wow")} />
         <GameTile label="Twitch" icon="/window.svg" active={selected === "twitch"} onClick={() => setSelected("twitch")} />
       </section>
 
-      <main className="glass" style={{ borderRadius: 16, padding: 20 }}>
+      <main className="glass panel">
         <h2 className="neon-text" style={{ marginTop: 0 }}>{title}</h2>
         {selected === "tft" ? <TftPanel stats={MOCK_TFT} /> : <PlaceholderPanel game={title} />}
       </main>
@@ -66,18 +73,19 @@ export default function Home() {
   );
 }
 
+function Tab({ label, active, onClick }: { label: string; active?: boolean; onClick?: () => void }) {
+  return (
+    <button className={["tab", active ? "active" : ""].join(" ")} onClick={onClick}>
+      {label}
+    </button>
+  );
+}
+
 function GameTile({ label, icon, active, onClick }: { label: string; icon: string; active?: boolean; onClick?: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="tile glass"
-      style={{
-        gridColumn: "span 3",
-        borderRadius: 16,
-        padding: 16,
-        textAlign: "left",
-        background: active ? "rgba(124, 60, 255, 0.08)" : undefined,
-      }}
+      className={["tile", "glass", active ? "active" : ""].join(" ")}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <Image src={icon} alt="" width={28} height={28} />
@@ -89,9 +97,9 @@ function GameTile({ label, icon, active, onClick }: { label: string; icon: strin
 
 function StatRow({ label, value }: { label: string; value: string }) {
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-      <span style={{ opacity: 0.8 }}>{label}</span>
-      <span style={{ fontWeight: 600 }}>{value}</span>
+    <div className="stat-row">
+      <span className="label">{label}</span>
+      <span className="value">{value}</span>
     </div>
   );
 }
@@ -99,19 +107,27 @@ function StatRow({ label, value }: { label: string; value: string }) {
 function TftPanel({ stats }: { stats: TftStats }) {
   return (
     <div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-        <div className="glass" style={{ padding: 16, borderRadius: 12 }}>
-          <h3 style={{ marginTop: 0 }}>Rang</h3>
+      <div className="stats">
+        <div className="glass card">
+          <h3>Rang</h3>
           <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
             <span className="neon-text" style={{ fontSize: 28 }}>{stats.rank}</span>
             <span style={{ opacity: 0.8 }}>({stats.lp} LP)</span>
           </div>
         </div>
-        <div className="glass" style={{ padding: 16, borderRadius: 12 }}>
-          <h3 style={{ marginTop: 0 }}>Aperçu</h3>
+        <div className="glass card">
+          <h3>Aperçu</h3>
           <StatRow label="Games" value={String(stats.games)} />
-          <StatRow label="Top 4" value={`${Math.round(stats.top4Rate * 100)}%`} />
-          <StatRow label="Winrate" value={`${Math.round(stats.winRate * 100)}%`} />
+          <div className="stat-row" style={{ alignItems: "center", gap: 12 }}>
+            <span className="label">Top 4</span>
+            <span className="value">{Math.round(stats.top4Rate * 100)}%</span>
+          </div>
+          <ProgressBar percent={Math.round(stats.top4Rate * 100)} />
+          <div className="stat-row" style={{ alignItems: "center", gap: 12 }}>
+            <span className="label">Winrate</span>
+            <span className="value">{Math.round(stats.winRate * 100)}%</span>
+          </div>
+          <ProgressBar percent={Math.round(stats.winRate * 100)} />
           <StatRow label="Best augment" value={stats.bestAugment} />
         </div>
       </div>
@@ -122,5 +138,14 @@ function TftPanel({ stats }: { stats: TftStats }) {
 function PlaceholderPanel({ game }: { game: string }) {
   return (
     <div style={{ opacity: 0.8 }}>Les stats {game} arrivent bientôt…</div>
+  );
+}
+
+function ProgressBar({ percent }: { percent: number }) {
+  const value = Math.max(0, Math.min(100, percent));
+  return (
+    <div className="progress" role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={100}>
+      <div className="progress-bar" style={{ width: `${value}%` }} />
+    </div>
   );
 }
