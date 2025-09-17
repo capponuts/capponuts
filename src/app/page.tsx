@@ -232,7 +232,7 @@ function TftPanel({ stats, loading, error }: { stats: ApiTft | null; loading: bo
             </div>
           </div>
           <div className="glass card">
-            <h3>Aperçu</h3>
+            <h3>Aperçu <span className="label">(Ranked récents)</span></h3>
             <StatRow label="Games" value={stats.games != null ? String(stats.games) : "—"} />
             <div className="stat-row" style={{ alignItems: "center", gap: 12 }}>
               <span className="label">Top 4</span>

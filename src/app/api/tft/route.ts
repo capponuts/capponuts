@@ -63,7 +63,7 @@ type LeagueEntry = {
   losses?: number;
 };
 type TftParticipant = { puuid: string; placement?: number };
-type TftMatch = { info?: { participants?: TftParticipant[] } };
+type TftMatch = { info?: { queue_id?: number; participants?: TftParticipant[] } };
 
 // Simple in-memory cache to smooth rate limits (best-effort; may not persist in serverless)
 const cache = new Map<string, { ts: number; data: unknown }>();
@@ -238,40 +238,49 @@ export async function GET(request: Request) {
       solo = entries.length > 0 ? (entries.find((e: LeagueEntry) => e.queueType === "RANKED_TFT") || entries[0]) : null;
     }
 
-    // 4) Get last N matches to estimate top4 rate and match-based fallback winrate (optional, best-effort)
+    // 4) Compute ranked-only (queue_id 1100) fallback from recent matches (up to last 20 ranked)
     let top4Rate: number | null = null;
     let matchGames: number | null = null;
     let matchWinRate: number | null = null;
     if (puuid) {
       try {
-        const idsRes = await fetch(
-          `https://${regional}.api.riotgames.com/tft/match/v1/matches/by-puuid/${encodeURIComponent(puuid)}/ids?count=5`,
-          { headers, next: { revalidate: 60 } }
-        );
-        if (idsRes.ok) {
+        const targetRanked = 20;
+        let start = 0;
+        let rankedCount = 0;
+        let winsCnt = 0;
+        let top4 = 0;
+        let safety = 0;
+        while (rankedCount < targetRanked && safety < 4) { // at most 4 pages of 20 ids
+          const idsRes = await fetch(
+            `https://${regional}.api.riotgames.com/tft/match/v1/matches/by-puuid/${encodeURIComponent(puuid)}/ids?count=20&start=${start}`,
+            { headers, next: { revalidate: 60 } }
+          );
+          if (!idsRes.ok) break;
           const ids: string[] = await idsRes.json();
-          let top4 = 0;
-          let total = 0;
-          let winsCnt = 0;
+          if (!ids || ids.length === 0) break;
           for (const id of ids) {
+            if (rankedCount >= targetRanked) break;
             const mRes = await fetch(`https://${regional}.api.riotgames.com/tft/match/v1/matches/${id}`, { headers, next: { revalidate: 60 } });
             if (!mRes.ok) continue;
             const match = (await mRes.json()) as TftMatch;
+            if (match?.info?.queue_id !== 1100) continue; // ranked only
             const me = match?.info?.participants?.find((p: TftParticipant) => p.puuid === puuid);
             if (me && typeof me.placement === "number") {
-              total += 1;
+              rankedCount += 1;
               if (me.placement <= 4) top4 += 1;
               if (me.placement === 1) winsCnt += 1;
             }
           }
-          if (total > 0) top4Rate = top4 / total;
-          if (total > 0) {
-            matchGames = total;
-            matchWinRate = winsCnt / total;
-          }
+          start += ids.length;
+          safety += 1;
+        }
+        if (rankedCount > 0) {
+          matchGames = rankedCount;
+          top4Rate = top4 / rankedCount;
+          matchWinRate = winsCnt / rankedCount;
         }
       } catch {
-        // ignore top4 failures
+        // ignore
       }
     }
 
