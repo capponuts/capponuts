@@ -1,0 +1,9 @@
+   ▲ Next.js 15.5.3 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://172.30.0.2:3000
+
+ ✓ Starting...
+ ✓ Ready in 816ms
+ ○ Compiling /api/tft ...
+ ✓ Compiled /api/tft in 1317ms
+ GET /api/tft 400 in 2572ms
