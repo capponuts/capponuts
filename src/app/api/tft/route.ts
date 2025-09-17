@@ -67,16 +67,26 @@ type TftMatch = { info?: { participants?: TftParticipant[] } };
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const gameName = searchParams.get("gameName");
-  const tagLine = searchParams.get("tagLine");
-  const regionParam = (searchParams.get("region") || "euw").toLowerCase() as RiotRegion;
+  const envGameName = process.env.RIOT_GAME_NAME || null;
+  const envTagLine = process.env.RIOT_TAG_LINE || null;
+  const envRegion = (process.env.RIOT_REGION || "euw").toLowerCase() as RiotRegion;
+
+  const gameName = (searchParams.get("gameName") || envGameName) as string | null;
+  const tagLine = (searchParams.get("tagLine") || envTagLine) as string | null;
+  const regionParam = ((searchParams.get("region") || envRegion) as string).toLowerCase() as RiotRegion;
 
   if (!process.env.RIOT_API_KEY) {
     return NextResponse.json({ error: "Missing RIOT_API_KEY" }, { status: 500 });
   }
 
   if (!gameName || !tagLine) {
-    return NextResponse.json({ error: "Missing gameName or tagLine" }, { status: 400 });
+    return NextResponse.json(
+      {
+        error: "Missing gameName or tagLine",
+        hint: "Provide ?gameName=Capponuts&tagLine=1993 or set RIOT_GAME_NAME/RIOT_TAG_LINE in env.",
+      },
+      { status: 400 }
+    );
   }
 
   const platform = regionToPlatform(regionParam);
