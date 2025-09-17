@@ -84,29 +84,67 @@ export async function GET(request: Request) {
   const headers = { "X-Riot-Token": process.env.RIOT_API_KEY as string };
 
   try {
-    // 1) Get account by Riot ID to obtain PUUID
+    // 1) Try Riot Account by Riot ID to obtain PUUID
+    let puuid: string | null = null;
+    let lastErrorBody: string | null = null;
     const accountRes = await fetch(
       `https://${regional}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
       { headers, next: { revalidate: 120 } }
     );
-    if (!accountRes.ok) {
-      const text = await accountRes.text();
-      return NextResponse.json({ error: "Failed to fetch account", details: text }, { status: accountRes.status });
+    if (accountRes.ok) {
+      const account = (await accountRes.json()) as RiotAccount;
+      puuid = account.puuid;
+    } else {
+      lastErrorBody = await accountRes.text();
     }
-    const account = (await accountRes.json()) as RiotAccount;
-    const puuid: string = account.puuid;
 
-    // 2) Get Summoner by PUUID to obtain encryptedSummonerId
-    const summRes = await fetch(
-      `https://${platform}.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/${encodeURIComponent(puuid)}`,
-      { headers, next: { revalidate: 120 } }
-    );
-    if (!summRes.ok) {
-      const text = await summRes.text();
-      return NextResponse.json({ error: "Failed to fetch summoner", details: text }, { status: summRes.status });
+    // Fallback: if Riot Account lookup failed, try summoner by name (platform)
+    let summonerId: string | null = null;
+    if (!puuid) {
+      const byName = await fetch(
+        `https://${platform}.api.riotgames.com/tft/summoner/v1/summoners/by-name/${encodeURIComponent(gameName)}`,
+        { headers, next: { revalidate: 120 } }
+      );
+      if (!byName.ok) {
+        const body = await byName.text();
+        return NextResponse.json(
+          {
+            error: "Failed to resolve Riot ID",
+            details: lastErrorBody || body,
+            hint: "Vérifie l'orthographe de la Riot ID et le tag (#1993).",
+          },
+          { status: 400 }
+        );
+      }
+      const summ = (await byName.json()) as RiotSummoner;
+      summonerId = summ.id;
     }
-    const summ = (await summRes.json()) as RiotSummoner;
-    const summonerId: string = summ.id;
+
+    // 2) If we have PUUID (from Riot Account), get Summoner to obtain encryptedSummonerId
+    if (!summonerId && puuid) {
+      const summRes = await fetch(
+        `https://${platform}.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/${encodeURIComponent(puuid)}`,
+        { headers, next: { revalidate: 120 } }
+      );
+      if (!summRes.ok) {
+        const text = await summRes.text();
+        return NextResponse.json({ error: "Failed to fetch summoner", details: text }, { status: summRes.status });
+      }
+      const summ = (await summRes.json()) as RiotSummoner;
+      summonerId = summ.id;
+    }
+
+    // Ensure we have a valid summonerId
+    if (!summonerId) {
+      return NextResponse.json(
+        {
+          error: "Unable to resolve summoner",
+          details: "Impossible de résoudre le compte via Riot ID ou nom d'invocateur.",
+          hint: "Vérifie l'orthographe (Capponuts#1993) et la région (EUW).",
+        },
+        { status: 400 }
+      );
+    }
 
     // 3) Get League entries for rank/LP/wins/losses
     const leagueRes = await fetch(
@@ -123,29 +161,31 @@ export async function GET(request: Request) {
 
     // 4) Get last N matches to estimate top4 rate (optional, best-effort)
     let top4Rate: number | null = null;
-    try {
-      const idsRes = await fetch(
-        `https://${regional}.api.riotgames.com/tft/match/v1/matches/by-puuid/${encodeURIComponent(puuid)}/ids?count=10`,
-        { headers, next: { revalidate: 60 } }
-      );
-      if (idsRes.ok) {
-        const ids: string[] = await idsRes.json();
-        let top4 = 0;
-        let total = 0;
-        for (const id of ids) {
-          const mRes = await fetch(`https://${regional}.api.riotgames.com/tft/match/v1/matches/${id}`, { headers, next: { revalidate: 60 } });
-          if (!mRes.ok) continue;
-          const match = (await mRes.json()) as TftMatch;
-          const me = match?.info?.participants?.find((p: TftParticipant) => p.puuid === puuid);
-          if (me && typeof me.placement === "number") {
-            total += 1;
-            if (me.placement <= 4) top4 += 1;
+    if (puuid) {
+      try {
+        const idsRes = await fetch(
+          `https://${regional}.api.riotgames.com/tft/match/v1/matches/by-puuid/${encodeURIComponent(puuid)}/ids?count=10`,
+          { headers, next: { revalidate: 60 } }
+        );
+        if (idsRes.ok) {
+          const ids: string[] = await idsRes.json();
+          let top4 = 0;
+          let total = 0;
+          for (const id of ids) {
+            const mRes = await fetch(`https://${regional}.api.riotgames.com/tft/match/v1/matches/${id}`, { headers, next: { revalidate: 60 } });
+            if (!mRes.ok) continue;
+            const match = (await mRes.json()) as TftMatch;
+            const me = match?.info?.participants?.find((p: TftParticipant) => p.puuid === puuid);
+            if (me && typeof me.placement === "number") {
+              total += 1;
+              if (me.placement <= 4) top4 += 1;
+            }
           }
+          if (total > 0) top4Rate = top4 / total;
         }
-        if (total > 0) top4Rate = top4 / total;
+      } catch {
+        // ignore top4 failures
       }
-    } catch {
-      // ignore top4 failures
     }
 
     const wins = solo?.wins ?? null;

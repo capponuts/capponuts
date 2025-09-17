@@ -41,9 +41,14 @@ export default function Home() {
           bestAugment: data?.bestAugment ?? null,
         });
       })
-      .catch(() => {
+      .catch(async (e) => {
         if (cancelled) return;
-        setError("Impossible de récupérer les stats TFT maintenant.");
+        try {
+          const text = typeof e?.message === "string" ? e.message : String(e);
+          setError("Impossible de récupérer les stats TFT maintenant.");
+        } catch {
+          setError("Impossible de récupérer les stats TFT maintenant.");
+        }
       })
       .finally(() => {
         if (cancelled) return;
