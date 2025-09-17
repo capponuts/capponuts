@@ -14,11 +14,19 @@ type ApiTft = {
   bestAugment: string | null;
 };
 
+type ApiTwitch = {
+  user?: { id: string; login: string; displayName: string; avatar: string | null; description: string | null; views: number | null };
+  stream?: { live: boolean; title?: string; viewers?: number; gameName?: string | null; thumbnailUrl?: string };
+};
+
 export default function Home() {
   const [selected, setSelected] = useState<GameKey>("tft");
   const [tft, setTft] = useState<ApiTft | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [twitch, setTwitch] = useState<ApiTwitch | null>(null);
+  const [loadingTwitch, setLoadingTwitch] = useState(false);
+  const [errorTwitch, setErrorTwitch] = useState<string | null>(null);
 
   useEffect(() => {
     if (selected !== "tft") return;
@@ -48,6 +56,33 @@ export default function Home() {
       .finally(() => {
         if (cancelled) return;
         setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selected]);
+
+  useEffect(() => {
+    if (selected !== "twitch") return;
+    let cancelled = false;
+    setLoadingTwitch(true);
+    setErrorTwitch(null);
+    fetch(`/api/twitch`)
+      .then(async (r) => {
+        if (!r.ok) throw new Error(await r.text());
+        return r.json();
+      })
+      .then((data: ApiTwitch) => {
+        if (cancelled) return;
+        setTwitch(data);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setErrorTwitch("Impossible de récupérer les infos Twitch maintenant.");
+      })
+      .finally(() => {
+        if (cancelled) return;
+        setLoadingTwitch(false);
       });
     return () => {
       cancelled = true;
@@ -90,7 +125,13 @@ export default function Home() {
 
       <main className="glass panel">
         <h2 className="neon-text" style={{ marginTop: 0 }}>{title}</h2>
-        {selected === "tft" ? <TftPanel stats={tft} loading={loading} error={error} /> : <PlaceholderPanel game={title} />}
+        {selected === "tft" ? (
+          <TftPanel stats={tft} loading={loading} error={error} />
+        ) : selected === "twitch" ? (
+          <TwitchPanel data={twitch} loading={loadingTwitch} error={errorTwitch} />
+        ) : (
+          <PlaceholderPanel game={title} />
+        )}
       </main>
     </div>
   );
@@ -169,6 +210,38 @@ function ProgressBar({ percent }: { percent: number }) {
   return (
     <div className="progress" role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={100}>
       <div className="progress-bar" style={{ width: `${value}%` }} />
+    </div>
+  );
+}
+
+function TwitchPanel({ data, loading, error }: { data: ApiTwitch | null; loading: boolean; error: string | null }) {
+  if (loading) return <div className="glass card" style={{ textAlign: "center" }}>Chargement Twitch…</div>;
+  if (error) return <div className="glass card" style={{ color: "#ff8080" }}>{error}</div>;
+  if (!data?.user) return <div className="glass card">Twitch non disponible.</div>;
+  const user = data.user;
+  const stream = data.stream;
+  return (
+    <div className="stats">
+      <div className="glass card" style={{ display: "flex", gap: 16, alignItems: "center" }}>
+        {user.avatar && <Image src={user.avatar} alt="avatar" width={56} height={56} style={{ borderRadius: 8 }} />}
+        <div>
+          <div className="neon-text" style={{ fontSize: 22 }}>{user.displayName}</div>
+          <div className="label">twitch.tv/{user.login}</div>
+        </div>
+      </div>
+      <div className="glass card">
+        <h3>Statut</h3>
+        {stream?.live ? (
+          <>
+            <StatRow label="Live" value={"Oui"} />
+            {stream.title && <StatRow label="Titre" value={stream.title} />}
+            {stream.gameName && <StatRow label="Jeu" value={stream.gameName} />}
+            {typeof stream.viewers === "number" && <StatRow label="Viewers" value={String(stream.viewers)} />}
+          </>
+        ) : (
+          <StatRow label="Live" value={"Non"} />
+        )}
+      </div>
     </div>
   );
 }
