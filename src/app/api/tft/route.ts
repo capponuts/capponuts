@@ -124,6 +124,9 @@ export async function GET(request: Request) {
     let byPuuidStatus: number | null = null;
     let byPuuidErrorBody: string | null = null;
     let byPuuidData: unknown = null;
+    let lolByPuuidStatus: number | null = null;
+    let lolByPuuidErrorBody: string | null = null;
+    let lolByPuuidData: unknown = null;
     if (!summonerId && puuid) {
       const summRes = await fetch(
         `https://${platform}.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/${encodeURIComponent(puuid)}`,
@@ -159,6 +162,25 @@ export async function GET(request: Request) {
       }
     }
 
+    // Final fallback: use LoL Summoner v4 by PUUID to retrieve encrypted summoner id
+    if (!summonerId && puuid) {
+      const lolRes = await fetch(
+        `https://${platform}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${encodeURIComponent(puuid)}`,
+        { headers, next: { revalidate: 120 } }
+      );
+      lolByPuuidStatus = lolRes.status;
+      if (!lolRes.ok) {
+        lolByPuuidErrorBody = await lolRes.text();
+      } else {
+        type LolSummoner = { id?: string } & Record<string, unknown>;
+        const lolSumm = (await lolRes.json()) as LolSummoner;
+        lolByPuuidData = { keys: Object.keys(lolSumm || {}), id: lolSumm?.id ?? null };
+        if (typeof lolSumm?.id === "string" && lolSumm.id.length > 0) {
+          summonerId = lolSumm.id;
+        }
+      }
+    }
+
     // Ensure we have a valid summonerId
     if (!summonerId) {
       return NextResponse.json(
@@ -172,6 +194,7 @@ export async function GET(request: Request) {
             riotIdAttempt: { status: accountStatus, body: accountErrorBody },
             byNameAttempt: { status: byNameStatus, body: byNameErrorBody },
             byPuuidAttempt: { status: byPuuidStatus, body: byPuuidErrorBody, data: byPuuidData },
+            lolByPuuidAttempt: { status: lolByPuuidStatus, body: lolByPuuidErrorBody, data: lolByPuuidData },
             resolved: { puuid, summonerId },
           },
         },
