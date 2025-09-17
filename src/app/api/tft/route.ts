@@ -65,6 +65,10 @@ type LeagueEntry = {
 type TftParticipant = { puuid: string; placement?: number };
 type TftMatch = { info?: { participants?: TftParticipant[] } };
 
+// Simple in-memory cache to smooth rate limits (best-effort; may not persist in serverless)
+const cache = new Map<string, { ts: number; data: unknown }>();
+const CACHE_TTL_MS = 60_000;
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const envGameName = process.env.RIOT_GAME_NAME || undefined;
@@ -85,6 +89,14 @@ export async function GET(request: Request) {
   const platform = regionToPlatform(regionParam);
   const regional = regionToRegionalGroup(regionParam);
   const headers = { "X-Riot-Token": process.env.RIOT_API_KEY as string };
+
+  // Cache key
+  const cacheKey = JSON.stringify({ gameName, tagLine, regionParam, overridePuuid });
+  const now = Date.now();
+  const cached = cache.get(cacheKey);
+  if (cached && now - cached.ts < CACHE_TTL_MS) {
+    return NextResponse.json(cached.data);
+  }
 
   try {
     // 1) Try Riot Account by Riot ID to obtain PUUID
@@ -248,7 +260,7 @@ export async function GET(request: Request) {
     if (puuid) {
       try {
         const idsRes = await fetch(
-          `https://${regional}.api.riotgames.com/tft/match/v1/matches/by-puuid/${encodeURIComponent(puuid)}/ids?count=10`,
+          `https://${regional}.api.riotgames.com/tft/match/v1/matches/by-puuid/${encodeURIComponent(puuid)}/ids?count=5`,
           { headers, next: { revalidate: 60 } }
         );
         if (idsRes.ok) {
@@ -297,7 +309,9 @@ export async function GET(request: Request) {
       bestAugment: null as string | null,
     };
 
-    return NextResponse.json(payload, { status: 200 });
+    const res = NextResponse.json(payload, { status: 200 });
+    cache.set(cacheKey, { ts: now, data: payload });
+    return res;
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ error: "Unexpected error", details: message }, { status: 500 });
