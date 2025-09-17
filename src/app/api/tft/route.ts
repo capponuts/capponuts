@@ -88,7 +88,8 @@ export async function GET(request: Request) {
   try {
     // 1) Try Riot Account by Riot ID to obtain PUUID
     let puuid: string | null = null;
-    let lastErrorBody: string | null = null;
+    let accountStatus: number | null = null;
+    let accountErrorBody: string | null = null;
     const accountRes = await fetch(
       `https://${regional}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
       { headers, next: { revalidate: 120 } }
@@ -97,26 +98,22 @@ export async function GET(request: Request) {
       const account = (await accountRes.json()) as RiotAccount;
       puuid = account.puuid;
     } else {
-      lastErrorBody = await accountRes.text();
+      accountStatus = accountRes.status;
+      accountErrorBody = await accountRes.text();
     }
 
     // Fallback: if Riot Account lookup failed, try summoner by name (platform)
     let summonerId: string | null = null;
+    let byNameStatus: number | null = null;
+    let byNameErrorBody: string | null = null;
     if (!puuid) {
       const byName = await fetch(
         `https://${platform}.api.riotgames.com/tft/summoner/v1/summoners/by-name/${encodeURIComponent(gameName)}`,
         { headers, next: { revalidate: 120 } }
       );
       if (!byName.ok) {
-        const body = await byName.text();
-        return NextResponse.json(
-          {
-            error: "Failed to resolve Riot ID",
-            details: lastErrorBody || body,
-            hint: "Vérifie l'orthographe de la Riot ID et le tag (#1993).",
-          },
-          { status: 400 }
-        );
+        byNameStatus = byName.status;
+        byNameErrorBody = await byName.text();
       }
       const summ = (await byName.json()) as RiotSummoner;
       summonerId = summ.id;
@@ -143,6 +140,12 @@ export async function GET(request: Request) {
           error: "Unable to resolve summoner",
           details: "Impossible de résoudre le compte via Riot ID ou nom d'invocateur.",
           hint: "Vérifie l'orthographe (Capponuts#1993) et la région (EUW).",
+          debug: {
+            regional,
+            platform,
+            riotIdAttempt: { status: accountStatus, body: accountErrorBody },
+            byNameAttempt: { status: byNameStatus, body: byNameErrorBody },
+          },
         },
         { status: 400 }
       );
