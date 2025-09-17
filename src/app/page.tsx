@@ -5,15 +5,6 @@ import Image from "next/image";
 
 type GameKey = "tft" | "lol" | "wow" | "twitch";
 
-type TftStats = {
-  rank: string;
-  lp: number;
-  top4Rate: number; // 0..1
-  winRate: number; // 0..1
-  games: number;
-  bestAugment: string;
-};
-
 type ApiTft = {
   rank: string | null;
   lp: number | null;
@@ -39,18 +30,18 @@ export default function Home() {
         if (!r.ok) throw new Error(await r.text());
         return r.json();
       })
-      .then((data: any) => {
+      .then((data: ApiTft) => {
         if (cancelled) return;
         setTft({
-          rank: data.rank ?? null,
-          lp: data.lp ?? null,
-          top4Rate: data.top4Rate ?? null,
-          winRate: data.winRate ?? null,
-          games: data.games ?? null,
-          bestAugment: data.bestAugment ?? null,
+          rank: data?.rank ?? null,
+          lp: data?.lp ?? null,
+          top4Rate: data?.top4Rate ?? null,
+          winRate: data?.winRate ?? null,
+          games: data?.games ?? null,
+          bestAugment: data?.bestAugment ?? null,
         });
       })
-      .catch((e) => {
+      .catch(() => {
         if (cancelled) return;
         setError("Impossible de récupérer les stats TFT maintenant.");
       })

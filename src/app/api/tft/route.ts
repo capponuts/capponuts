@@ -52,6 +52,19 @@ function regionToRegionalGroup(region: RiotRegion): string {
   }
 }
 
+type RiotAccount = { puuid: string };
+type RiotSummoner = { id: string };
+type LeagueEntry = {
+  queueType?: string;
+  tier?: string;
+  rank?: string;
+  leaguePoints?: number;
+  wins?: number;
+  losses?: number;
+};
+type TftParticipant = { puuid: string; placement?: number };
+type TftMatch = { info?: { participants?: TftParticipant[] } };
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const gameName = searchParams.get("gameName");
@@ -80,7 +93,7 @@ export async function GET(request: Request) {
       const text = await accountRes.text();
       return NextResponse.json({ error: "Failed to fetch account", details: text }, { status: accountRes.status });
     }
-    const account = await accountRes.json();
+    const account = (await accountRes.json()) as RiotAccount;
     const puuid: string = account.puuid;
 
     // 2) Get Summoner by PUUID to obtain encryptedSummonerId
@@ -92,7 +105,7 @@ export async function GET(request: Request) {
       const text = await summRes.text();
       return NextResponse.json({ error: "Failed to fetch summoner", details: text }, { status: summRes.status });
     }
-    const summ = await summRes.json();
+    const summ = (await summRes.json()) as RiotSummoner;
     const summonerId: string = summ.id;
 
     // 3) Get League entries for rank/LP/wins/losses
@@ -104,8 +117,9 @@ export async function GET(request: Request) {
       const text = await leagueRes.text();
       return NextResponse.json({ error: "Failed to fetch league entries", details: text }, { status: leagueRes.status });
     }
-    const entries = await leagueRes.json();
-    const solo = Array.isArray(entries) ? entries.find((e: any) => e.queueType === "RANKED_TFT") || entries[0] : null;
+    const entriesJson = (await leagueRes.json()) as unknown;
+    const entries: LeagueEntry[] = Array.isArray(entriesJson) ? (entriesJson as LeagueEntry[]) : [];
+    const solo: LeagueEntry | null = entries.length > 0 ? (entries.find((e: LeagueEntry) => e.queueType === "RANKED_TFT") || entries[0]) : null;
 
     // 4) Get last N matches to estimate top4 rate (optional, best-effort)
     let top4Rate: number | null = null;
@@ -121,8 +135,8 @@ export async function GET(request: Request) {
         for (const id of ids) {
           const mRes = await fetch(`https://${regional}.api.riotgames.com/tft/match/v1/matches/${id}`, { headers, next: { revalidate: 60 } });
           if (!mRes.ok) continue;
-          const match = await mRes.json();
-          const me = match?.info?.participants?.find((p: any) => p.puuid === puuid);
+          const match = (await mRes.json()) as TftMatch;
+          const me = match?.info?.participants?.find((p: TftParticipant) => p.puuid === puuid);
           if (me && typeof me.placement === "number") {
             total += 1;
             if (me.placement <= 4) top4 += 1;
@@ -154,8 +168,9 @@ export async function GET(request: Request) {
     };
 
     return NextResponse.json(payload, { status: 200 });
-  } catch (err: any) {
-    return NextResponse.json({ error: "Unexpected error", details: String(err?.message || err) }, { status: 500 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: "Unexpected error", details: message }, { status: 500 });
   }
 }
 
