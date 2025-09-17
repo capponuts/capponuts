@@ -123,6 +123,7 @@ export async function GET(request: Request) {
     // 2) If we have PUUID (from Riot Account), get Summoner to obtain encryptedSummonerId
     let byPuuidStatus: number | null = null;
     let byPuuidErrorBody: string | null = null;
+    let byPuuidData: unknown = null;
     if (!summonerId && puuid) {
       const summRes = await fetch(
         `https://${platform}.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/${encodeURIComponent(puuid)}`,
@@ -132,9 +133,14 @@ export async function GET(request: Request) {
       if (!summRes.ok) {
         byPuuidErrorBody = await summRes.text();
       } else {
-        const summ = (await summRes.json()) as RiotSummoner;
-        if (typeof summ?.id === "string" && summ.id.length > 0) {
-          summonerId = summ.id;
+        type SummonerLike = RiotSummoner & { summonerId?: unknown } & Record<string, unknown>;
+        const summ = (await summRes.json()) as SummonerLike;
+        const idFromId = typeof summ.id === "string" ? summ.id : null;
+        const idFromAlt = typeof summ.summonerId === "string" ? summ.summonerId : null;
+        const resolvedId = idFromId || idFromAlt;
+        byPuuidData = { id: resolvedId, keys: Object.keys(summ || {}) };
+        if (typeof resolvedId === "string" && resolvedId.length > 0) {
+          summonerId = resolvedId;
         }
       }
     }
@@ -165,7 +171,7 @@ export async function GET(request: Request) {
             platform,
             riotIdAttempt: { status: accountStatus, body: accountErrorBody },
             byNameAttempt: { status: byNameStatus, body: byNameErrorBody },
-            byPuuidAttempt: { status: byPuuidStatus, body: byPuuidErrorBody },
+            byPuuidAttempt: { status: byPuuidStatus, body: byPuuidErrorBody, data: byPuuidData },
             resolved: { puuid, summonerId },
           },
         },
