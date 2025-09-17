@@ -121,17 +121,36 @@ export async function GET(request: Request) {
     }
 
     // 2) If we have PUUID (from Riot Account), get Summoner to obtain encryptedSummonerId
+    let byPuuidStatus: number | null = null;
+    let byPuuidErrorBody: string | null = null;
     if (!summonerId && puuid) {
       const summRes = await fetch(
         `https://${platform}.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/${encodeURIComponent(puuid)}`,
         { headers, next: { revalidate: 120 } }
       );
+      byPuuidStatus = summRes.status;
       if (!summRes.ok) {
-        const text = await summRes.text();
-        return NextResponse.json({ error: "Failed to fetch summoner", details: text }, { status: summRes.status });
+        byPuuidErrorBody = await summRes.text();
+      } else {
+        const summ = (await summRes.json()) as RiotSummoner;
+        if (typeof summ?.id === "string" && summ.id.length > 0) {
+          summonerId = summ.id;
+        }
       }
-      const summ = (await summRes.json()) as RiotSummoner;
-      summonerId = summ.id;
+    }
+
+    // Extra fallback: if we still don't have summonerId, try by-name once more on platform
+    if (!summonerId) {
+      const byName2 = await fetch(
+        `https://${platform}.api.riotgames.com/tft/summoner/v1/summoners/by-name/${encodeURIComponent(gameName)}`,
+        { headers, next: { revalidate: 120 } }
+      );
+      if (byName2.ok) {
+        const summ2 = (await byName2.json()) as RiotSummoner;
+        if (typeof summ2?.id === "string" && summ2.id.length > 0) {
+          summonerId = summ2.id;
+        }
+      }
     }
 
     // Ensure we have a valid summonerId
@@ -146,6 +165,7 @@ export async function GET(request: Request) {
             platform,
             riotIdAttempt: { status: accountStatus, body: accountErrorBody },
             byNameAttempt: { status: byNameStatus, body: byNameErrorBody },
+            byPuuidAttempt: { status: byPuuidStatus, body: byPuuidErrorBody },
             resolved: { puuid, summonerId },
           },
         },
