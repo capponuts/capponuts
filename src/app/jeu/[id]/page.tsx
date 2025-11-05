@@ -18,15 +18,47 @@ export default function JeuManche({ params }: Params) {
   const [musicOn, setMusicOn] = useState(true);
   const clickAudioRef = useRef<HTMLAudioElement | null>(null);
   const bgAudioRef = useRef<HTMLAudioElement | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+
+  function playBeep() {
+    if (!soundEnabled) return;
+    try {
+      const Ctor: typeof AudioContext = (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext || AudioContext;
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new Ctor();
+      }
+      const ctx = audioCtxRef.current;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "square";
+      osc.frequency.value = 880; // clic court, assez percussif
+      gain.gain.setValueAtTime(0.001, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime + 0.005);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.08);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.09);
+    } catch {}
+  }
 
   function playClick() {
     if (!soundEnabled) return;
     const el = clickAudioRef.current;
-    if (!el) return;
+    if (!el) {
+      playBeep();
+      return;
+    }
     try {
       el.currentTime = 0;
-      void el.play();
-    } catch {}
+      const p = el.play();
+      if (p && typeof (p as Promise<void>).then === "function") {
+        (p as Promise<void>).catch(() => {
+          playBeep();
+        });
+      }
+    } catch {
+      playBeep();
+    }
   }
 
   useEffect(() => {
@@ -75,6 +107,16 @@ export default function JeuManche({ params }: Params) {
       try { bg.pause(); } catch {}
     }
   }, [soundEnabled, musicOn]);
+
+  // Tente de (re)prendre le contexte audio lorsque l'utilisateur active le son
+  useEffect(() => {
+    if (!soundEnabled) return;
+    try {
+      if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
+        void audioCtxRef.current.resume();
+      }
+    } catch {}
+  }, [soundEnabled]);
 
   if (!question) {
     return (
