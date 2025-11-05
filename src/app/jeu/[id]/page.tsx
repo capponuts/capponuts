@@ -2,12 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import type { Metadata } from "next";
 import { FAMILLE_QUESTIONS } from "@/data/famille";
-
-export const metadata: Metadata = {
-  title: "Une Famille en Or – Manche",
-};
 
 type Params = { params: { id: string } };
 
