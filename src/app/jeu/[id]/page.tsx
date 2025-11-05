@@ -18,7 +18,11 @@ export default function JeuManche({ params }: Params) {
   const [musicOn, setMusicOn] = useState(true);
   const clickAudioRef = useRef<HTMLAudioElement | null>(null);
   const bgAudioRef = useRef<HTMLAudioElement | null>(null);
+  const successAudioRef = useRef<HTMLAudioElement | null>(null);
+  const errorAudioRef = useRef<HTMLAudioElement | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const [pulse, setPulse] = useState<boolean[]>(() => (question ? Array(question.answers.length).fill(false) : []));
+  const [strikes, setStrikes] = useState(0);
 
   function playBeep() {
     if (!soundEnabled) return;
@@ -61,9 +65,41 @@ export default function JeuManche({ params }: Params) {
     }
   }
 
+  function playSuccess() {
+    if (!soundEnabled) return;
+    const el = successAudioRef.current;
+    if (!el) {
+      playBeep();
+      return;
+    }
+    try {
+      el.currentTime = 0;
+      void el.play().catch(() => playBeep());
+    } catch {
+      playBeep();
+    }
+  }
+
+  function playError() {
+    if (!soundEnabled) return;
+    const el = errorAudioRef.current;
+    if (!el) {
+      playBeep();
+      return;
+    }
+    try {
+      el.currentTime = 0;
+      void el.play().catch(() => playBeep());
+    } catch {
+      playBeep();
+    }
+  }
+
   useEffect(() => {
     if (!question) return;
     setRevealed(Array(question.answers.length).fill(false));
+    setPulse(Array(question.answers.length).fill(false));
+    setStrikes(0);
   }, [question]);
 
   const total = useMemo(() => {
@@ -78,17 +114,38 @@ export default function JeuManche({ params }: Params) {
       const num = Number(e.key);
       if (!Number.isNaN(num) && num >= 1 && num <= question.answers.length) {
         const idx = num - 1;
+        const willReveal = !revealed[idx];
         setRevealed((r) => r.map((v, i) => (i === idx ? !v : v)));
-        playClick();
+        if (willReveal) {
+          setPulse((p) => {
+            const next = [...p];
+            next[idx] = true;
+            return next;
+          });
+          setTimeout(() => {
+            setPulse((p) => {
+              const next = [...p];
+              next[idx] = false;
+              return next;
+            });
+          }, 360);
+          playSuccess();
+        } else {
+          playClick();
+        }
       }
       if (e.key.toLowerCase() === "a") {
         // reveal all
+        const anyHidden = revealed.some((v) => !v);
         setRevealed(Array(question.answers.length).fill(true));
-        playClick();
+        setPulse(Array(question.answers.length).fill(true));
+        setTimeout(() => setPulse(Array(question.answers.length).fill(false)), 380);
+        if (anyHidden) playSuccess(); else playClick();
       }
       if (e.key.toLowerCase() === "r") {
         // reset
         setRevealed(Array(question.answers.length).fill(false));
+        setPulse(Array(question.answers.length).fill(false));
       }
     }
     window.addEventListener("keydown", onKey);
@@ -139,6 +196,19 @@ export default function JeuManche({ params }: Params) {
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <button
             className="btn-neon"
+            onClick={() => {
+              setStrikes((s) => {
+                const next = Math.min(3, s + 1);
+                if (next !== s) playError();
+                return next;
+              });
+            }}
+            title="Ajouter une croix rouge"
+          >
+            Ajouter une croix
+          </button>
+          <button
+            className="btn-neon"
             onClick={() => setSoundEnabled((v) => !v)}
             title={soundEnabled ? "Couper tous les sons" : "Activer les sons"}
           >
@@ -167,6 +237,15 @@ export default function JeuManche({ params }: Params) {
           justifyContent: "center",
         }}
       >
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 16, marginBottom: 8 }}>
+          <div aria-label="strikes" style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            {[0,1,2].map((i) => (
+              <span key={i} style={{ fontSize: 32, color: i < strikes ? "#ff4d4f" : "#3a1e28", textShadow: i < strikes ? "0 0 10px rgba(255,77,79,0.5)" : "none" }}>
+                ✖
+              </span>
+            ))}
+          </div>
+        </div>
         <h2 className="neon-text" style={{ marginTop: 0, fontSize: 32, textAlign: "center" }}>{question.question}</h2>
 
         <div
@@ -186,10 +265,27 @@ export default function JeuManche({ params }: Params) {
             return (
               <button
                 key={index}
-                className={["tile", "glass", shown ? "active" : ""].join(" ")}
+                className={["tile", "glass", shown ? "active" : "", pulse[index] ? "reveal-pulse" : ""].join(" ")}
                 onClick={() => {
+                  const willReveal = !revealed[index];
                   setRevealed((r) => r.map((v, i) => (i === index ? !v : v)));
-                  playClick();
+                  if (willReveal) {
+                    setPulse((p) => {
+                      const next = [...p];
+                      next[index] = true;
+                      return next;
+                    });
+                    setTimeout(() => {
+                      setPulse((p) => {
+                        const next = [...p];
+                        next[index] = false;
+                        return next;
+                      });
+                    }, 360);
+                    playSuccess();
+                  } else {
+                    playClick();
+                  }
                 }}
                 style={{
                   display: "flex",
@@ -236,6 +332,8 @@ export default function JeuManche({ params }: Params) {
       {/* Audio elements (placez vos fichiers dans public/sounds/) */}
       <audio ref={clickAudioRef} src="/sounds/click.mp3" preload="auto" />
       <audio ref={bgAudioRef} src="/sounds/bg.mp3" preload="auto" />
+      <audio ref={successAudioRef} src="/sounds/victory.mp3" preload="auto" />
+      <audio ref={errorAudioRef} src="/sounds/error.mp3" preload="auto" />
     </div>
   );
 }
