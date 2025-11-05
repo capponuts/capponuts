@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { FAMILLE_QUESTIONS } from "@/data/famille";
 
@@ -13,6 +13,21 @@ export default function JeuManche({ params }: Params) {
   const [revealed, setRevealed] = useState<boolean[]>(() =>
     question ? Array(question.answers.length).fill(false) : []
   );
+
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [musicOn, setMusicOn] = useState(true);
+  const clickAudioRef = useRef<HTMLAudioElement | null>(null);
+  const bgAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  function playClick() {
+    if (!soundEnabled) return;
+    const el = clickAudioRef.current;
+    if (!el) return;
+    try {
+      el.currentTime = 0;
+      void el.play();
+    } catch {}
+  }
 
   useEffect(() => {
     if (!question) return;
@@ -32,10 +47,12 @@ export default function JeuManche({ params }: Params) {
       if (!Number.isNaN(num) && num >= 1 && num <= question.answers.length) {
         const idx = num - 1;
         setRevealed((r) => r.map((v, i) => (i === idx ? !v : v)));
+        playClick();
       }
       if (e.key.toLowerCase() === "a") {
         // reveal all
         setRevealed(Array(question.answers.length).fill(true));
+        playClick();
       }
       if (e.key.toLowerCase() === "r") {
         // reset
@@ -45,6 +62,19 @@ export default function JeuManche({ params }: Params) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [question]);
+
+  // Synchronise la musique de fond
+  useEffect(() => {
+    const bg = bgAudioRef.current;
+    if (!bg) return;
+    if (soundEnabled && musicOn) {
+      bg.loop = true;
+      bg.volume = 0.5;
+      void bg.play().catch(() => {});
+    } else {
+      try { bg.pause(); } catch {}
+    }
+  }, [soundEnabled, musicOn]);
 
   if (!question) {
     return (
@@ -65,6 +95,22 @@ export default function JeuManche({ params }: Params) {
           <p className="subtitle" style={{ fontSize: 16 }}>Appuyez 1-8 pour révéler, A: tout, R: réinitialiser</p>
         </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <button
+            className="btn-neon"
+            onClick={() => setSoundEnabled((v) => !v)}
+            title={soundEnabled ? "Couper tous les sons" : "Activer les sons"}
+          >
+            {soundEnabled ? "Couper le son" : "Activer le son"}
+          </button>
+          <button
+            className="btn-neon"
+            onClick={() => setMusicOn((v) => !v)}
+            disabled={!soundEnabled}
+            style={{ opacity: soundEnabled ? 1 : 0.6 }}
+            title="Musique de fond"
+          >
+            {musicOn ? "Musique: ON" : "Musique: OFF"}
+          </button>
           <Link className="btn-neon" href="/jeu">Liste des manches</Link>
         </div>
       </header>
@@ -99,7 +145,10 @@ export default function JeuManche({ params }: Params) {
               <button
                 key={index}
                 className={["tile", "glass", shown ? "active" : ""].join(" ")}
-                onClick={() => setRevealed((r) => r.map((v, i) => (i === index ? !v : v)))}
+                onClick={() => {
+                  setRevealed((r) => r.map((v, i) => (i === index ? !v : v)));
+                  playClick();
+                }}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -120,7 +169,7 @@ export default function JeuManche({ params }: Params) {
         </div>
 
         <div style={{ display: "flex", gap: 8, marginTop: 24, alignItems: "center" }}>
-          <button className="btn-neon" onClick={() => setRevealed(Array(question.answers.length).fill(true))}>Révéler tout</button>
+          <button className="btn-neon" onClick={() => { setRevealed(Array(question.answers.length).fill(true)); playClick(); }}>Révéler tout</button>
           <button className="btn-neon" onClick={() => setRevealed(Array(question.answers.length).fill(false))}>Réinitialiser</button>
           <div style={{ marginLeft: "auto", fontSize: 22 }}>
             Score: <span className="neon-text" style={{ fontSize: 28 }}>{total}</span>
@@ -141,6 +190,10 @@ export default function JeuManche({ params }: Params) {
           Astuce: F11 pour plein écran · Touche 1-8 pour chaque réponse
         </div>
       </footer>
+
+      {/* Audio elements (placez vos fichiers dans public/sounds/) */}
+      <audio ref={clickAudioRef} src="/sounds/click.mp3" preload="auto" />
+      <audio ref={bgAudioRef} src="/sounds/bg.mp3" preload="auto" />
     </div>
   );
 }
