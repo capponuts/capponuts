@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FAMILLE_QUESTIONS } from "@/data/famille";
+import { getEmojiForQuestion } from "@/lib/emoji";
 
 export const metadata: Metadata = {
   title: "Une Famille en Or – Solutions",
@@ -37,7 +38,7 @@ export default function Solutions() {
           {FAMILLE_QUESTIONS.map((q) => (
             <section key={q.id} className="glass" style={{ padding: 16 }}>
               <h2 className="neon-text" style={{ marginTop: 0 }}>
-                <span aria-hidden="true" style={{ marginRight: 8 }}>{["🎉","🍕","🚀","🧠","🎮","🎤","🍀","🔥","🌟","🧩"][ (q.id - 1) % 10 ]}</span>
+                <span aria-hidden="true" style={{ marginRight: 8 }}>{getEmojiForQuestion(q.question)}</span>
                 Manche {q.id} – {q.question}
               </h2>
               <ol style={{ marginLeft: 20, display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 8 }}>

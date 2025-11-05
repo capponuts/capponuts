@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FAMILLE_QUESTIONS } from "@/data/famille";
+import { getEmojiForQuestion } from "@/lib/emoji";
 
 type Params = { params: { id: string } };
 
@@ -302,7 +303,7 @@ export default function JeuManche({ params }: Params) {
       <header className="header" style={{ marginBottom: 24 }}>
         <div>
           <h1 className="neon-text title" style={{ fontSize: 40 }}>
-            <span aria-hidden="true" style={{ marginRight: 10 }}>{["🎉","🍕","🚀","🧠","🎮","🎤","🍀","🔥","🌟","🧩"][ (question.id - 1) % 10 ]}</span>
+            <span aria-hidden="true" style={{ marginRight: 10 }}>{getEmojiForQuestion(question.question)}</span>
             Manche {question.id}
           </h1>
           <p className="subtitle" style={{ fontSize: 16 }}>Appuyez 1-8 pour révéler, A: tout, R: réinitialiser</p>
