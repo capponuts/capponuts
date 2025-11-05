@@ -2,10 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import type { Metadata } from "next";
 import { MINI_GAMES, ARTICULE_EXPRESSIONS, MIME_ACTIONS, JEMAPPELLE_PROMPTS } from "@/data/jeu2";
-
-export const metadata: Metadata = { title: "Samedi Tout Est Permis – Jeu" };
 
 type Params = { params: { slug: string } };
 
