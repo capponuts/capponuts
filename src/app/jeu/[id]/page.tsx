@@ -334,8 +334,8 @@ export default function JeuManche({ params }: Params) {
       <audio ref={clickAudioRef} src="/sounds/click.mp3" preload="auto" />
       <audio ref={bgAudioRef} src="/sounds/bg.mp3" preload="auto" />
       <audio ref={successAudioRef} src="/sounds/victory.mp3" preload="auto" />
-      <audio ref={errorAudioRef} src="/sounds/error.mp3" preload="auto" />
-      <audio ref={errorAltAudioRef} src="/sounds/erro.mp3" preload="auto" />
+      <audio ref={errorAudioRef} src="/sounds/erro.mp3" preload="auto" />
+      <audio ref={errorAltAudioRef} src="/sounds/error.mp3" preload="auto" />
     </div>
   );
 }
