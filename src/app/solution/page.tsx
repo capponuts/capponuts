@@ -36,11 +36,14 @@ export default function Solutions() {
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           {FAMILLE_QUESTIONS.map((q) => (
             <section key={q.id} className="glass" style={{ padding: 16 }}>
-              <h2 className="neon-text" style={{ marginTop: 0 }}>Manche {q.id} – {q.question}</h2>
+              <h2 className="neon-text" style={{ marginTop: 0 }}>
+                <span aria-hidden="true" style={{ marginRight: 8 }}>{["🎉","🍕","🚀","🧠","🎮","🎤","🍀","🔥","🌟","🧩"][ (q.id - 1) % 10 ]}</span>
+                Manche {q.id} – {q.question}
+              </h2>
               <ol style={{ marginLeft: 20, display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 8 }}>
                 {q.answers.map((a, i) => (
                   <li key={i} style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
-                    <span>{a.text}</span>
+                    <span>⭐ {a.text}</span>
                     <strong className="neon-text">{a.points}</strong>
                   </li>
                 ))}

@@ -301,7 +301,10 @@ export default function JeuManche({ params }: Params) {
     <div className="container">
       <header className="header" style={{ marginBottom: 24 }}>
         <div>
-          <h1 className="neon-text title" style={{ fontSize: 40 }}>Manche {question.id}</h1>
+          <h1 className="neon-text title" style={{ fontSize: 40 }}>
+            <span aria-hidden="true" style={{ marginRight: 10 }}>{["🎉","🍕","🚀","🧠","🎮","🎤","🍀","🔥","🌟","🧩"][ (question.id - 1) % 10 ]}</span>
+            Manche {question.id}
+          </h1>
           <p className="subtitle" style={{ fontSize: 16 }}>Appuyez 1-8 pour révéler, A: tout, R: réinitialiser</p>
         </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
@@ -416,10 +419,12 @@ export default function JeuManche({ params }: Params) {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <span className="neon-text" style={{ fontSize: 28 }}>{index + 1}</span>
+                  <span className="neon-text" style={{ fontSize: 28 }}>
+                    {index + 1} <span aria-hidden="true" style={{ marginLeft: 6 }}>{shown ? "✨" : "🔒"}</span>
+                  </span>
                   <span style={{ fontSize: 24, color: shown ? "#fff" : "#8a8a8a" }}>{shown ? a.text : "— — — — —"}</span>
                 </div>
-                <span className="neon-text" style={{ fontSize: 28 }}>{shown ? a.points : "?"}</span>
+                <span className="neon-text" style={{ fontSize: 28 }}>{shown ? `⭐ ${a.points}` : "?"}</span>
               </button>
             );
           })}

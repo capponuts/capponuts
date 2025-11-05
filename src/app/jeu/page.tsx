@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default function JeuIndex() {
+  const EMOJIS = ["🎉","🍕","🚀","🧠","🎮","🎤","🍀","🔥","🌟","🧩","🎯","🍀"]; // boucle
   return (
     <div className="container">
       <header className="header" style={{ marginBottom: 24 }}>
@@ -39,10 +40,13 @@ export default function JeuIndex() {
             width: "100%",
           }}
         >
-          {FAMILLE_QUESTIONS.map((q) => (
+          {FAMILLE_QUESTIONS.map((q, idx) => (
             <Link key={q.id} href={`/jeu/${q.id}`} className="tile glass" style={{ textDecoration: "none", padding: 20, minHeight: 120 }}>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                <span className="neon-text" style={{ fontSize: 22 }}>Manche {q.id}</span>
+                <span className="neon-text" style={{ fontSize: 22 }}>
+                  <span aria-hidden="true" style={{ marginRight: 8 }}>{EMOJIS[idx % EMOJIS.length]}</span>
+                  Manche {q.id}
+                </span>
                 <span style={{ color: "#b7b7b7", fontSize: 16 }}>{q.question}</span>
               </div>
             </Link>
