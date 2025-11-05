@@ -23,6 +23,7 @@ export default function JeuManche({ params }: Params) {
   const errorAltAudioRef = useRef<HTMLAudioElement | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const [pulse, setPulse] = useState<boolean[]>(() => (question ? Array(question.answers.length).fill(false) : []));
+  const tileRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [strikes, setStrikes] = useState(0);
 
   function playBeep() {
@@ -96,6 +97,25 @@ export default function JeuManche({ params }: Params) {
     }
   }
 
+  function spawnParticlesAt(el: HTMLElement, count = 16) {
+    try {
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement("span");
+        p.className = "reveal-particle";
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 36 + Math.random() * 36; // 36–72px
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance;
+        p.style.setProperty("--dx", `${dx}px`);
+        p.style.setProperty("--dy", `${dy}px`);
+        el.appendChild(p);
+        setTimeout(() => {
+          if (p.parentElement === el) el.removeChild(p);
+        }, 700);
+      }
+    } catch {}
+  }
+
   useEffect(() => {
     if (!question) return;
     setRevealed(Array(question.answers.length).fill(false));
@@ -130,6 +150,8 @@ export default function JeuManche({ params }: Params) {
               return next;
             });
           }, 360);
+          const el = tileRefs.current[idx];
+          if (el) spawnParticlesAt(el);
           playSuccess();
         } else {
           playClick();
@@ -141,7 +163,15 @@ export default function JeuManche({ params }: Params) {
         setRevealed(Array(question.answers.length).fill(true));
         setPulse(Array(question.answers.length).fill(true));
         setTimeout(() => setPulse(Array(question.answers.length).fill(false)), 380);
-        if (anyHidden) playSuccess(); else playClick();
+        if (anyHidden) {
+          // Particules sur toutes les cases qui étaient cachées
+          tileRefs.current.forEach((el, i) => {
+            if (!revealed[i] && el) spawnParticlesAt(el, 20);
+          });
+          playSuccess();
+        } else {
+          playClick();
+        }
       }
       if (e.key.toLowerCase() === "r") {
         // reset
@@ -283,6 +313,8 @@ export default function JeuManche({ params }: Params) {
                         return next;
                       });
                     }, 360);
+                    const el = tileRefs.current[index];
+                    if (el) spawnParticlesAt(el);
                     playSuccess();
                   } else {
                     playClick();
@@ -295,7 +327,9 @@ export default function JeuManche({ params }: Params) {
                   padding: 24,
                   minHeight: 140,
                   textAlign: "left",
+                  position: "relative",
                 }}
+                ref={(el) => (tileRefs.current[index] = el)}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <span className="neon-text" style={{ fontSize: 28 }}>{index + 1}</span>
