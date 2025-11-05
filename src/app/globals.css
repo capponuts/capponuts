@@ -171,6 +171,19 @@ a {
   will-change: transform, opacity;
 }
 
+/* Shake erreur (croix) */
+@keyframes shake-err {
+  0%, 100% { transform: translateX(0); text-shadow: none; }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+.shake-error {
+  animation: shake-err 420ms ease-out;
+  text-shadow: 0 0 14px rgba(255, 77, 79, 0.55), 0 0 24px rgba(255, 77, 79, 0.35);
+}
+
 .panel {
   border-radius: 16px;
   padding: 20px;

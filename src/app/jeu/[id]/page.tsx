@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FAMILLE_QUESTIONS } from "@/data/famille";
 
 type Params = { params: { id: string } };
 
 export default function JeuManche({ params }: Params) {
+  const router = useRouter();
   const id = Number(params.id);
   const question = useMemo(() => FAMILLE_QUESTIONS.find((q) => q.id === id) || null, [id]);
 
@@ -21,10 +23,14 @@ export default function JeuManche({ params }: Params) {
   const successAudioRef = useRef<HTMLAudioElement | null>(null);
   const errorAudioRef = useRef<HTMLAudioElement | null>(null);
   const errorAltAudioRef = useRef<HTMLAudioElement | null>(null);
+  const nextAudioRef = useRef<HTMLAudioElement | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const [pulse, setPulse] = useState<boolean[]>(() => (question ? Array(question.answers.length).fill(false) : []));
   const tileRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [strikes, setStrikes] = useState(0);
+  const [isShaking, setIsShaking] = useState(false);
+  const [showTransition, setShowTransition] = useState(false);
+  const [totalCumul, setTotalCumul] = useState<number>(0);
 
   function playBeep() {
     if (!soundEnabled) return;
@@ -95,6 +101,13 @@ export default function JeuManche({ params }: Params) {
     } catch {
       playBeep();
     }
+  }
+
+  function playNextJingle() {
+    if (!soundEnabled) return;
+    const el = nextAudioRef.current || successAudioRef.current;
+    if (!el) { playBeep(); return; }
+    try { el.currentTime = 0; void el.play().catch(() => playBeep()); } catch { playBeep(); }
   }
 
   function spawnParticlesAt(el: HTMLElement, count = 16) {
@@ -206,6 +219,34 @@ export default function JeuManche({ params }: Params) {
     } catch {}
   }, [soundEnabled]);
 
+  // Charger score cumulé depuis localStorage
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("famille_total");
+      setTotalCumul(raw ? Number(raw) || 0 : 0);
+    } catch {}
+  }, []);
+
+  function confirmAndGoNext() {
+    // Met à jour score cumulé et affiche l’overlay
+    try {
+      const raw = localStorage.getItem("famille_total");
+      const current = raw ? Number(raw) || 0 : 0;
+      const nextTotal = current + total;
+      localStorage.setItem("famille_total", String(nextTotal));
+      setTotalCumul(nextTotal);
+    } catch {}
+    setShowTransition(true);
+    playNextJingle();
+    setTimeout(() => {
+      const nextId = id + 1;
+      if (FAMILLE_QUESTIONS.find((q) => q.id === nextId)) {
+        router.push(`/jeu/${nextId}`);
+      }
+      setShowTransition(false);
+    }, 1600);
+  }
+
   if (!question) {
     return (
       <div className="container">
@@ -231,6 +272,8 @@ export default function JeuManche({ params }: Params) {
               setStrikes((s) => {
                 const next = Math.min(3, s + 1);
                 if (next !== s) playError();
+                setIsShaking(true);
+                setTimeout(() => setIsShaking(false), 500);
                 return next;
               });
             }}
@@ -277,7 +320,7 @@ export default function JeuManche({ params }: Params) {
             ))}
           </div>
         </div>
-        <h2 className="neon-text" style={{ marginTop: 0, fontSize: 32, textAlign: "center" }}>{question.question}</h2>
+        <h2 className={["neon-text", isShaking ? "shake-error" : ""].join(" ")} style={{ marginTop: 0, fontSize: 32, textAlign: "center" }}>{question.question}</h2>
 
         <div
           className="grid"
@@ -329,7 +372,9 @@ export default function JeuManche({ params }: Params) {
                   textAlign: "left",
                   position: "relative",
                 }}
-                ref={(el) => (tileRefs.current[index] = el)}
+                ref={(el) => {
+                  tileRefs.current[index] = el;
+                }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <span className="neon-text" style={{ fontSize: 28 }}>{index + 1}</span>
@@ -347,6 +392,9 @@ export default function JeuManche({ params }: Params) {
           <div style={{ marginLeft: "auto", fontSize: 22 }}>
             Score: <span className="neon-text" style={{ fontSize: 28 }}>{total}</span>
           </div>
+          {FAMILLE_QUESTIONS.find((q) => q.id === id + 1) ? (
+            <button className="btn-neon" onClick={confirmAndGoNext} title="Valider et passer à la manche suivante">Manche suivante</button>
+          ) : null}
         </div>
       </main>
 
@@ -370,6 +418,25 @@ export default function JeuManche({ params }: Params) {
       <audio ref={successAudioRef} src="/sounds/victory.mp3" preload="auto" />
       <audio ref={errorAudioRef} src="/sounds/erro.mp3" preload="auto" />
       <audio ref={errorAltAudioRef} src="/sounds/error.mp3" preload="auto" />
+      <audio ref={nextAudioRef} src="/sounds/next.mp3" preload="auto" />
+
+      {showTransition ? (
+        <div style={{
+          position: "fixed",
+          inset: 0,
+          background: "rgba(0,0,0,0.6)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 1000,
+        }}>
+          <div className="glass" style={{ padding: 24, borderRadius: 16, minWidth: 420, textAlign: "center" }}>
+            <h3 className="neon-text" style={{ marginTop: 0, fontSize: 28 }}>Manche suivante</h3>
+            <div style={{ marginTop: 8, fontSize: 18 }}>Score de la manche: <strong className="neon-text" style={{ fontSize: 22 }}>{total}</strong></div>
+            <div style={{ marginTop: 6, fontSize: 16, color: "#b7b7b7" }}>Score cumulé: <strong>{totalCumul}</strong></div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
