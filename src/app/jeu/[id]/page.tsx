@@ -20,6 +20,7 @@ export default function JeuManche({ params }: Params) {
   const bgAudioRef = useRef<HTMLAudioElement | null>(null);
   const successAudioRef = useRef<HTMLAudioElement | null>(null);
   const errorAudioRef = useRef<HTMLAudioElement | null>(null);
+  const errorAltAudioRef = useRef<HTMLAudioElement | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const [pulse, setPulse] = useState<boolean[]>(() => (question ? Array(question.answers.length).fill(false) : []));
   const [strikes, setStrikes] = useState(0);
@@ -82,7 +83,7 @@ export default function JeuManche({ params }: Params) {
 
   function playError() {
     if (!soundEnabled) return;
-    const el = errorAudioRef.current;
+    const el = errorAudioRef.current || errorAltAudioRef.current;
     if (!el) {
       playBeep();
       return;
@@ -334,6 +335,7 @@ export default function JeuManche({ params }: Params) {
       <audio ref={bgAudioRef} src="/sounds/bg.mp3" preload="auto" />
       <audio ref={successAudioRef} src="/sounds/victory.mp3" preload="auto" />
       <audio ref={errorAudioRef} src="/sounds/error.mp3" preload="auto" />
+      <audio ref={errorAltAudioRef} src="/sounds/erro.mp3" preload="auto" />
     </div>
   );
 }
