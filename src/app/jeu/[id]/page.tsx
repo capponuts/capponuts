@@ -176,6 +176,12 @@ export default function JeuManche({ params }: Params) {
     function onKey(e: KeyboardEvent) {
       if (!question) return;
       const k = e.key.toLowerCase();
+      // tenter de résumer l'audio si suspendu lors d'une interaction clavier
+      try {
+        if (soundEnabled && audioCtxRef.current && audioCtxRef.current.state === "suspended") {
+          void audioCtxRef.current.resume();
+        }
+      } catch {}
       // 1..8 => toggle
       const num = Number(e.key);
       if (!Number.isNaN(num) && num >= 1 && num <= question.answers.length) {
@@ -222,15 +228,16 @@ export default function JeuManche({ params }: Params) {
         // reset
         setRevealed(Array(question.answers.length).fill(false));
         setPulse(Array(question.answers.length).fill(false));
+        playClick();
       }
 
       // Raccourcis animateur
       if (k === "x") addStrike();
       if (k === "z") removeStrike();
-      if (k === "s") setSoundEnabled((v) => !v);
-      if (k === "m") soundEnabled && setMusicOn((v) => !v);
-      if (k === "f") void toggleFullscreen();
-      if (k === "n" && FAMILLE_QUESTIONS.find((q) => q.id === id + 1)) confirmAndGoNext();
+      if (k === "s") { setSoundEnabled((v) => !v); playClick(); }
+      if (k === "m") { if (soundEnabled) { setMusicOn((v) => !v); playClick(); } }
+      if (k === "f") { playClick(); void toggleFullscreen(); }
+      if (k === "n" && FAMILLE_QUESTIONS.find((q) => q.id === id + 1)) { playSuccess(); confirmAndGoNext(); }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
