@@ -32,6 +32,36 @@ export default function JeuManche({ params }: Params) {
   const [showTransition, setShowTransition] = useState(false);
   const [totalCumul, setTotalCumul] = useState<number>(0);
 
+  function addStrike() {
+    setStrikes((s) => {
+      const next = Math.min(3, s + 1);
+      if (next !== s) {
+        playError();
+        setIsShaking(true);
+        setTimeout(() => setIsShaking(false), 500);
+      }
+      return next;
+    });
+  }
+
+  function removeStrike() {
+    setStrikes((s) => {
+      const next = Math.max(0, s - 1);
+      if (next !== s) playClick();
+      return next;
+    });
+  }
+
+  async function toggleFullscreen() {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch {}
+  }
+
   function playBeep() {
     if (!soundEnabled) return;
     try {
@@ -144,6 +174,7 @@ export default function JeuManche({ params }: Params) {
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (!question) return;
+      const k = e.key.toLowerCase();
       // 1..8 => toggle
       const num = Number(e.key);
       if (!Number.isNaN(num) && num >= 1 && num <= question.answers.length) {
@@ -170,7 +201,7 @@ export default function JeuManche({ params }: Params) {
           playClick();
         }
       }
-      if (e.key.toLowerCase() === "a") {
+      if (k === "a") {
         // reveal all
         const anyHidden = revealed.some((v) => !v);
         setRevealed(Array(question.answers.length).fill(true));
@@ -186,11 +217,19 @@ export default function JeuManche({ params }: Params) {
           playClick();
         }
       }
-      if (e.key.toLowerCase() === "r") {
+      if (k === "r") {
         // reset
         setRevealed(Array(question.answers.length).fill(false));
         setPulse(Array(question.answers.length).fill(false));
       }
+
+      // Raccourcis animateur
+      if (k === "x") addStrike();
+      if (k === "z") removeStrike();
+      if (k === "s") setSoundEnabled((v) => !v);
+      if (k === "m") soundEnabled && setMusicOn((v) => !v);
+      if (k === "f") void toggleFullscreen();
+      if (k === "n" && FAMILLE_QUESTIONS.find((q) => q.id === id + 1)) confirmAndGoNext();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);

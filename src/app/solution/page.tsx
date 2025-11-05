@@ -20,6 +20,19 @@ export default function Solutions() {
       </header>
 
       <main className="glass panel" style={{ padding: 20 }}>
+        <section className="glass" style={{ padding: 16, marginBottom: 16 }}>
+          <h2 className="neon-text" style={{ marginTop: 0 }}>Raccourcis animateur</h2>
+          <ul style={{ marginLeft: 18, display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 6 }}>
+            <li>1–8: révéler/masquer la réponse correspondante</li>
+            <li>A: tout révéler · R: réinitialiser la manche</li>
+            <li>X: ajouter une croix rouge (joue <code>erro.mp3</code>)</li>
+            <li>Z: retirer une croix rouge</li>
+            <li>S: activer/couper le son</li>
+            <li>M: musique ON/OFF</li>
+            <li>N: manche suivante (enregistre le score cumulé + jingle)</li>
+            <li>F: plein écran ON/OFF</li>
+          </ul>
+        </section>
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           {FAMILLE_QUESTIONS.map((q) => (
             <section key={q.id} className="glass" style={{ padding: 16 }}>
