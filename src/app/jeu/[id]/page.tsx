@@ -61,19 +61,38 @@ export default function JeuManche({ params }: Params) {
     <div className="container">
       <header className="header" style={{ marginBottom: 24 }}>
         <div>
-          <h1 className="neon-text title">Manche {question.id}</h1>
-          <p className="subtitle">Appuyez 1-8 pour révéler, A: tout, R: réinitialiser</p>
+          <h1 className="neon-text title" style={{ fontSize: 40 }}>Manche {question.id}</h1>
+          <p className="subtitle" style={{ fontSize: 16 }}>Appuyez 1-8 pour révéler, A: tout, R: réinitialiser</p>
         </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <Link className="btn-neon" href="/jeu">Liste des manches</Link>
-          <Link className="btn-neon" href="/solution">Solutions</Link>
         </div>
       </header>
 
-      <main className="glass panel" style={{ padding: 20 }}>
-        <h2 className="neon-text" style={{ marginTop: 0 }}>{question.question}</h2>
+      <main
+        className="glass panel"
+        style={{
+          padding: 32,
+          minHeight: "80vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
+        <h2 className="neon-text" style={{ marginTop: 0, fontSize: 32, textAlign: "center" }}>{question.question}</h2>
 
-        <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16, marginTop: 12 }}>
+        <div
+          className="grid"
+          style={{
+            gridTemplateColumns: "1fr 1fr",
+            gap: 20,
+            marginTop: 16,
+            maxWidth: 1600,
+            marginLeft: "auto",
+            marginRight: "auto",
+            width: "100%",
+          }}
+        >
           {question.answers.map((a, index) => {
             const shown = revealed[index];
             return (
@@ -85,26 +104,26 @@ export default function JeuManche({ params }: Params) {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  padding: 20,
-                  minHeight: 96,
+                  padding: 24,
+                  minHeight: 140,
                   textAlign: "left",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <span className="neon-text" style={{ fontSize: 24 }}>{index + 1}</span>
-                  <span style={{ fontSize: 20, color: shown ? "#fff" : "#8a8a8a" }}>{shown ? a.text : "— — — — —"}</span>
+                  <span className="neon-text" style={{ fontSize: 28 }}>{index + 1}</span>
+                  <span style={{ fontSize: 24, color: shown ? "#fff" : "#8a8a8a" }}>{shown ? a.text : "— — — — —"}</span>
                 </div>
-                <span className="neon-text" style={{ fontSize: 24 }}>{shown ? a.points : "?"}</span>
+                <span className="neon-text" style={{ fontSize: 28 }}>{shown ? a.points : "?"}</span>
               </button>
             );
           })}
         </div>
 
-        <div style={{ display: "flex", gap: 8, marginTop: 20, alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 8, marginTop: 24, alignItems: "center" }}>
           <button className="btn-neon" onClick={() => setRevealed(Array(question.answers.length).fill(true))}>Révéler tout</button>
           <button className="btn-neon" onClick={() => setRevealed(Array(question.answers.length).fill(false))}>Réinitialiser</button>
-          <div style={{ marginLeft: "auto", fontSize: 20 }}>
-            Score: <span className="neon-text" style={{ fontSize: 24 }}>{total}</span>
+          <div style={{ marginLeft: "auto", fontSize: 22 }}>
+            Score: <span className="neon-text" style={{ fontSize: 28 }}>{total}</span>
           </div>
         </div>
       </main>
