@@ -27,6 +27,8 @@ export default function JeuIndex() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
         }}
       >
         <h2 className="neon-text" style={{ marginTop: 0, fontSize: 28 }}>Manches disponibles</h2>

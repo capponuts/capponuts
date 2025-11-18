@@ -359,6 +359,8 @@ export default function JeuManche({ params }: Params) {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
         }}
       >
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 16, marginBottom: 8 }}>
