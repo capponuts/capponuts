@@ -25,6 +25,8 @@ interface YouTubePlayer {
   unMute: () => void;
   isMuted: () => boolean;
   playVideo: () => void;
+  setVolume: (volume: number) => void;
+  getVolume: () => number;
   destroy: () => void;
   seekTo: (seconds: number) => void;
 }
@@ -79,10 +81,26 @@ function createArcadeBeep() {
 
 export default function CyberText() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [isMuted, setIsMuted] = useState(true)
+  const [isMuted, setIsMuted] = useState<boolean>(() => {
+    try {
+      const raw = localStorage.getItem("home_muted");
+      return raw === null ? true : raw === "true";
+    } catch {
+      return true;
+    }
+  })
   const [isLoading, setIsLoading] = useState(true)
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [soundEnabled, setSoundEnabled] = useState(false)
+  const [volume, setVolume] = useState<number>(() => {
+    try {
+      const raw = localStorage.getItem("home_volume");
+      const v = raw ? Math.max(0, Math.min(100, Number(raw))) : 20;
+      return Number.isFinite(v) ? v : 20;
+    } catch {
+      return 20;
+    }
+  })
   const playerRef = useRef<YouTubePlayer | null>(null)
 
   useEffect(() => {
@@ -149,9 +167,14 @@ export default function CyberText() {
           },
           events: {
             onReady: (event: { target: YouTubePlayer }) => {
+              // Toujours démarrer en muet pour respecter l'autoplay
               event.target.mute()
               event.target.seekTo(20) // Force le démarrage à 20 secondes
               event.target.playVideo()
+              // Appliquer le volume préféré (n'affecte pas le système)
+              try {
+                event.target.setVolume(volume)
+              } catch {}
             }
           }
         })
@@ -182,13 +205,19 @@ export default function CyberText() {
 
   const toggleMute = () => {
     if (playerRef.current) {
-      if (playerRef.current.isMuted()) {
-        playerRef.current.unMute()
-        setIsMuted(false)
-      } else {
-        playerRef.current.mute()
-        setIsMuted(true)
-      }
+      try {
+        if (playerRef.current.isMuted()) {
+          // Unmute après interaction utilisateur, appliquer volume interne YouTube
+          playerRef.current.unMute()
+          playerRef.current.setVolume(volume)
+          setIsMuted(false)
+          localStorage.setItem("home_muted", "false")
+        } else {
+          playerRef.current.mute()
+          setIsMuted(true)
+          localStorage.setItem("home_muted", "true")
+        }
+      } catch {}
     }
   }
 
@@ -205,8 +234,17 @@ export default function CyberText() {
 
   const enableSound = () => {
     setSoundEnabled(true)
-    createArcadeBeep() // Test du son
+    // Ne pas forcer un bip immédiat (évite d'impacter les sons système)
+    // L'utilisateur entendra la vidéo une fois le mute levé
   }
+
+  // Persistance du volume utilisateur (si on ajoute un contrôle plus tard)
+  useEffect(() => {
+    try { localStorage.setItem("home_volume", String(volume)); } catch {}
+    if (playerRef.current && !isMuted) {
+      try { playerRef.current.setVolume(volume); } catch {}
+    }
+  }, [volume, isMuted])
 
   const letters = ['C', 'A', 'P', 'P', 'O', 'N', 'U', 'T', 'S']
 
