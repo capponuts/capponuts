@@ -189,14 +189,11 @@ a {
 }
 
 /* --- Helpers pour la landing CyberText --- */
-.fade-in { @apply animate-fade-in; }
-.animate-spin-slow { @apply animate-spin-slow; }
-.animate-glow-text { @apply animate-glow-text; }
-.bg-gradient-radial { @apply bg-gradient-radial from-pink-500/20 via-purple-500/5 to-transparent; }
-.bg-gradient-conic { @apply bg-gradient-conic from-cyan-400/10 via-transparent to-pink-600/10; }
-.animate-water-wave-1 { @apply animate-water-wave-1; }
-.animate-water-wave-2 { @apply animate-water-wave-2; }
-.animate-water-wave-3 { @apply animate-water-wave-3; }
+/* Utiliser directement les utilitaires Tailwind:
+   - animate-fade-in, animate-spin-slow, animate-glow-text
+   - bg-gradient-radial, bg-gradient-conic
+   - animate-water-wave-1/2/3
+   (Pas d'alias @apply pour éviter les dépendances circulaires) */
 
 /* Style des lettres 3D avec léger glitch */
 .cyber-letter-glitch {
