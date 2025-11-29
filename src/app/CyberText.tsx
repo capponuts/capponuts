@@ -224,14 +224,7 @@ export default function CyberText() {
   }
 
   const playArcadeBeep = () => {
-    // Activer le son au premier clic utilisateur si nécessaire
-    if (!soundEnabled) {
-      setSoundEnabled(true)
-    }
-    
-    if (soundEnabled) {
-      createArcadeBeep()
-    }
+    // Désactivé pour éviter d'interférer avec l'audio global
   }
 
   const enableSound = () => {
@@ -309,11 +302,13 @@ export default function CyberText() {
       </div>
       {/* Audio séparé pour la musique d'accueil */}
       <audio ref={customAudioRef} src="/sounds/kapponutss.mp3" preload="auto" loop muted />
+      {/* Fallback vers le nom de fichier au root si besoin */}
+      {/* <audio ref={customAudioRef} src="/Kapponutss.mp3" preload="auto" loop muted /> */}
 
       {/* Container principal pour le contenu */}
       <div className="relative z-30 w-full h-full flex flex-col">
         {/* Lettres CAPPONUTS - Centré dans l'écran */}
-        <div className="flex-1 flex items-center justify-center px-4">
+            <div className="flex-1 flex items-center justify-center px-4">
           <div className="text-center">
             {/* CAPPONUTS */}
             <div className="flex flex-wrap justify-center gap-2 sm:gap-4 max-w-7xl mb-8">
@@ -330,8 +325,7 @@ export default function CyberText() {
                     `,
                     animationDelay: `${index * 0.1}s`,
                   }}
-                  onMouseEnter={playArcadeBeep}
-                  onClick={playArcadeBeep}
+                      // bip désactivé pour stabilité audio
                 >
                   {letter}
                 </div>
@@ -354,7 +348,21 @@ export default function CyberText() {
                 <button
                   onClick={() => {
                     enableSound()
-                    toggleMute()
+                    // Démarre la piste audio custom (YouTube reste muet)
+                    const a = customAudioRef.current;
+                    if (a) {
+                      try {
+                        a.muted = false;
+                        a.volume = Math.max(0, Math.min(1, volume / 100));
+                        a.currentTime = 0;
+                        void a.play();
+                        setIsMuted(false);
+                        try { localStorage.setItem("home_muted", "false"); } catch {}
+                      } catch {}
+                    } else {
+                      // fallback au comportement précédent si jamais
+                      toggleMute();
+                    }
                   }}
                   className="cyber-volume-button group relative p-4 z-10"
                   aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
