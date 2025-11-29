@@ -116,6 +116,20 @@ export default function CyberText() {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
+  // Forcer le silence à l'arrivée (aucun son autoplay)
+  useEffect(() => {
+    try { localStorage.setItem("home_muted", "true"); } catch {}
+    setIsMuted(true);
+    const a = customAudioRef.current;
+    if (a) {
+      try {
+        a.pause();
+        a.currentTime = 0;
+        a.muted = true;
+      } catch {}
+    }
+  }, []);
+
   // Animation de chargement
   useEffect(() => {
     const interval = setInterval(() => {
