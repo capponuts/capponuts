@@ -102,6 +102,7 @@ export default function CyberText() {
     }
   })
   const playerRef = useRef<YouTubePlayer | null>(null)
+  const customAudioRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -167,14 +168,11 @@ export default function CyberText() {
           },
           events: {
             onReady: (event: { target: YouTubePlayer }) => {
-              // Toujours démarrer en muet pour respecter l'autoplay
+              // Toujours rester en muet pour respecter l'autoplay et ne pas perturber le système
               event.target.mute()
               event.target.seekTo(20) // Force le démarrage à 20 secondes
               event.target.playVideo()
-              // Appliquer le volume préféré (n'affecte pas le système)
-              try {
-                event.target.setVolume(volume)
-              } catch {}
+              // On ne dé-mute plus la vidéo YouTube. Le son est géré par un audio séparé.
             }
           }
         })
@@ -204,20 +202,24 @@ export default function CyberText() {
   }, [])
 
   const toggleMute = () => {
-    if (playerRef.current) {
+    // Laisser la vidéo YouTube muette. Utiliser un audio séparé.
+    const a = customAudioRef.current;
+    if (!a) return;
+    if (isMuted) {
       try {
-        if (playerRef.current.isMuted()) {
-          // Unmute après interaction utilisateur, appliquer volume interne YouTube
-          playerRef.current.unMute()
-          playerRef.current.setVolume(volume)
-          setIsMuted(false)
-          localStorage.setItem("home_muted", "false")
-        } else {
-          playerRef.current.mute()
-          setIsMuted(true)
-          localStorage.setItem("home_muted", "true")
-        }
+        a.muted = false;
+        a.volume = Math.max(0, Math.min(1, volume / 100));
+        void a.play();
       } catch {}
+      setIsMuted(false);
+      try { localStorage.setItem("home_muted", "false"); } catch {}
+    } else {
+      try {
+        a.pause();
+        a.muted = true;
+      } catch {}
+      setIsMuted(true);
+      try { localStorage.setItem("home_muted", "true"); } catch {}
     }
   }
 
@@ -241,8 +243,9 @@ export default function CyberText() {
   // Persistance du volume utilisateur (si on ajoute un contrôle plus tard)
   useEffect(() => {
     try { localStorage.setItem("home_volume", String(volume)); } catch {}
-    if (playerRef.current && !isMuted) {
-      try { playerRef.current.setVolume(volume); } catch {}
+    const a = customAudioRef.current;
+    if (a && !isMuted) {
+      try { a.volume = Math.max(0, Math.min(1, volume / 100)); } catch {}
     }
   }, [volume, isMuted])
 
@@ -304,6 +307,8 @@ export default function CyberText() {
         {/* Overlay sombre pour améliorer la lisibilité */}
         <div className="absolute inset-0 bg-black/50 z-10" />
       </div>
+      {/* Audio séparé pour la musique d'accueil */}
+      <audio ref={customAudioRef} src="/sounds/kapponutss.mp3" preload="auto" loop muted />
 
       {/* Container principal pour le contenu */}
       <div className="relative z-30 w-full h-full flex flex-col">
