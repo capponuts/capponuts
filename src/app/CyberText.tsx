@@ -314,10 +314,8 @@ export default function CyberText() {
         {/* Overlay sombre pour améliorer la lisibilité */}
         <div className="absolute inset-0 bg-black/50 z-10" />
       </div>
-      {/* Audio séparé pour la musique d'accueil */}
-      <audio ref={customAudioRef} src="/sounds/kapponutss.mp3" preload="auto" loop muted />
-      {/* Fallback vers le nom de fichier au root si besoin */}
-      {/* <audio ref={customAudioRef} src="/Kapponutss.mp3" preload="auto" loop muted /> */}
+      {/* Audio séparé pour la musique d'accueil (fichier dans public/) */}
+      <audio ref={customAudioRef} src="/Kapponutss.mp3" preload="auto" loop muted />
 
       {/* Container principal pour le contenu */}
       <div className="relative z-30 w-full h-full flex flex-col">
