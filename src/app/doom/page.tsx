@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 export default function DoomPage() {
-  const rootRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [showIntro, setShowIntro] = useState(true);
   const [introPhase, setIntroPhase] = useState(0);
+  const dosInstanceRef = useRef<unknown>(null);
 
   // Intro animation
   useEffect(() => {
@@ -31,64 +32,87 @@ export default function DoomPage() {
     };
   }, [showIntro]);
 
-  // Load js-dos
+  const initDos = useCallback(async () => {
+    if (!canvasRef.current) return;
+
+    try {
+      setProgress(10);
+
+      // Load js-dos CSS
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "https://v8.js-dos.com/latest/js-dos.css";
+      document.head.appendChild(link);
+
+      setProgress(20);
+
+      // Load js-dos script
+      await new Promise<void>((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://v8.js-dos.com/latest/js-dos.js";
+        script.async = true;
+        script.onload = () => {
+          console.log("js-dos script loaded");
+          resolve();
+        };
+        script.onerror = (e) => {
+          console.error("Failed to load js-dos script", e);
+          reject(new Error("Failed to load js-dos script"));
+        };
+        document.head.appendChild(script);
+      });
+
+      setProgress(40);
+
+      // Wait a bit for js-dos to initialize
+      await new Promise((r) => setTimeout(r, 500));
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const Dos = (window as any).Dos;
+      if (!Dos) {
+        throw new Error("Dos not found on window");
+      }
+
+      setProgress(60);
+
+      // Create the DOS instance
+      const dos = Dos(canvasRef.current, {
+        url: "/doom/doom.jsdos",
+        autoStart: true,
+      });
+
+      dosInstanceRef.current = dos;
+
+      setProgress(80);
+
+      // Wait for it to be ready
+      await new Promise((r) => setTimeout(r, 2000));
+
+      setProgress(100);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error initializing DOS:", err);
+      setError(err instanceof Error ? err.message : "Unknown error");
+      setLoading(false);
+    }
+  }, []);
+
+  // Load js-dos after intro
   useEffect(() => {
     if (showIntro) return;
+    initDos();
+  }, [showIntro, initDos]);
 
-    const loadJsDos = async () => {
-      try {
-        setProgress(10);
-
-        // Load js-dos from CDN
-        const script = document.createElement("script");
-        script.src = "https://js-dos.com/v8/latest/js-dos.js";
-        script.async = true;
-
-        await new Promise<void>((resolve, reject) => {
-          script.onload = () => resolve();
-          script.onerror = () => reject(new Error("Failed to load js-dos"));
-          document.head.appendChild(script);
-        });
-
-        setProgress(30);
-
-        // Wait for Dos to be available
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const Dos = (window as any).Dos;
-        if (!Dos) {
-          throw new Error("js-dos not loaded properly");
-        }
-
-        setProgress(50);
-
-        // Create DOS instance
-        if (rootRef.current) {
-          setProgress(70);
-
-          const dos = Dos(rootRef.current, {
-            style: "none",
-            noSideBar: true,
-            noFullscreen: false,
-            noSocialLinks: true,
-          });
-
-          setProgress(90);
-
-          // Load Doom bundle
-          await dos.run("/doom/doom.jsdos");
-
-          setProgress(100);
-          setLoading(false);
-        }
-      } catch (err) {
-        console.error("Error loading Doom:", err);
-        setError(err instanceof Error ? err.message : "Failed to load Doom");
-        setLoading(false);
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const dos = dosInstanceRef.current as any;
+      if (dos?.stop) {
+        dos.stop();
       }
     };
-
-    loadJsDos();
-  }, [showIntro]);
+  }, []);
 
   // Intro screen
   if (showIntro) {
@@ -173,17 +197,30 @@ export default function DoomPage() {
           ERROR
         </div>
         <div className="text-gray-400 text-lg mb-4">{error}</div>
-        <div className="text-gray-600 text-sm max-w-md">
-          Le chargement de DOSBox a échoué. Essaie de rafraîchir la page ou
-          vérifie ta connexion internet.
+        <div className="text-gray-600 text-sm max-w-md mb-6">
+          Le chargement de DOSBox a échoué. Essaie de rafraîchir la page.
         </div>
-        <button
-          onClick={() => window.location.reload()}
-          className="mt-8 px-6 py-3 bg-red-900 hover:bg-red-700 text-white font-bold"
-          style={{ fontFamily: "Impact, sans-serif" }}
-        >
-          RETRY
-        </button>
+        
+        {/* Alternative: direct link to dos.zone */}
+        <div className="flex flex-col gap-4">
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 bg-red-900 hover:bg-red-700 text-white font-bold"
+            style={{ fontFamily: "Impact, sans-serif" }}
+          >
+            RETRY
+          </button>
+          
+          <a
+            href="https://dos.zone/doom-dec-1993/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white font-bold text-center"
+            style={{ fontFamily: "Impact, sans-serif" }}
+          >
+            PLAY ON DOS.ZONE →
+          </a>
+        </div>
       </div>
     );
   }
@@ -213,11 +250,10 @@ export default function DoomPage() {
           </div>
 
           <div className="text-gray-500 mt-4 text-sm">
-            {progress < 30 && "Initializing DOSBox..."}
-            {progress >= 30 && progress < 50 && "Loading emulator..."}
-            {progress >= 50 && progress < 70 && "Preparing environment..."}
-            {progress >= 70 && progress < 90 && "Loading DOOM.WAD..."}
-            {progress >= 90 && "Starting game..."}
+            {progress < 30 && "Loading js-dos emulator..."}
+            {progress >= 30 && progress < 60 && "Initializing DOSBox..."}
+            {progress >= 60 && progress < 80 && "Loading DOOM.WAD..."}
+            {progress >= 80 && "Starting game..."}
           </div>
 
           <div className="text-gray-600 text-xs mt-8">
@@ -228,12 +264,11 @@ export default function DoomPage() {
 
       {/* js-dos container */}
       <div
-        ref={rootRef}
-        className="w-full h-full"
+        ref={canvasRef}
+        className="w-full h-full flex items-center justify-center"
         style={{
-          maxWidth: "960px",
-          maxHeight: "720px",
-          aspectRatio: "4/3",
+          maxWidth: "100vw",
+          maxHeight: "100vh",
         }}
       />
 
@@ -241,9 +276,9 @@ export default function DoomPage() {
       {!loading && (
         <div className="absolute bottom-4 left-4 text-gray-600 text-xs bg-black/80 px-3 py-2 rounded">
           <div className="font-bold text-gray-400 mb-1">Contrôles:</div>
-          <div>↑↓←→ ou WASD: Se déplacer</div>
-          <div>Ctrl: Tirer | Space: Ouvrir | Shift: Courir</div>
-          <div>1-7: Armes | Tab: Carte | Esc: Menu</div>
+          <div>↑↓←→: Se déplacer | Ctrl: Tirer</div>
+          <div>Space: Ouvrir | Shift: Courir</div>
+          <div>1-7: Armes | Esc: Menu</div>
         </div>
       )}
 
@@ -251,9 +286,7 @@ export default function DoomPage() {
       {!loading && (
         <button
           onClick={() => {
-            if (rootRef.current) {
-              rootRef.current.requestFullscreen?.();
-            }
+            document.documentElement.requestFullscreen?.();
           }}
           className="absolute top-4 right-4 px-4 py-2 bg-red-900/80 hover:bg-red-700 text-white text-sm font-bold rounded"
           style={{ fontFamily: "Impact, sans-serif" }}
