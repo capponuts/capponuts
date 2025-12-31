@@ -138,14 +138,6 @@ const SOUNDS: SoundButton[] = [
     category: "role",
     color: "#8b4513",
   },
-  {
-    id: "voleur",
-    label: "Le Voleur se réveille",
-    file: "/soundbox/voleur.mp3",
-    icon: "🦹",
-    category: "role",
-    color: "#3d3d3d",
-  },
   // Effets additionnels
   {
     id: "vote",
