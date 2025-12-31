@@ -179,6 +179,14 @@ const SOUNDS: SoundButton[] = [
     color: "#c71585",
   },
   {
+    id: "amoureux",
+    label: "Les Amoureux",
+    file: "/soundbox/amoureux.mp3",
+    icon: "💑",
+    category: "role",
+    color: "#ff6b81",
+  },
+  {
     id: "chasseur",
     label: "Le Chasseur tire",
     file: "/soundbox/chasseur.mp3",
